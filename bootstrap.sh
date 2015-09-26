@@ -1,7 +1,6 @@
-distribution=`uname -s`
-if [[$distribution == 'Darwin']]; then
-  ./bootstrap/osx
-elif [[$distribution == 'Linux']]; then
+if [ "$(uname)" == "Darwin" ]; then
+  ./bootstrap/osx.sh
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
   ./bootstrap/linux.sh
 fi
 

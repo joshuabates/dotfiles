@@ -18,6 +18,16 @@ brew cask alfred link
 echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells
 chsh -s "$(brew --prefix)/bin/zsh" $USER
 
+export NVM_DIR=$(brew --prefix)/var/nvm
+source $(brew --prefix nvm)/nvm.sh
+
+nvm install stable
+nvm install 0.8
+nvm install iojs
+
+rbenv install 1.9.3-p551
+rbenv install 2.2.3
+
 curl https://raw.githubusercontent.com/altercation/solarized/master/iterm2-colors-solarized/Solarized%20Dark.itermcolors > /tmp/solarized.itermcolors
 open /tmp/solarized.itermcolors
 

@@ -30,4 +30,8 @@ fi
 if which direnv &>/dev/null ; then
   eval "$(direnv hook zsh)"
 fi
+
+export NVM_DIR=$(brew --prefix)/var/nvm
+source $(brew --prefix nvm)/nvm.sh
+
 export PATH=./bin:"$PATH"

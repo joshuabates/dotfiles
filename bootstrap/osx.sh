@@ -1,8 +1,18 @@
+#!/bin/sh
+
+# Ask for the administrator password upfront
+sudo -v
+
+# Keep-alive: update existing `sudo` time stamp until finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+rm -rf /usr/local/Cellar /usr/local/.git && brew cleanup
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew tap Homebrew/bundle
 brew install caskroom/cask/brew-cask
+brew update && brew upgrade brew-cask && brew cleanup && brew cask cleanup
 
-brew bundle Brewfile
+brew bundle --file="$(dirname "$0")"/Brewfile
 brew cask alfred link
 
 echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells
@@ -31,12 +41,6 @@ cat <<EOF > ~/Library/Application\ Support/Karabiner/private.xml
 EOF
 
 # custom version of ~/.osx — https://mths.be/osx
-
-# Ask for the administrator password upfront
-sudo -v
-
-# Keep-alive: update existing `sudo` time stamp until `.osx` has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 ###############################################################################
 # General UI/UX                                                               #
@@ -656,7 +660,7 @@ defaults write org.m0k.transmission WarningLegal -bool false
 
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
 	"Dock" "Finder" "Google Chrome" "Google Chrome Canary" "Mail" "Messages" \
-	"Opera" "Safari" "SizeUp" "Spectacle" "SystemUIServer" "Terminal" \
+	"Opera" "Safari" "SizeUp" "Spectacle" "SystemUIServer" \
 	"Transmission" "Twitter" "iCal"; do
 	killall "${app}" > /dev/null 2>&1
 done

@@ -1,0 +1,2 @@
+EXCLUDES="README.md LICENSE bootstrap bootstrap.sh"
+DOTFILES_DIRS="$HOME/.dotfiles"

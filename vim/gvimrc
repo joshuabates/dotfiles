@@ -1,0 +1,38 @@
+if has("gui_macvim")
+  " Fullscreen takes up entire screen
+  set fuoptions=maxhorz,maxvert
+  set undofile
+  set undodir=~/.vim/backup
+
+	macmenu &File.New\ Tab key=<nop>
+
+  " macmenu &File.New\ Tab key=<D-T>
+  " Command-Return for fullscreen
+  macmenu Window.Toggle\ Full\ Screen\ Mode key=<D-CR>
+
+  map <D-F> :Search!<space>
+
+  " Command-][ to increase/decrease indentation
+  vmap <D-]> >gv
+  vmap <D-[> <gv
+
+  " Adjust viewports to the same size
+  map <Leader>= <C-w>=
+  hi cursorline guibg=#333333 " highlight bg color of current line
+  hi CursorColumn guibg=#333333 " highlight cursor
+
+  " Don't beep
+  set visualbell
+
+  " Start without the toolbar
+  set guioptions-=T
+
+  " Default gui color scheme
+  color solarized
+  set guifont=Inconsolata:h18
+
+  " Command-/ to toggle comments
+  nmap <D-/> <plug>CommentaryLine<CR>
+  vmap <D-/> <plug>Commentary<CR>
+  map <D-t> :CommandT<CR>
+endif

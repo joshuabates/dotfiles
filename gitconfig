@@ -1,1 +1,62 @@
-/Users/joshua/Projects/dotfiles/gitconfig
+[merge]
+	tool = opendiff
+  defaultToUpstream = true
+  conflictStyle=diff3
+[user]
+	name = Joshua Bates
+	email = joshuabates@gmail.com
+[color]
+  branch = auto
+  diff = auto
+  status = auto
+	ui = auto
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
+[alias]
+	st = status
+	s = status
+  rs = reset
+	ci = commit -v
+	co = checkout
+	b = branch
+	br = branch
+	mt = mergetool
+	d = diff
+	di = diff
+  dc = diff --cached
+  a = add
+  ap = add --patch
+  ae = add --edit
+  get = !git fetch && ( git rebase -v origin || ( git stash && ( git rebase -v origin || echo "WARNING: Run 'git stash pop' manually!" ) && git stash pop ) )
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(yellow bold)<%an>%Creset' --abbrev-commit --date=relative
+	l = log --graph --abbrev-commit --date=relative
+  ps = push
+  fe = fetch
+  sh = stash
+  # fast forward
+  ff = merge --ff-only
+  # merge commit
+  mc = merge --no-ff
+	ctags = !.git/hooks/ctags
+[push]
+	default = upstream
+[format]
+  pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
+[core]
+	excludesfile = ~/.gitignore_global
+	editor = vim
+[help]
+	autocorrect = 1
+[url "git@github.com:"]
+  insteadOf = https://github.com/

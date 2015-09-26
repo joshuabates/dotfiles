@@ -1,1 +1,12 @@
-/Users/joshua/Projects/dotfiles/gitignore_global
+.DS_Store
+*.sw[nop]
+.bundle
+.env
+db/*.sqlite3
+log/*.log
+rerun.txt
+tags
+!tags/
+tmp/**/*
+zzlocal.rb
+.powenv

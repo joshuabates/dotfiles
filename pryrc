@@ -1,1 +1,117 @@
-/Users/joshua/Projects/dotfiles/pryrc
+ # vim: ft=ruby
+
+require 'rubygems'
+
+if defined?(::Bundler)
+  global_gemset = ENV['GEM_PATH'].split(':').grep(/ruby/).first
+  if global_gemset
+    all_global_gem_paths = Dir.glob("#{global_gemset}/gems/*")
+    all_global_gem_paths.each do |p|
+      gem_path = "#{p}/lib"
+      $LOAD_PATH << gem_path
+    end
+  end
+end
+
+def try_require(gem)
+  begin
+    require gem
+    true
+  rescue LoadError => e
+    puts e
+  end
+end
+
+def require_first(*gems)
+  raise LoadError, "couldn't load #{gems}" unless gems.detect do |gem|
+    try_require gem
+  end
+end
+
+require 'pry-doc'
+require 'hirb'
+require 'awesome_print'
+try_require 'bond'
+
+if defined? JRUBY_VERSION
+  Pry.config.pager = false
+  require 'pry-nav'
+else
+  require_first 'pry-byebug', 'pry-debugger', 'pry-nav'
+  try_require 'pry-remote'
+  try_require 'pry-rescue'
+  try_require 'pry-stack_explorer'
+end
+
+if defined? Rails
+  require 'commands'
+  require 'pry-rails'
+  require 'rails-env-switcher'
+  require 'rspec-console'
+  require 'cucumber-console'
+end
+
+Pry.commands.alias_command "@", "whereami"
+
+# TODO: Only load if debugger or pry-nav is available
+Pry.commands.alias_command 'c', 'continue'
+Pry.commands.alias_command 's', 'step'
+Pry.commands.alias_command 'n', 'next'
+
+Pry.commands.block_command "t", ".tail log/test.log"
+Pry.commands.alias_command 'x', '!!!'
+Pry.commands.alias_command 'clear', '.clear'
+Pry.commands.alias_command 'bt', 'pry-backtrace'
+
+Pry.commands.block_command('re', "Reload for tests", :listing => "reload") do |cmd|
+  return unless Rails.env.test?
+
+  DatabaseCleaner.clean_with :truncation
+  load Rails.root.join('db/seeds.rb') rescue nil
+end
+
+Pry.commands.block_command(/ref/, "Reload for tests", :listing => "reload") do |cmd|
+  CucumberConsole::Runner.reset([])
+  Dir.glob('features/**/*.rb').each { |file| load file }
+end
+
+Pry::Commands.block_command "spring", "run tests" do |*args|
+  if args[0] == 'cucumber'
+    run 're'
+    run 'ref'
+  end
+
+  ActiveRecord::Base.logger.level = 5
+  Rails.logger.level = 5
+  run args.join(' ')
+end
+
+Pry::Commands.block_command 'bounce', 'restart console' do
+  exec "./script/rails console #{Rails.env}"
+end
+Pry.commands.alias_command 'b!', 'bounce'
+Pry.commands.alias_command 'bundle exec', 'spring'
+
+Pry::Commands.block_command 'v', 'open in tmux vim' do |object|
+  code_object = Pry::CodeObject.lookup(object, _pry_)
+
+  file, line = Pry::Command::Edit::FileAndLineLocator.from_code_object(code_object, object)
+  run 'vfl', file, line
+end
+
+Pry::Commands.block_command 've', 'open exception in tmux vim' do |object|
+  level = object || 1
+  file, line = Pry::Command::Edit::FileAndLineLocator.from_exception(_pry_.last_exception, level.to_i)
+  run 'vfl', file, line
+end
+
+Pry::Commands.block_command 'vfl', 'open file and line in tmux vim' do |file, line|
+  run '.tmux select-pane -t :.+'
+  run '.tmux send-keys Escape'
+  run ".tmux send-keys :e Space +#{line} Space #{file} Enter"
+  run ".tmux send-keys zz"
+end
+
+Pry::Commands.block_command 'd?', 'open docs in dash' do |object|
+  run "open dash://rb:#{object}"
+end

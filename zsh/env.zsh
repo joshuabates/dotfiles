@@ -4,10 +4,16 @@ export NODE_PATH="/usr/local/lib/node"
 
 export EC2_AMITOOL_HOME="/usr/local/Library/LinkedKegs/ec2-ami-tools/jars"
 export EC2_HOME="$HOME/.ec2"
-export AWS_ACCESS_KEY=`cat ~/.ec2/AWS_ACCESS_KEY`
-export AWS_SECRET_KEY=`cat ~/.ec2/AWS_SECRET_KEY`
-export RIGHTSCALE_REFRESH_TOKEN=`cat ~/.rightscale_token`
 export AWS_REGION=us-east-1
+
+if [[ -s "$HOME/.ec2" ]]; then
+  export AWS_ACCESS_KEY=`cat ~/.ec2/AWS_ACCESS_KEY`
+  export AWS_SECRET_KEY=`cat ~/.ec2/AWS_SECRET_KEY`
+fi
+
+if [[ -s "$HOME/.rightscale_token" ]]; then
+  export RIGHTSCALE_REFRESH_TOKEN=`cat ~/.rightscale_token`
+fi
 
 export LC_CTYPE=en_US.UTF-8
 export EDITOR="vim"

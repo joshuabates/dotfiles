@@ -5,8 +5,6 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 fi
 
 git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
-npm install --global pure-prompt
-
 env RCRC=$HOME/.dotfiles/rcrc rcup
 
 mkdir -p ~/.vim/autoload
@@ -14,3 +12,6 @@ curl -fLo ~/.vim/autoload/plug.vim \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 vim -c PlugInstall -c quitall
+
+# restart shell
+su -l `whoami`

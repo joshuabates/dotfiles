@@ -2,7 +2,10 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-. `brew --prefix`/etc/profile.d/z.sh
+if which brew &>/dev/null ; then
+  . `brew --prefix`/etc/profile.d/z.sh
+fi
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 source ~/.zsh/aliases.zsh
@@ -31,7 +34,9 @@ if which direnv &>/dev/null ; then
   eval "$(direnv hook zsh)"
 fi
 
-export NVM_DIR=$(brew --prefix)/var/nvm
-source $(brew --prefix nvm)/nvm.sh
+if which brew &>/dev/null ; then
+  export NVM_DIR=~/.nvm
+  source $(brew --prefix nvm)/nvm.sh
+fi
 
 export PATH=./bin:"$PATH"

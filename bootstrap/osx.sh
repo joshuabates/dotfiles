@@ -18,12 +18,17 @@ brew cask alfred link
 echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells
 chsh -s "$(brew --prefix)/bin/zsh" $USER
 
-export NVM_DIR=$(brew --prefix)/var/nvm
+mkdir ~/.nvm
+cp $(brew --prefix nvm)/nvm-exec ~/.nvm/
+export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
 
 nvm install stable
 nvm install 0.8
 nvm install iojs
+
+# TODO: make safe for linux (needs maybe_sudo command)
+npm install --global pure-prompt
 
 rbenv install 1.9.3-p551
 rbenv install 2.2.3

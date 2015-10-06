@@ -47,6 +47,7 @@ else
   try_require 'pry-remote'
   try_require 'pry-rescue'
   try_require 'pry-stack_explorer'
+  try_require 'pry-inline'
 end
 
 if defined? Rails
@@ -59,10 +60,17 @@ end
 
 Pry.commands.alias_command "@", "whereami"
 
-# TODO: Only load if debugger or pry-nav is available
-Pry.commands.alias_command 'c', 'continue'
-Pry.commands.alias_command 's', 'step'
-Pry.commands.alias_command 'n', 'next'
+if defined?(PryByebug) || defined?(PryNav)
+  Pry.commands.alias_command 'c', 'continue'
+  Pry.commands.alias_command 's', 'step'
+  Pry.commands.alias_command 'n', 'next'
+  Pry.commands.alias_command 'f', 'finish'
+end
+
+# Hit Enter to repeat last command
+Pry::Commands.command /^$/, "repeat last command" do
+  _pry_.run_command Pry.history.to_a.last
+end
 
 Pry.commands.block_command "t", ".tail log/test.log"
 Pry.commands.alias_command 'x', '!!!'

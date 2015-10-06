@@ -19,4 +19,4 @@ sudo dpkg -i rcm_1.2.3-1_all.deb
 # install jq
 # install innotop
 # install aws tools
-chsh -s /usr/local/bin/zsh
+chsh -s /bin/zsh

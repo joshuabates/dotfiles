@@ -390,6 +390,7 @@ nmap <leader>f :Ack! <C-r><C-w><cr>
 nmap <leader>r :%s/<C-r><C-w>//c<Left><Left>
 " Project wide search & replace for the current word
 nmap <leader>R :Qdo %s/<C-r><C-w>//gc | update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
+vmap <C-R> :Qdo %s/<C-r><C-w>//gc | update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
 
 " Cycle through lines in the quickfix list
 nmap <leader>j :w<CR>:cn<CR>
@@ -416,7 +417,16 @@ let g:netrw_browse_split=0
 cabbrev E Explore
 cabbrev ej e app/assets/javascripts
 
-nmap <leader>l :VimuxRunLastCommand<CR>
+fu! VimuxRunLastCommandOrLastInHistory()
+  if exists("g:VimuxRunnerIndex")
+    call VimuxRunLastCommand()
+  else
+    call TmuxRun('!!')
+    call VimuxSendKeys("Enter")
+  endif
+endfu
+
+nmap <leader>l :call VimuxRunLastCommandOrLastInHistory()<CR>
 
 " EXPERIMENTAL IN FLUX STUFF {
   function! TmuxRun(cmd)
@@ -428,6 +438,13 @@ nmap <leader>l :VimuxRunLastCommand<CR>
     end
   endfunction
 
+  function! TmuxCommand()
+    call inputsave()
+    let replacement = input('Sent to tmux pain:')
+    call inputrestore()
+    call TmuxRun(replacement)
+  endfunction
+
   function! VimuxReload()
     call TmuxRun("load '".expand("%")."'")
   endfunction
@@ -436,21 +453,33 @@ nmap <leader>l :VimuxRunLastCommand<CR>
     call system('tmux select-pane -t :.+')
   endfunction
 
+  function! CurrentLine()
+    let line = line(".")
+    let file = expand("%")
+    return file . ':' . line
+  endfunction
+
   nmap <plug>ReplCopyLastSelection gv<plug>ReplCopySelection
   nmap <plug>ReplCopyLine "ryy :call TmuxRun(@r)<CR>j :call repeat#set("\<plug>ReplCopyLine")<cr>
   vmap <plug>ReplCopySelection "ry :call TmuxRun(@r)<CR>
 
-  vmap <C-p> <plug>ReplCopySelection
-  nmap <leader>pp <plug>ReplCopyLine
-  nmap <leader>p. <plug>ReplCopyLastSelection
+  vmap <C-,> <plug>ReplCopySelection
+  nmap <leader>,p <plug>ReplCopyLine
+  nmap <leader>,. <plug>ReplCopyLastSelection
+  nmap <leader>,c :call TmuxRun('c')<CR>
+  nmap <leader>,n :call TmuxRun('n')<CR>
+  nmap <leader>,s :call TmuxRun('s')<CR>
+  nmap <leader>,o :call TmuxRun('page.save_and_open_screenshot')<CR>
+  nmap <leader>,t :call TmuxCommand()<CR>
+  nmap <leader>,b :call TmuxRun('break ' . CurrentLine())<CR>
 
-  nnoremap <leader>pl :call VimuxReload()<CR>
+  nnoremap <leader>,l :call VimuxReload()<CR>
 
   " Select current paragraph and send it to tmux
-  nmap <leader>ps vip<leader>pp<CR>
+  nmap <leader>,s vip<leader>pp<CR>
 
   " Nab lines from ~/.pry_history (respects "count")
-  nmap <Leader>ph :<c-u>let pc = (v:count1 ? v:count1 : 1)<cr>:read !tail -<c-r>=pc<cr> ~/.pry_history<cr>:.-<c-r>=pc-1<cr>:norm <c-r>=pc<cr>==<cr>
+  nmap <Leader>,h :<c-u>let pc = (v:count1 ? v:count1 : 1)<cr>:read !tail -<c-r>=pc<cr> ~/.pry_history<cr>:.-<c-r>=pc-1<cr>:norm <c-r>=pc<cr>==<cr>
 
 " }
 

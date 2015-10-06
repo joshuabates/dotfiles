@@ -2,16 +2,22 @@
 
 require 'rubygems'
 
-if defined?(::Bundler)
-  global_gemset = ENV['GEM_PATH'].split(':').grep(/ruby/).first
-  if global_gemset
-    all_global_gem_paths = Dir.glob("#{global_gemset}/gems/*")
-    all_global_gem_paths.each do |p|
-      gem_path = "#{p}/lib"
-      $LOAD_PATH << gem_path
+# https://github.com/janlelis/debundle.rb/blob/modern/debundle.rb
+module Debundle
+  VERSION = '1.0.0'
+
+  def self.debundle!
+    if Gem.post_reset_hooks.reject!{ |hook| hook.source_location.first =~ %r{/bundler/} }
+      Bundler.preserve_gem_path
+      Gem.clear_paths
+      load 'rubygems/core_ext/kernel_require.rb'
+      load 'rubygems/core_ext/kernel_gem.rb'
     end
+  rescue => e
+    warn "DEBUNDLE.RB FAILED: #{e.class}\n#{e.message}"
   end
 end
+Debundle.debundle!
 
 def try_require(gem)
   begin

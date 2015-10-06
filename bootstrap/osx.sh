@@ -30,6 +30,7 @@ nvm install iojs
 # TODO: make safe for linux (needs maybe_sudo command)
 npm install --global pure-prompt
 
+export RUBY_CFLAGS="-ggdb3 -O0"
 rbenv install 1.9.3-p551
 rbenv install 2.2.3
 

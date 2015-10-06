@@ -24,6 +24,7 @@ setopt histignorespace extended_history
 setopt INC_APPEND_HISTORY share_history
 SAVEHIST=8096
 HISTSIZE=8096
+source ~/.zsh/history.zsh
 
 # load rbenv if available
 if which rbenv &>/dev/null ; then

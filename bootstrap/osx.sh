@@ -41,8 +41,9 @@ nvm install iojs
 npm install --global pure-prompt
 
 export RUBY_CFLAGS="-ggdb3 -O0"
-rbenv install 1.9.3-p551
-rbenv install 2.2.3
+rbenv install -s 1.9.3-p551
+rbenv install -s 2.2.3
+rbenv install -s jruby-9.0.0.0
 
 curl https://raw.githubusercontent.com/altercation/solarized/master/iterm2-colors-solarized/Solarized%20Dark.itermcolors > /tmp/solarized.itermcolors
 open /tmp/solarized.itermcolors

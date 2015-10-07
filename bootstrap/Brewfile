@@ -35,7 +35,6 @@ brew 'json-c'
 brew 'postgresql', restart_service: true
 brew 'mysql', restart_service: true
 brew 'heroku-toolbelt'
-brew 'foreman'
 brew 'imagemagick'
 brew 'john'
 brew 'jq'

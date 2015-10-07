@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 # Ask for the administrator password upfront
 sudo -v
@@ -6,19 +7,28 @@ sudo -v
 # Keep-alive: update existing `sudo` time stamp until finished
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
-rm -rf /usr/local/Cellar /usr/local/.git && brew cleanup
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-brew tap Homebrew/bundle
-brew install caskroom/cask/brew-cask
-brew update && brew upgrade brew-cask && brew cleanup && brew cask cleanup
+# Don't sleep
+sudo pmset -a sleep 0
+
+if hash brew 2>/dev/null; then
+  brew update && brew upgrade brew-cask && brew cleanup && brew cask cleanup
+else
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  brew tap Homebrew/bundle
+  brew install caskroom/cask/brew-cask
+fi
 
 brew bundle --file="$(dirname "$0")"/Brewfile
-brew cask alfred link
 
-echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells
-chsh -s "$(brew --prefix)/bin/zsh" $USER
+if [ -f "$(brew --prefix)/bin/zsh" ]; then
+  echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells
+  chsh -s "$(brew --prefix)/bin/zsh" $USER
+else
+  puts "ZSH is not installed; Exiting"
+  exit 1
+fi
 
-mkdir ~/.nvm
+mkdir -p ~/.nvm
 cp $(brew --prefix nvm)/nvm-exec ~/.nvm/
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
@@ -687,3 +697,5 @@ echo "  1) map esc/ctrl to caps lock"
 echo "    1.1) Launch Seil and map caps lock to f19 (80)"
 echo "    1.2) Launch Karabiner and select F19 escape/control keys"
 echo "    1.2) Under system prefs > keyboard > modifier keys > set caps lock to no op"
+
+sudo pmset -a sleep 1

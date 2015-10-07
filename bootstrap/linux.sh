@@ -1,3 +1,6 @@
+#!/bin/sh
+set -e
+
 sudo aptitude install zsh vim-nox tmux
 
 # If full install

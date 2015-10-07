@@ -469,7 +469,8 @@ nmap <leader>l :call VimuxRunLastCommandOrLastInHistory()<CR>
   nmap <leader>,c :call TmuxRun('c')<CR>
   nmap <leader>,n :call TmuxRun('n')<CR>
   nmap <leader>,s :call TmuxRun('s')<CR>
-  nmap <leader>,o :call TmuxRun('page.save_and_open_screenshot')<CR>
+  nmap <leader>,os :call TmuxRun('page.save_and_open_screenshot')<CR>
+  nmap <leader>,op :call TmuxRun('page.save_and_open_page')<CR>
   nmap <leader>,t :call TmuxCommand()<CR>
   nmap <leader>,b :call TmuxRun('break ' . CurrentLine())<CR>
 

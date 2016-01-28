@@ -138,10 +138,12 @@
   Plug 'henrik/vim-qargs'
 
   " Send commands to tmux panes
-  Plug 'yunake/vimux'
-  " Plug 'benmills/vimux'
+  " Plug 'yunake/vimux'
+  Plug 'benmills/vimux'
   let g:VimuxOrientation = "h"
   let VimuxUseNearestPane = 1
+  " let g:VimuxTmuxCommand = "tmate"
+  let g:VimuxTmuxCommand = "tmux"
 
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'skalnik/vim-vroom'
@@ -156,6 +158,8 @@
 
   Plug 'vim-ruby/vim-ruby'
   Plug 'jgdavey/vim-blockle'
+  let g:blockle_mapping = '<Leader>{'
+
   Plug 'tpope/vim-rails'
   Plug 'tpope/vim-rake'
   Plug 'tpope/vim-bundler'
@@ -243,6 +247,7 @@ nnoremap <silent><C-p>h :CtrlPCmdHistory<CR>
 nnoremap <silent><C-p>/ :CtrlPSearchHistory<CR>
 nnoremap <c-p>y :CtrlPYankring<cr>
 nnoremap <C-p>b :CtrlPBuffer<cr>
+nnoremap <leader>b :CtrlPBuffer<cr>
 nnoremap <C-p>f :CtrlPLocate<cr>
 
 " SlitJoin {
@@ -428,6 +433,9 @@ endfu
 
 nmap <leader>l :call VimuxRunLastCommandOrLastInHistory()<CR>
 
+" Copy current path to clipboard
+nmap <leader>g :let @*=expand(@%).":".line(".")<CR>
+
 " EXPERIMENTAL IN FLUX STUFF {
   function! TmuxRun(cmd)
     if exists("g:VimuxRunnerIndex")
@@ -469,7 +477,8 @@ nmap <leader>l :call VimuxRunLastCommandOrLastInHistory()<CR>
   nmap <leader>,c :call TmuxRun('c')<CR>
   nmap <leader>,n :call TmuxRun('n')<CR>
   nmap <leader>,s :call TmuxRun('s')<CR>
-  nmap <leader>,os :call TmuxRun('page.save_and_open_screenshot')<CR>
+  nmap <leader>,d :call TmuxRun('^d')<CR>
+  nmap <leader>,os :call TmuxRun('page.save_and_open_screenshot(nil, full: true)')<CR>
   nmap <leader>,op :call TmuxRun('page.save_and_open_page')<CR>
   nmap <leader>,t :call TmuxCommand()<CR>
   nmap <leader>,b :call TmuxRun('break ' . CurrentLine())<CR>

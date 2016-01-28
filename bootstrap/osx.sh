@@ -421,7 +421,7 @@ defaults write com.apple.dock persistent-others -array-add '{tile-data={}; tile-
 # 12: Notification Center
 
 # Bottom right screen corner → Start screen saver
-defaults write com.apple.dock wvous-br-corner -int 5
+defaults write com.apple.dock wvous-br-corner -int 10
 defaults write com.apple.dock wvous-br-modifier -int 1048576
 
 ###############################################################################

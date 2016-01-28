@@ -1,0 +1,20 @@
+set noautofocus
+
+let barposition = "bottom"
+let nextmatchpattern = "((?!first)(next|>|›|»|forward| )+)"
+
+unmap d
+unmap u
+unmap t
+unmap T
+unmap h
+unmap l
+
+map <C-u> scrollPageUp
+map <C-d> scrollPageDown
+
+map l nextTab
+map h previousTab
+
+
+map T :buffer<space>

@@ -40,22 +40,34 @@ require 'awesome_print'
 try_require 'bond'
 
 if defined? JRUBY_VERSION
-  Pry.config.pager = false
   require 'pry-nav'
 else
-  require_first 'pry-byebug', 'pry-debugger', 'pry-nav'
+  # require_first 'pry-byebug', 'pry-debugger', 'pry-nav'
   try_require 'pry-remote'
   try_require 'pry-rescue'
   try_require 'pry-stack_explorer'
   try_require 'pry-inline'
 end
 
+if defined?(Rails) && Rails.env
+  if defined?(Rails::ConsoleMethods)
+    include Rails::ConsoleMethods
+  else
+    def reload!(print=true)
+      puts "Reloading..." if print
+      ActionDispatch::Reloader.cleanup!
+      ActionDispatch::Reloader.prepare!
+      true
+    end
+  end
+end
+
 if defined? Rails
-  require 'commands'
-  require 'pry-rails'
-  require 'rails-env-switcher'
-  require 'rspec-console'
-  require 'cucumber-console'
+  try_require 'commands'
+  try_require 'pry-rails'
+  try_require 'rails-env-switcher'
+  try_require 'rspec-console'
+  try_require 'cucumber-console'
 end
 
 Pry.commands.alias_command "@", "whereami"
@@ -66,6 +78,8 @@ if defined?(PryByebug) || defined?(PryNav)
   Pry.commands.alias_command 'n', 'next'
   Pry.commands.alias_command 'f', 'finish'
 end
+
+Pry.config.pager = false
 
 # Hit Enter to repeat last command
 Pry::Commands.command /^$/, "repeat last command" do

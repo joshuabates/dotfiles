@@ -3,8 +3,6 @@ let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_rails = 1
 let g:rubycomplete_classes_in_global = 1
 nnoremap <leader>a :A<CR>  " Go to alternate file
-" Alternate between do; end and { } blocks in ruby
-nmap <leader>{ $<Plug>BlockToggle
 
 nmap <Leader>s :VroomRunTestFile<CR>
 nmap <Leader>e :VroomRunNearestTest<CR>

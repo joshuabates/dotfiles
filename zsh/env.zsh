@@ -28,3 +28,4 @@ export PATH=./node_modules/:/usr/local/bin:/usr/local/sbin:~/bin:/usr/local/shar
 export HISTFILE=~/.histfile
 export HISTSIZE=100000
 export SAVEHIST=100000
+export SHELL=$(brew --prefix)/bin/zsh

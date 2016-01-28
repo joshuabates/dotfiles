@@ -24,7 +24,7 @@ setopt histignorespace extended_history
 setopt INC_APPEND_HISTORY share_history
 SAVEHIST=8096
 HISTSIZE=8096
-source ~/.zsh/history.zsh
+# source ~/.zsh/history.zsh
 
 # load rbenv if available
 if which rbenv &>/dev/null ; then
@@ -39,5 +39,7 @@ if which brew &>/dev/null ; then
   export NVM_DIR=~/.nvm
   source $(brew --prefix nvm)/nvm.sh
 fi
+
+source dnvm.sh
 
 export PATH=./bin:"$PATH"

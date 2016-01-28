@@ -49,6 +49,7 @@ curl https://raw.githubusercontent.com/altercation/solarized/master/iterm2-color
 open /tmp/solarized.itermcolors
 
 # caps lock -> ctrl / smart escape
+mkdir -p ~/Library/Application\ Support/Karabiner
 cat <<EOF > ~/Library/Application\ Support/Karabiner/private.xml
 <?xml version="1.0"?>
 <root>

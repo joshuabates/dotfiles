@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 if [[ "$(uname)" == "Darwin" ]]; then
@@ -7,7 +7,10 @@ elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
   ./bootstrap/linux.sh
 fi
 
-git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+if [[ ! -d "${ZDOTDIR:-$HOME}/.zprezto" ]]; then
+  git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+fi
+
 env RCRC=$HOME/.dotfiles/rcrc rcup
 
 mkdir -p ~/.vim/autoload

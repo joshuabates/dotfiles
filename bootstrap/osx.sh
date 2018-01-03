@@ -14,8 +14,6 @@ if hash brew 2>/dev/null; then
   brew update && brew upgrade brew-cask && brew cleanup && brew cask cleanup
 else
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  brew tap Homebrew/bundle
-  brew install caskroom/cask/brew-cask
 fi
 
 brew bundle --file="$(dirname "$0")"/Brewfile
@@ -27,15 +25,6 @@ else
   puts "ZSH is not installed; Exiting"
   exit 1
 fi
-
-mkdir -p ~/.nvm
-cp $(brew --prefix nvm)/nvm-exec ~/.nvm/
-export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
-
-nvm install stable
-nvm install 0.8
-nvm install iojs
 
 # TODO: make safe for linux (needs maybe_sudo command)
 npm install --global pure-prompt

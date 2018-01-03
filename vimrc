@@ -1,12 +1,3 @@
-" TODO:
-" - Ctrlp for changes
-" - Ctrlp for jumps
-
-" - get tags working in coffeescript
-" - test quickfix rspec stuff out
-
-" - Get snippets + autocomplete working properly
-
 " Plugins {
   set nocompatible
   call plug#begin()
@@ -37,64 +28,39 @@
       return ''
     endfu
 
-  " Autocompletion and Snippets
-  Plug 'SirVer/ultisnips'
-  Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
-    let g:ycm_collect_identifiers_from_tags_files = 1
-    let g:ycm_collect_identifiers_from_comments_and_strings = 1
-    let g:ycm_auto_trigger = 0
-    " let g:ycm_key_invoke_completion = '<C-n>'
-    let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-    let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-    let g:ycm_autoclose_preview_window_after_completion = 1
-    let g:ycm_key_detailed_diagnostics = ''
-    let g:UltiSnipsExpandTrigger = "<tab>"
-    let g:UltiSnipsJumpForwardTrigger = "<tab>"
-    let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-
-    function! g:SnippetOrComplete()
-      call UltiSnips#ExpandSnippetOrJump()
-      if g:ulti_expand_or_jump_res == 0
-        if pumvisible()
-          return "\<C-N>"
-        else
-          if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-          " if getline('.')[0:col('.')-1]
-            return "\<C-X>\<C-U>\<C-P>"
-          else
-            return "\<tab>"
-          end
-        endif
-      endif
-
-      return ""
-      endif
-    endfunction
-
-    function! g:UltiSnips_Reverse()
-      call UltiSnips#JumpBackwards()
-      if g:ulti_jump_backwards_res == 0
-        return "\<C-P>"
-      endif
-
-      return ""
-    endfunction
-
-    "Use TAB to complete when typing words, else inserts TABs as usual.
-    function! Tab_Or_Complete()
-      if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-        return "\<C-N>"
-      else
-        return "\<Tab>"
-      endif
-    endfunction
-    inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
-
-    au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:SnippetOrComplete()<cr>"
-    au BufEnter * exec "inoremap <silent> " . g:UltiSnipsJumpBackwardTrigger . " <C-R>=g:UltiSnips_Reverse()<cr>"
-
   Plug 'scrooloose/syntastic'
+
+	" set statusline+=%#warningmsg#
+	" set statusline+=%{SyntasticStatuslineFlag()}
+	" set statusline+=%*
+
+	let g:syntastic_always_populate_loc_list = 1
+	let g:syntastic_loc_list_height = 5
+	let g:syntastic_auto_loc_list = 0
+	let g:syntastic_check_on_open = 1
+	let g:syntastic_check_on_wq = 1
+	let g:syntastic_javascript_checkers = ['eslint']
+
+	" let g:syntastic_error_symbol = '❌'
+	" let g:syntastic_style_error_symbol = '⁉️'
+	let g:syntastic_warning_symbol = '⚠️'
+	let g:syntastic_style_warning_symbol = '💩'
+
+  highlight SyntasticErrorSign ctermfg=red guifg=darkred
+  highlight SyntasticWarningSign ctermfg=yellow guifg=darkyellow
+
+	highlight link SyntasticErrorSign SignColumn
+	highlight link SyntasticWarningSign SignColumn
+	highlight link SyntasticStyleErrorSign SignColumn
+	highlight link SyntasticStyleWarningSign SignColumn
+
   let g:syntastic_mode_map = { 'passive_filetypes': ['sass'] }
+  " use eslint for syntastic
+  let g:syntastic_javascript_checkers = ['eslint']
+
+  " auto-fix the current buffer / selection
+  Plug 'ruanyl/vim-fixmyjs'
+  let g:fixmyjs_rc_path = '.eslintrc.js'
 
   Plug 'sjl/gundo.vim'
 
@@ -149,7 +115,6 @@
   Plug 'skalnik/vim-vroom'
   let g:vroom_use_vimux = 1
   let g:vroom_map_keys = 0
-  let g:vroom_use_spring = 1
   let g:vroom_use_colors = 0
   let g:vroom_rspec_version = 'x' " trick vroom into suppressing the no-color flag
 
@@ -208,6 +173,8 @@
   nmap <silent> <leader>d <Plug>DashSearch
   vmap <silent> <leader>d "dy:Dash <C-R>d<CR>
 
+  " Plug 'floobits/floobits-neovim'
+
   call plug#end()
 " }
 
@@ -251,7 +218,7 @@ nnoremap <leader>b :CtrlPBuffer<cr>
 nnoremap <C-p>f :CtrlPLocate<cr>
 
 " SlitJoin {
-  nnoremap gj :SplitjoinSplit<cr>
+nnore m a p gj :SplitjoinSplit<cr>
   nnoremap gk :SplitjoinJoin<cr>
   let g:splitjoin_ruby_curly_braces=0
 " }
@@ -272,7 +239,6 @@ set noshowmatch         " Don't match parentheses/brackets
 set nocursorcolumn      " Don't paint cursor column
 set lazyredraw          " Wait to redraw
 set scrolljump=8        " Scroll 8 lines at a time at bottom/top
-let html_no_rendering=1 " Don't render italic, bold, links in HTML
 
 let g:syntastic_enable_signs=1
 let g:syntastic_quiet_messages = {'level': 'warnings'}
@@ -306,7 +272,6 @@ map <C-\> :tnext<CR>
 " % to bounce from do to end etc.
 runtime! macros/matchit.vim
 
-" Set encoding
 set encoding=utf-8
 
 " Whitespace stuff
@@ -334,17 +299,15 @@ set wildignore+=*.o,*.obj,.git,*.rbc,*.class,.svn,vendor/gems/*
 " Status bar
 set laststatus=2
 
-" allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
 " Use modeline overrides
 set modeline
 set modelines=10
 
-" set winminheight=0
-" set winheight=999
-
 " Directories for swp files
+set undofile
+set undodir=~/tmp
 set backupdir=/tmp
 set directory=/tmp
 
@@ -367,14 +330,6 @@ vnoremap < <gv
 
 " Select last pasted block
 nnoremap gp `[v`]
-
-" When on, the ":substitute" flag 'g' is default on.  This means that
-" all matches in a line are substituted instead of one.
-set gdefault
-" When a bracket is inserted, briefly jump to the matching one.  The
-" jump is only done if the match can be seen on the screen.  The time to
-" show the match can be set with 'matchtime'.
-set showmatch
 
 "This unsets the "last search pattern" register by hitting return
 nnoremap <CR> :noh<CR><CR>

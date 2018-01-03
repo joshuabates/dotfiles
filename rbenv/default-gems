@@ -8,6 +8,9 @@ pry-rails
 pry-rescue
 pry-remote
 pry-nav
+pry-inline
+pry-doc
+pry-byebug
 hirb
 awesome_print
 tmuxinator

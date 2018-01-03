@@ -16,6 +16,7 @@ alias bri="bundle list | tr -d '*(,)' | awk '{print $1, \"--version\", $2}' | xa
 alias cu="bundle exec cucumber -f rerun --out rerun.txt"
 alias cur="bundle exec cucumber -r features/ @rerun.txt | tee log/cucumber.log"
 alias cuf="bundle exec cucumber -r features/ --name"
+alias pspec="DISABLE_SPRING=1 rake parallel:spec; cat tmp/failing_specs.log | grep rspec"
 
 # Navigation
 alias p='cd ~/Projects'

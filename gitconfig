@@ -50,13 +50,17 @@
   mc = merge --no-ff
 	ctags = !.git/hooks/ctags
 [push]
-	default = upstream
+	default = simple
 [format]
   pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
 [core]
 	excludesfile = ~/.gitignore_global
 	editor = vim
+	pager = diff-so-fancy | less --tabs=4 -RFX
 [help]
 	autocorrect = 1
-[url "git@github.com:"]
-  insteadOf = https://github.com/
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22

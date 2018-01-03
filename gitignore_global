@@ -10,3 +10,4 @@ tags
 tmp/**/*
 zzlocal.rb
 .powenv
+scratch

@@ -35,11 +35,13 @@ if which direnv &>/dev/null ; then
   eval "$(direnv hook zsh)"
 fi
 
-if which brew &>/dev/null ; then
-  export NVM_DIR=~/.nvm
-  source $(brew --prefix nvm)/nvm.sh
-fi
+# if which brew &>/dev/null ; then
+#   export NVM_DIR=~/.nvm
+#   source $(brew --prefix nvm)/nvm.sh
+# fi
 
-source dnvm.sh
+# source dnvm.sh
 
 export PATH=./bin:"$PATH"
+
+export PATH="$HOME/.yarn/bin:$PATH"

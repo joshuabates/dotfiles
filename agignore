@@ -1,2 +1,4 @@
 tmp
 *.sql
+public
+node_modules

@@ -10,6 +10,8 @@
 --ignore-dir=javascripts/lib
 --ignore-dir=log
 --ignore-dir=tmp
+--ignore-dir=public
+--ignore-dir=node_modules
 --ignore-dir=public/system
 --ignore-dir=public/assets
 --ignore-dir=.sass-cache

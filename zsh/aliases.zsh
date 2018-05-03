@@ -1,6 +1,9 @@
 # Machine
 alias psg='ps aux | grep'
 
+alias vi='nvim'
+alias vim='nvim'
+
 # FASD
 alias v='f -e vim'
 alias j='fasd_cd -d'

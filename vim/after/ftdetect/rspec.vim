@@ -1,1 +1,1 @@
-au BufNewFile,BufRead *._spec.rb set filetype=rspec.ruby
+/Users/joshua/.dotfiles/vim/after/ftdetect/rspec.vim

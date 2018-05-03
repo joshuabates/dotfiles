@@ -1,1 +1,1 @@
-autocmd BufNewFile,BufReadPost *_spec.js.coffee set filetype=coffeespec.coffee
+/Users/joshua/.dotfiles/vim/after/ftdetect/coffee_spec.vim

@@ -1,2 +1,1 @@
-" Get hamlc templates to syntax highlight (ghetto)
-autocmd BufNewFile,BufReadPost *.hamlc set filetype=haml
+/Users/joshua/.dotfiles/vim/after/ftdetect/haml_coffee.vim

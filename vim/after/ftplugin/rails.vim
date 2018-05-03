@@ -1,1 +1,1 @@
-let g:vroom_use_spring = 1
+/Users/joshua/.dotfiles/vim/after/ftplugin/rails.vim

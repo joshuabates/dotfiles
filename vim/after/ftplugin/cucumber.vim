@@ -1,1 +1,1 @@
-nmap <C-]> [<C-D>
+/Users/joshua/.dotfiles/vim/after/ftplugin/cucumber.vim

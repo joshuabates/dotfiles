@@ -14,9 +14,9 @@ source ~/.zsh/opts.zsh
 source ~/.zsh/key-bindings.zsh
 source ~/.zsh/commands.zsh
 
-for plugin in ~/.zsh/plugins/**/*.zsh; do
-  source $plugin
-done
+# for plugin in ~/.zsh/plugins/**/*.zsh; do
+#  source $plugin
+#done
 
 # history settings
 setopt appendhistory histignoredups

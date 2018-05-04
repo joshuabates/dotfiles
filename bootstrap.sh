@@ -15,8 +15,6 @@ if [[ ! -d "${ZDOTDIR:-$HOME}/.zprezto" ]]; then
   git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
 fi
 
-env RCRC=$HOME/.dotfiles/rcrc rcup
-
 setopt EXTENDED_GLOB
 
 mkdir -p ~/.vim/autoload

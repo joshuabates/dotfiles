@@ -45,3 +45,7 @@ fi
 export PATH=./bin:"$PATH"
 
 export PATH="$HOME/.yarn/bin:$PATH"
+
+. $HOME/.asdf/asdf.sh
+
+. $HOME/.asdf/completions/asdf.bash

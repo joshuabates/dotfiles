@@ -15,8 +15,6 @@ if [[ ! -d "${ZDOTDIR:-$HOME}/.zprezto" ]]; then
   git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
 fi
 
-setopt EXTENDED_GLOB
-
 mkdir -p ~/.vim/autoload
 curl -fLo ~/.vim/autoload/plug.vim \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim

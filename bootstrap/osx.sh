@@ -26,7 +26,7 @@ laptop_echo "Installing Homebrew ..."
 if hash brew 2>/dev/null; then
   brew update && brew cleanup && brew cask cleanup
 else
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 laptop_echo "Updating Homebrew formulae ..."
@@ -34,6 +34,14 @@ brew bundle --file="$(dirname "$0")"/Brewfile
 
 laptop_echo "Linking dotfiles"
 env RCRC=$HOME/.dotfiles/rcrc rcup
+
+if [ -f "$(brew --prefix)/bin/zsh" ]; then
+  echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells
+  chsh -s "$(brew --prefix)/bin/zsh" $USER
+else
+  puts "ZSH is not installed; Exiting"
+  exit 1
+fi
 
 laptop_echo "Configuring asdf version manager..."
 
@@ -45,7 +53,11 @@ install_asdf_plugin() {
     asdf plugin-add "$name" "$url"
   fi
 }
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+
+if [[ ! -d "$HOME/.asdf" ]]; then
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+fi
+
 source "$HOME/.asdf/asdf.sh"
 install_asdf_plugin "ruby" "https://github.com/asdf-vm/asdf-ruby.git"
 install_asdf_plugin "nodejs" "https://github.com/asdf-vm/asdf-nodejs.git"
@@ -86,7 +98,6 @@ EOF
 
 number_of_cores=$(sysctl -n hw.ncpu)
 
-
 export RUBY_CFLAGS="-ggdb3 -O0"
 install_asdf_language "ruby" jruby-9.1.16.0
 
@@ -103,12 +114,16 @@ bash "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
 install_asdf_language "nodejs" 8.9.4
 install_asdf_language "nodejs"
 
+mkdir -p ~/Projects/oc
+cd ~/Projects/oc
 wget -qO- https://api.github.com/orgs/opencounter/repos | jq ".[].ssh_url" | xargs -L 1 git clone
+cd -
 
 laptop_echo "Configuring puma-dev..."
 sudo puma-dev -setup
 puma-dev -install -d test
 
+laptop_echo "Installing NPM modules ..."
 # TODO: make safe for linux (needs maybe_sudo command)
 npm install --global pure-prompt
 yarn global add jshint jsxhint jsonlint stylelint sass-lint flow webpack
@@ -117,7 +132,7 @@ curl https://raw.githubusercontent.com/altercation/solarized/master/iterm2-color
 open /tmp/solarized.itermcolors
 
 # caps lock -> ctrl / smart escape
-mkdir -p ~/config/karabiner
+mkdir -p ~/.config/karabiner
 cat <<EOF > ~/.config/karabiner/karabiner.json 
 {
     "global": {
@@ -191,15 +206,10 @@ cat <<EOF > ~/.config/karabiner/karabiner.json
   }
 EOF
 
+laptop_echo "General OSX Settings ..."
 ###############################################################################
 # General UI/UX                                                               #
 ###############################################################################
-
-# Set computer name (as done via System Preferences → Sharing)
-sudo scutil --set ComputerName "$COMPUTER_NAME"
-sudo scutil --set HostName "$HOST_NAME"
-sudo scutil --set LocalHostName "$HOST_NAME"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$HOST_NAME"
 
 # Set standby delay to 3 hours (default is 1 hour)
 sudo pmset -a standbydelay 10800
@@ -239,6 +249,7 @@ defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 # Disable smart dashes as they’re annoying when typing code
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 
+laptop_echo "Input OSX Settings ..."
 ###############################################################################
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input                 #
 ###############################################################################
@@ -255,6 +266,7 @@ defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 # Disable auto-correct
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
+laptop_echo "Screen OSX Settings ..."
 ###############################################################################
 # Screen                                                                      #
 ###############################################################################
@@ -263,6 +275,7 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
 
+laptop_echo "Finder OSX Settings ..."
 ###############################################################################
 # Finder                                                                      #
 ###############################################################################
@@ -301,7 +314,6 @@ defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
 # Use column view in all Finder windows by default
 # Four-letter codes for all view modes: `icnv`, `clmv`, `Flwv`, `Nlsv`
-t corners
 # Possible values:
 #  0: no-op
 #  2: Mission Control
@@ -335,6 +347,7 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
       OpenWith -bool true \
       Privileges -bool true
 
+laptop_echo "Dock OSX Settings ..."
 ###############################################################################
 # Dock, Dashboard, and hot corners                                            #
 ###############################################################################
@@ -356,6 +369,7 @@ defaults write com.apple.dock autohide-delay -float 0
 
 
 
+laptop_echo "Terminal OSX Settings ..."
 ###############################################################################
 # Terminal & iTerm 2                                                          #
 ###############################################################################
@@ -366,6 +380,7 @@ defaults write com.apple.terminal StringEncodings -array 4
 # Don’t display the annoying prompt when quitting iTerm
 defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
+laptop_echo "Time machine OSX Settings ..."
 ###############################################################################
 # Time Machine                                                                #
 ###############################################################################
@@ -374,6 +389,7 @@ defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 
+laptop_echo "Activity Monitor OSX Settings ..."
 ###############################################################################
 # Activity Monitor                                                            #
 ###############################################################################
@@ -405,6 +421,7 @@ defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
 defaults write com.apple.DiskUtility advanced-image-options -bool true
 
+laptop_echo "App Store OSX Settings ..."
 ###############################################################################
 # Mac App Store                                                               #
 ###############################################################################
@@ -472,22 +489,18 @@ defaults write org.m0k.transmission NSNavLastRootDirectory "~/Downloads"
 defaults write org.m0k.transmission WarningDonate -bool false
 defaults write org.m0k.transmission WarningLegal -bool false
 
-###############################################################################
-# Kill affected applications                                                  #
-###############################################################################
+laptop_echo "Finished OSX Settings ..."
 
-for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
-	"Dock" "Finder" "Google Chrome" "Google Chrome Canary" "Mail" "Messages" \
-	"Opera" "Safari" "SizeUp" "Spectacle" "SystemUIServer" \
-	"Transmission" "Twitter" "iCal"; do
-	killall "${app}" > /dev/null 2>&1
+laptop_echo "Sign into dropbox"
+open /Applications/Dropbox.app
+
+while ! test -f "~/Dropbox/1Password.agilekeychain"; do
+  sleep 5
+  echo "waiting for dropbox to sync"
 done
-echo "Done. Note that some of these changes require a logout/restart to take effect."
-echo "things you need to do:"
-echo "======================"
-echo "  1) map esc/ctrl to caps lock"
-echo "    1.1) Launch Seil and map caps lock to f19 (80)"
-echo "    1.2) Launch Karabiner and select F19 escape/control keys"
-echo "    1.2) Under system prefs > keyboard > modifier keys > set caps lock to no op"
 
-sudo pmset -a sleep 1
+laptop_echo "Setup 1 password"
+open /Applications/1Password\ 6.app
+
+laptop_echo "TODO"
+open /Applications/Bear.app

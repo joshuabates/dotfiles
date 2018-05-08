@@ -61,6 +61,8 @@ fi
 source "$HOME/.asdf/asdf.sh"
 install_asdf_plugin "ruby" "https://github.com/asdf-vm/asdf-ruby.git"
 install_asdf_plugin "nodejs" "https://github.com/asdf-vm/asdf-nodejs.git"
+install_asdf_plugin "java" "https://github.com/skotchpine/asdf-java"
+install_asdf_plugin "python" "https://github.com/tuvistavie/asdf-python.git"
 
 install_asdf_language() {
   local language="$1"
@@ -114,19 +116,19 @@ bash "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
 install_asdf_language "nodejs" 8.9.4
 install_asdf_language "nodejs"
 
-mkdir -p ~/Projects/oc
-cd ~/Projects/oc
-wget -qO- https://api.github.com/orgs/opencounter/repos | jq ".[].ssh_url" | xargs -L 1 git clone
-cd -
-
-laptop_echo "Configuring puma-dev..."
-sudo puma-dev -setup
-puma-dev -install -d test
+install_asdf_language "java"
+install_asdf_language "python"
 
 laptop_echo "Installing NPM modules ..."
 # TODO: make safe for linux (needs maybe_sudo command)
 npm install --global pure-prompt
-yarn global add jshint jsxhint jsonlint stylelint sass-lint flow webpack
+yarn global add jshint jsxhint jsonlint stylelint sass-lint flow webpack webpack-cli electron clone-org-repos
+
+asdf reshim nodejs
+
+laptop_echo "Configuring puma-dev..."
+sudo puma-dev -setup
+puma-dev -install -d test
 
 curl https://raw.githubusercontent.com/altercation/solarized/master/iterm2-colors-solarized/Solarized%20Dark.itermcolors > /tmp/solarized.itermcolors
 open /tmp/solarized.itermcolors
@@ -501,6 +503,8 @@ done
 
 laptop_echo "Setup 1 password"
 open /Applications/1Password\ 6.app
+
+laptop_echo `brew cask info little-snitch`
 
 laptop_echo "TODO"
 open /Applications/Bear.app

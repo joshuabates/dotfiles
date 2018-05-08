@@ -43,6 +43,7 @@ fi
 # source dnvm.sh
 
 export PATH=./bin:"$PATH"
+export PATH=/Users/joshua/Library/Python/2.7/bin:"$PATH"
 
 export PATH="$HOME/.yarn/bin:$PATH"
 

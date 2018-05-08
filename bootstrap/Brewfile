@@ -43,6 +43,7 @@ brew "msgpack"
 brew "neovim", args: ["HEAD"]
 brew "readline"
 brew "tree"
+brew "parity"
 brew "postgis"
 brew "puma/puma/puma-dev"
 brew "pv"
@@ -65,6 +66,7 @@ brew "unixodbc" # asdf dependency
 
 cask_args appdir: "/Applications"
 cask "1password"
+cask "1password-cli"
 cask "alfred"
 cask "bartender"
 cask "caffeine"
@@ -96,6 +98,12 @@ cask 'witch'
 cask "yate"
 cask "zeplin"
 cask "caskroom/fonts/font-inconsolata"
+
+cask "qlcolorcode"
+cask "qlstephen"
+cask "qlmarkdown"
+cask "quicklook-json"
+cask "qlvideo"
 
 mas "Airmail 3", id: 918858936
 mas "Bear", id: 1091189122

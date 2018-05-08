@@ -11,10 +11,6 @@ if [[ -s "$HOME/.ec2" ]]; then
   export AWS_SECRET_KEY=`cat ~/.ec2/AWS_SECRET_KEY`
 fi
 
-if [[ -s "$HOME/.rightscale_token" ]]; then
-  export RIGHTSCALE_REFRESH_TOKEN=`cat ~/.rightscale_token`
-fi
-
 export LC_CTYPE=en_US.UTF-8
 export EDITOR="vim"
 export EVENT_NOKQUEUE=1

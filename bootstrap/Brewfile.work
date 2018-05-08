@@ -1,0 +1,32 @@
+tap "heroku/brew"
+tap "thoughtbot/formulae"
+tap "homebrew/core"
+tap "homebrew/boneyard"
+tap "homebrew/bundle"
+tap "homebrew/services"
+
+brew "openssl"
+brew "autoconf"
+brew "automake"
+brew "awscli"
+brew "coreutils"
+brew "cmake"
+brew "gcc", args: ["with-all-languages"]
+brew "git"
+brew "imagemagick"
+brew "jq"
+brew "libtool" # asdf dependency
+brew "libxslt" # asdf dependency
+brew "libyaml" # asdf dependency
+brew "readline"
+brew "parity"
+brew "postgis"
+brew "puma/puma/puma-dev"
+brew "redis", restart_service: true
+brew "s3cmd"
+brew "yarn", args: ["without-node"]
+brew "heroku/brew/heroku"
+
+cask_args appdir: "/Applications"
+cask "1password"
+cask "1password-cli"

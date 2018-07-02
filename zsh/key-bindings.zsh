@@ -62,7 +62,6 @@ bindkey "^S" sudo-command-line
 # # emacs style
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
-bindkey '^R' history-incremental-search-backward
 
 if bindkey -l | grep -q visual; then
   autoload -U select-bracketed

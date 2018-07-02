@@ -12,7 +12,7 @@ if [[ -s "$HOME/.ec2" ]]; then
 fi
 
 export LC_CTYPE=en_US.UTF-8
-export EDITOR="vim"
+export EDITOR="nvim"
 export EVENT_NOKQUEUE=1
 export FD_SETSIZE=10000
 
@@ -20,8 +20,3 @@ export CLICOLOR=1
 export LSCOLORS=DxGxcxdxCxegedabagacad
 
 export PATH=./node_modules/:/usr/local/bin:/usr/local/sbin:~/bin:/usr/local/share/npm/bin/:$PATH
-
-export HISTFILE=~/.histfile
-export HISTSIZE=100000
-export SAVEHIST=100000
-export SHELL=$(brew --prefix)/bin/zsh

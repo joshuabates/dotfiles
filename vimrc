@@ -21,11 +21,21 @@ call plug#begin()
   Plug 'mhinz/vim-grepper'
   Plug 'MattesGroeger/vim-bookmarks'
 
+  Plug 'ludovicchabant/vim-gutentags'
+
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rhubarb'
+  Plug 'tpope/vim-abolish' " crs (snake), crm (mixed), crc (camel), cru (upper), cr- (dash), cr. (dot) cr<space> (space), crt (title)
+  Plug 'tpope/vim-rails'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-bundler'
+  Plug 'tpope/vim-eunuch'
+
+  Plug 'andrewradev/switch.vim' " gs
+  Plug 'AndrewRadev/splitjoin.vim' " gS gJ
 
   Plug 'vim-ruby/vim-ruby'
 
@@ -37,13 +47,69 @@ call plug#begin()
 
   Plug 'pangloss/vim-javascript'
   Plug 'maxmellon/vim-jsx-pretty'
+  " Plug 'suy/vim-context-commentstring'
+  " let g:context#commentstring#table['javascript'] = {
+			" \ 'jsComment' : '// %s',
+			" \ 'jsImport' : '// %s',
+			" \ 'jsxStatment' : '// %s',
+			" \ 'jsxRegion' : '{/*%s*/}',
+  "     \}
+  let g:jsx_ext_required = 0
+
+  Plug 'mattn/emmet-vim'
+  let g:user_emmet_settings = {
+        \  'javascript' : {
+        \      'extends' : 'jsx',
+        \  },
+        \}
+
   Plug 'elzr/vim-json'
   let g:javascript_plugin_flow = 1
   let g:vim_jsx_pretty_colorful_config = 1
+
+  autocmd FileType javascript set formatprg=prettier\ --stdin
+  autocmd BufWritePre *.js :normal gggqG
+
   Plug 'peterhoeg/vim-qml'
 
   Plug 'benmills/vimux'
   Plug 'skalnik/vim-vroom'
+
+  Plug 'autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': 'bash install.sh',
+        \ }
+  let g:LanguageClient_autoStop = 0
+  let g:LanguageClient_serverCommands = {}
+
+  if executable('javascript-typescript-stdio')
+    let g:LanguageClient_serverCommands.javascript = ['javascript-typescript-stdio']
+  endif
+
+  if executable('css-language-server')
+    let g:LanguageClient_serverCommands.css = ['css-languageserver', '--stdio']
+    let g:LanguageClient_serverCommands.sass = ['css-languageserver', '--stdio']
+    let g:LanguageClient_serverCommands.scss = ['css-languageserver', '--stdio']
+  endif
+
+  if executable('solargraph')
+    let g:LanguageClient_serverCommands.ruby = ['tcp://localhost:7658']
+  endif
+
+  nnoremap <silent> <localleader>K :call LanguageClient_textDocument_hover()<CR>
+  silent! nunmap gd
+  nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+  nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+  nnoremap <silent> <localleader>ca :call LanguageClient_textDocument_codeAction()<CR>
+
+  set formatexpr=LanguageClient_textDocument_rangeFormatting()
+
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  let g:deoplete#enable_at_startup = 1
+  let g:deoplete#enable_smart_case = 1
+  let g:deoplete#sources = {}
+  let g:deoplete#sources.javascript = ['LanguageClient']
+  let g:deoplete#sources.ruby = ['LanguageClient']
 call plug#end()
 
 syntax enable
@@ -150,7 +216,7 @@ let g:grepper.highlight = 1
 let g:grepper.dir = 'repo,cwd'
 let g:grepper.tools = ['rg', 'ag', 'ack', 'git']
 
-nmap <leader>F :Grepper<cr>
+nmap <leader>F :Ag<cr>
 nnoremap <leader>f :Grepper -tool ag -cword -noprompt<cr>
 
 " Open a replace command for the current word

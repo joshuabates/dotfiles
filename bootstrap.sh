@@ -19,7 +19,11 @@ mkdir -p ~/.vim/autoload
 curl -fLo ~/.vim/autoload/plug.vim \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
+pip3 install neovim
+pip3 install --upgrade neovim
+
 vim -c PlugInstall -c quitall
+nvim -c PlugInstall -c quitall
 
 # restart shell
 su -l `whoami`

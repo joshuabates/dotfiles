@@ -77,6 +77,7 @@ install_asdf_language() {
   fi
 }
 
+
 laptop_echo "Installing Ruby..."
 cat << EOF > "$HOME"/.default-gems
 gem-ctags
@@ -96,6 +97,7 @@ awesome_print
 commands
 coolline
 pry-coolline
+solargraph
 EOF
 
 number_of_cores=$(sysctl -n hw.ncpu)
@@ -122,7 +124,7 @@ install_asdf_language "python"
 laptop_echo "Installing NPM modules ..."
 # TODO: make safe for linux (needs maybe_sudo command)
 npm install --global pure-prompt
-yarn global add jshint jsxhint jsonlint stylelint sass-lint flow webpack webpack-cli electron clone-org-repos
+yarn global add jshint jsxhint jsonlint stylelint sass-lint flow webpack webpack-cli electron clone-org-repos javascript-typescript-langserver
 
 asdf reshim nodejs
 
@@ -250,6 +252,20 @@ defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 
 # Disable smart dashes as they’re annoying when typing code
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+
+###############################################################################
+# SSD-specific tweaks                                                         #
+###############################################################################
+
+# Disable hibernation (speeds up entering sleep mode)
+sudo pmset -a hibernatemode 0
+
+# Remove the sleep image file to save disk space
+sudo rm /private/var/vm/sleepimage
+# Create a zero-byte file instead…
+sudo touch /private/var/vm/sleepimage
+# …and make sure it can’t be rewritten
+sudo chflags uchg /private/var/vm/sleepimage
 
 laptop_echo "Input OSX Settings ..."
 ###############################################################################
@@ -491,7 +507,13 @@ defaults write org.m0k.transmission NSNavLastRootDirectory "~/Downloads"
 defaults write org.m0k.transmission WarningDonate -bool false
 defaults write org.m0k.transmission WarningLegal -bool false
 
+defaults write com.apple.iTunes disablePingSidebar -bool true
+defaults write com.apple.iTunes disablePing -bool true
+
 laptop_echo "Finished OSX Settings ..."
+
+open /usr/local/Caskroom/little-snitch/*/LittleSnitch*.dmg
+open /Volumes/Little\ Snitch\ */Little\ Snitch\ Installer.app
 
 laptop_echo "Sign into dropbox"
 open /Applications/Dropbox.app

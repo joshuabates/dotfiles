@@ -1,1 +1,0 @@
-/Users/joshua/.dotfiles/vim/ftdetect/rspec.vim

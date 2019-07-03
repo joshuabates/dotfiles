@@ -10,13 +10,14 @@ endif
 
 set nocompatible
 call plug#begin()
-  Plug 'iCyMind/NeoSolarized'
+  Plug 'morhetz/gruvbox'
+ " Plug 'iCyMind/NeoSolarized'
   Plug 'itchyny/lightline.vim'
   Plug 'maximbaz/lightline-ale'
 
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
-  Plug 'christoomey/vim-tmux-navigator'
+  " Plug 'christoomey/vim-tmux-navigator'
   Plug 'itchyny/vim-cursorword'
   Plug 'mhinz/vim-grepper'
   Plug 'MattesGroeger/vim-bookmarks'
@@ -75,8 +76,10 @@ call plug#begin()
 
   Plug 'peterhoeg/vim-qml'
 
-  Plug 'benmills/vimux'
-  Plug 'skalnik/vim-vroom'
+  Plug 'janko/vim-test'
+
+  " Plug 'benmills/vimux'
+  " Plug 'skalnik/vim-vroom'
 
   Plug 'autozimu/LanguageClient-neovim', {
         \ 'branch': 'next',
@@ -142,7 +145,7 @@ nmap n nzz
 nnoremap Q <Nop>
 
 set termguicolors
-colorscheme NeoSolarized
+colorscheme gruvbox
 set background=dark
 let g:neosolarized_contrast = "high"
 let g:lightline = {
@@ -251,48 +254,52 @@ nmap <leader>K :w<CR>:cP<CR>
 " }
 
 
-let g:vroom_map_keys = 0
-let g:vroom_detect_spec_helper = 1
-let g:vroom_use_vimux = 1
+" let g:vroom_map_keys = 0
+" let g:vroom_detect_spec_helper = 1
+" let g:vroom_use_vimux = 1
 
 " this should only run for ruby
-nmap <leader>e :VroomRunNearestTest<CR>
-nmap <leader>s :VroomRunTestFile<CR>
+" nmap <leader>e :VroomRunNearestTest<CR>
+" nmap <leader>s :VroomRunTestFile<CR>
+nmap <leader>e :TestNearest<CR>
+nmap <leader>s :TestFile<CR>
+nmap <leader>l :TestLast<CR>
+nmap <leader>L :TestVisit<CR>
 
-fu! VimuxRunLastCommandOrLastInHistory()
-  if exists("g:VimuxRunnerIndex")
-    call VimuxRunLastCommand()
-  else
-    call TmuxRun('!!')
-    call VimuxSendKeys("Enter")
-  endif
-endfu
-nmap <leader>l :call VimuxRunLastCommandOrLastInHistory()<CR>
+" fu! VimuxRunLastCommandOrLastInHistory()
+"   if exists("g:VimuxRunnerIndex")
+"     call VimuxRunLastCommand()
+"   else
+"     call TmuxRun('!!')
+"     call VimuxSendKeys("Enter")
+"   endif
+" endfu
+" nmap <leader>l :call VimuxRunLastCommandOrLastInHistory()<CR>
 
-function! TmuxRun(cmd)
-  if exists("g:VimuxRunnerIndex")
-    call VimuxSendText(a:cmd)
-    call VimuxSendKeys("Enter")
-  else
-    call VimuxRunCommand(a:cmd)
-  end
-endfunction
+" function! TmuxRun(cmd)
+"   if exists("g:VimuxRunnerIndex")
+"     call VimuxSendText(a:cmd)
+"     call VimuxSendKeys("Enter")
+"   else
+"     call VimuxRunCommand(a:cmd)
+"   end
+" endfunction
 
-function! TmuxCommand()
-  call inputsave()
-  let replacement = input('Sent to tmux pain:')
-  call inputrestore()
-  call TmuxRun(replacement)
-endfunction
+" function! TmuxCommand()
+"   call inputsave()
+"   let replacement = input('Sent to tmux pain:')
+"   call inputrestore()
+"   call TmuxRun(replacement)
+" endfunction
 
-function! VimuxReload()
-  call TmuxRun("load '".expand("%")."'")
-endfunction
+" function! VimuxReload()
+"   call TmuxRun("load '".expand("%")."'")
+" endfunction
 
-function! CurrentLine()
-  let line = line(".")
-  let file = expand("%")
-  return file . ':' . line
-endfunction
+" function! CurrentLine()
+"   let line = line(".")
+"   let file = expand("%")
+"   return file . ':' . line
+" endfunction
 
-nnoremap <leader>,l :call VimuxReload()<CR>
+" nnoremap <leader>,l :call VimuxReload()<CR>

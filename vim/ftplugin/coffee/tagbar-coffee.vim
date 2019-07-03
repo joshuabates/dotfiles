@@ -1,1 +1,0 @@
-/Users/joshua/.dotfiles/vim/ftplugin/coffee/tagbar-coffee.vim

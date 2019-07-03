@@ -1,1 +1,0 @@
-/Users/joshua/.dotfiles/vim/after/ftdetect/haml_coffee.vim

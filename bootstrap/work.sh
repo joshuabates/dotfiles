@@ -1,3 +1,4 @@
+#!/bin/sh
 mkdir -p ~/Projects/oc
 cd ~/Projects/oc
 vared -p 'Enter github token: ' -c GITHUB_TOKEN
@@ -30,8 +31,6 @@ brew services start postgresql
 brew services start redis
 
 rake db:create:all
-
-cp config/database-sample.yml config/database.yml
 
 development restore-from staging
 

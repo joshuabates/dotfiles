@@ -81,7 +81,7 @@ cask "karabiner-elements"
 cask "little-snitch"
 cask "nvalt"
 cask "ocenaudio"
-cask "onyx"
+# cask "onyx"
 cask "postico"
 cask "rekordbox"
 cask "rowanj-gitx"
@@ -90,12 +90,12 @@ cask "sizeup"
 cask "skype"
 cask "soulseek"
 cask "synergy"
-cask "torbrowser"
+cask "tor-browser"
 cask "transmission"
 cask "vlc"
 cask "xld"
 cask 'witch'
-cask "yate"
+# cask "yate"
 cask "zeplin"
 cask "caskroom/fonts/font-inconsolata"
 
@@ -105,15 +105,3 @@ cask "qlmarkdown"
 cask "quicklook-json"
 cask "qlvideo"
 
-mas "Airmail 3", id: 918858936
-mas "Bear", id: 1091189122
-mas "DaisyDisk", id: 411643860
-mas "Day One Classic", id: 422304217
-mas "Living Earth", id: 539362919
-mas "Moom", id: 419330170
-mas "Shazam", id: 897118787
-mas "Sip", id: 507257563
-mas "Slack", id: 803453959
-mas "The Unarchiver", id: 425424353
-mas "VOX", id: 461369673
-mas "Xcode", id: 497799835

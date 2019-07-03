@@ -37,10 +37,13 @@ call plug#begin()
   Plug 'andrewradev/switch.vim' " gs
   Plug 'AndrewRadev/splitjoin.vim' " gS gJ
 
+  Plug 'jgdavey/vim-blockle'
+  let g:blockle_mapping = '<Leader>{'
   Plug 'vim-ruby/vim-ruby'
 
   Plug 'w0rp/ale'
   let g:ale_linters = {'javascript': ['flow', 'eslint']}
+  let g:ale_fixers = {'javascript': ['eslint']}
 
   Plug 'cakebaker/scss-syntax.vim'
   Plug 'hail2u/vim-css3-syntax'
@@ -67,8 +70,8 @@ call plug#begin()
   let g:javascript_plugin_flow = 1
   let g:vim_jsx_pretty_colorful_config = 1
 
-  autocmd FileType javascript set formatprg=prettier\ --stdin
-  autocmd BufWritePre *.js :normal gggqG
+  " autocmd FileType javascript set formatprg=prettier\ --stdin
+  " autocmd BufWritePre *.js :normal gggqG
 
   Plug 'peterhoeg/vim-qml'
 
@@ -107,9 +110,13 @@ call plug#begin()
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#enable_smart_case = 1
+  " call deoplete#custom#source('_',
+  "           \ 'disabled_syntaxes', ['Comment', 'String'])
+
   let g:deoplete#sources = {}
-  let g:deoplete#sources.javascript = ['LanguageClient']
-  let g:deoplete#sources.ruby = ['LanguageClient']
+  let g:deoplete#sources._ = ['buffer', 'around']
+  let g:deoplete#sources.javascript = ['around', 'buffer', 'LanguageClient']
+  let g:deoplete#sources.ruby = ['around', 'buffer', 'LanguageClient']
 call plug#end()
 
 syntax enable
@@ -132,6 +139,7 @@ set ignorecase
 set smartcase
 nmap N Nzz
 nmap n nzz
+nnoremap Q <Nop>
 
 set termguicolors
 colorscheme NeoSolarized
@@ -216,7 +224,8 @@ let g:grepper.highlight = 1
 let g:grepper.dir = 'repo,cwd'
 let g:grepper.tools = ['rg', 'ag', 'ack', 'git']
 
-nmap <leader>F :Ag<cr>
+nmap <leader><C-F> :Ag<cr>
+nmap <leader>F :GrepperAg 
 nnoremap <leader>f :Grepper -tool ag -cword -noprompt<cr>
 
 " Open a replace command for the current word

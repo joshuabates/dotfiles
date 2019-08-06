@@ -14,5 +14,9 @@ if defined? ::Pry
   exit
 end
 
+def find_me
+  User.find_by_email("joshua@opencounter.com")
+end
 alias :x :exit
 alias :r :require
+alias :me :find_me

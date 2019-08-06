@@ -4,6 +4,8 @@ alias psg='ps aux | grep'
 alias vi='nvim'
 alias vim='nvim'
 
+alias oc='kitty --single-instance -o allow_remote_control=yes --listen-on unix:/tmp/mykitty --start-as=maximized --session ~/.config/kitty/oc.conf &; x'
+
 # Rails
 alias rsc='ruby script/rails c'
 alias b='bundle exec'

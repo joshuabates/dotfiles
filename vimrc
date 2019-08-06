@@ -18,6 +18,7 @@ call plug#begin()
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
   " Plug 'christoomey/vim-tmux-navigator'
+  Plug 'knubie/vim-kitty-navigator'
   Plug 'itchyny/vim-cursorword'
   Plug 'mhinz/vim-grepper'
   Plug 'MattesGroeger/vim-bookmarks'
@@ -77,49 +78,51 @@ call plug#begin()
   Plug 'peterhoeg/vim-qml'
 
   Plug 'janko/vim-test'
+  Plug 'kassio/neoterm'
 
+  Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
   " Plug 'benmills/vimux'
   " Plug 'skalnik/vim-vroom'
 
-  Plug 'autozimu/LanguageClient-neovim', {
-        \ 'branch': 'next',
-        \ 'do': 'bash install.sh',
-        \ }
-  let g:LanguageClient_autoStop = 0
-  let g:LanguageClient_serverCommands = {}
+  " Plug 'autozimu/LanguageClient-neovim', {
+  "       \ 'branch': 'next',
+  "       \ 'do': 'bash install.sh',
+  "       \ }
+  " let g:LanguageClient_autoStop = 0
+  " let g:LanguageClient_serverCommands = {}
 
-  if executable('javascript-typescript-stdio')
-    let g:LanguageClient_serverCommands.javascript = ['javascript-typescript-stdio']
-  endif
+  " if executable('javascript-typescript-stdio')
+  "   let g:LanguageClient_serverCommands.javascript = ['javascript-typescript-stdio']
+  " endif
 
-  if executable('css-language-server')
-    let g:LanguageClient_serverCommands.css = ['css-languageserver', '--stdio']
-    let g:LanguageClient_serverCommands.sass = ['css-languageserver', '--stdio']
-    let g:LanguageClient_serverCommands.scss = ['css-languageserver', '--stdio']
-  endif
+  " if executable('css-language-server')
+  "   let g:LanguageClient_serverCommands.css = ['css-languageserver', '--stdio']
+  "   let g:LanguageClient_serverCommands.sass = ['css-languageserver', '--stdio']
+  "   let g:LanguageClient_serverCommands.scss = ['css-languageserver', '--stdio']
+  " endif
 
-  if executable('solargraph')
-    let g:LanguageClient_serverCommands.ruby = ['tcp://localhost:7658']
-  endif
+  " if executable('solargraph')
+  "   let g:LanguageClient_serverCommands.ruby = ['tcp://localhost:7658']
+  " endif
 
-  nnoremap <silent> <localleader>K :call LanguageClient_textDocument_hover()<CR>
-  silent! nunmap gd
-  nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-  nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-  nnoremap <silent> <localleader>ca :call LanguageClient_textDocument_codeAction()<CR>
+  " nnoremap <silent> <localleader>K :call LanguageClient_textDocument_hover()<CR>
+  " silent! nunmap gd
+  " nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+  " nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+  " nnoremap <silent> <localleader>ca :call LanguageClient_textDocument_codeAction()<CR>
 
-  set formatexpr=LanguageClient_textDocument_rangeFormatting()
+  " set formatexpr=LanguageClient_textDocument_rangeFormatting()
 
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  let g:deoplete#enable_at_startup = 1
-  let g:deoplete#enable_smart_case = 1
-  " call deoplete#custom#source('_',
-  "           \ 'disabled_syntaxes', ['Comment', 'String'])
+  " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  " let g:deoplete#enable_at_startup = 1
+  " let g:deoplete#enable_smart_case = 1
+  " " call deoplete#custom#source('_',
+  " "           \ 'disabled_syntaxes', ['Comment', 'String'])
 
-  let g:deoplete#sources = {}
-  let g:deoplete#sources._ = ['buffer', 'around']
-  let g:deoplete#sources.javascript = ['around', 'buffer', 'LanguageClient']
-  let g:deoplete#sources.ruby = ['around', 'buffer', 'LanguageClient']
+  " let g:deoplete#sources = {}
+  " let g:deoplete#sources._ = ['buffer', 'around']
+  " let g:deoplete#sources.javascript = ['around', 'buffer', 'LanguageClient']
+  " let g:deoplete#sources.ruby = ['around', 'buffer', 'LanguageClient']
 call plug#end()
 
 syntax enable
@@ -177,14 +180,16 @@ set number relativenumber
 autocmd InsertEnter * :set number norelativenumber
 autocmd InsertLeave * :set number relativenumber
 
+autocmd bufwritepost .vimrc source $MYVIMRC
+
 " Switch between files with leader-leader
 nnoremap <leader><leader> <c-^>
 
 " Switch panes without <c-w> prefix
-map <C-J> <C-W>j<C-W>_
-map <C-K> <C-W>k<C-W>_
-map <C-L> <C-W>l<C-W>_
-map <C-H> <C-W>h<C-W>_
+" map <C-J> <C-W>j<C-W>_
+" map <C-K> <C-W>k<C-W>_
+" map <C-L> <C-W>l<C-W>_
+" map <C-H> <C-W>h<C-W>_
 
 nnoremap <leader>t :Files<Cr>
 nnoremap <leader>m :BTags<Cr>
@@ -213,8 +218,13 @@ nnoremap <CR> :noh<CR><CR>
 fu! CloseQuickFixOrBuffer()
     for i in range(1, winnr('$'))
         let bnum = winbufnr(i)
-        if getbufvar(bnum, '&buftype') == 'quickfix'
+        let type = getbufvar(bnum, '&buftype')
+        if type == 'quickfix'
             cclose
+            return
+        endif
+        if type == 'terminal'
+            execute "Tclose"
             return
         endif
     endfor
@@ -265,6 +275,15 @@ nmap <leader>e :TestNearest<CR>
 nmap <leader>s :TestFile<CR>
 nmap <leader>l :TestLast<CR>
 nmap <leader>L :TestVisit<CR>
+let test#strategy = "neoterm"
+let g:neoterm_default_mod = "rightbelow"
+let g:neoterm_autoinsert = 1
+let g:neoterm_autoscroll = 1
+tnoremap <Esc> <C-\><C-n>
+tnoremap <C-k> <C-\><C-n><C-w>k
+tnoremap <C-j> <C-\><C-n><C-w>j
+tnoremap <C-h> <C-\><C-n><C-w>h
+tnoremap <C-l> <C-\><C-n><C-w>l
 
 " fu! VimuxRunLastCommandOrLastInHistory()
 "   if exists("g:VimuxRunnerIndex")

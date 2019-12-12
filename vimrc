@@ -11,13 +11,11 @@ endif
 set nocompatible
 call plug#begin()
   Plug 'morhetz/gruvbox'
- " Plug 'iCyMind/NeoSolarized'
   Plug 'itchyny/lightline.vim'
   Plug 'maximbaz/lightline-ale'
 
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
-  " Plug 'christoomey/vim-tmux-navigator'
   Plug 'knubie/vim-kitty-navigator'
   Plug 'itchyny/vim-cursorword'
   Plug 'mhinz/vim-grepper'
@@ -49,6 +47,7 @@ call plug#begin()
 
   Plug 'cakebaker/scss-syntax.vim'
   Plug 'hail2u/vim-css3-syntax'
+  Plug 'ap/vim-css-color'
 
   Plug 'pangloss/vim-javascript'
   Plug 'maxmellon/vim-jsx-pretty'
@@ -78,51 +77,16 @@ call plug#begin()
   Plug 'peterhoeg/vim-qml'
 
   Plug 'janko/vim-test'
-  Plug 'kassio/neoterm'
 
-  Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
-  " Plug 'benmills/vimux'
-  " Plug 'skalnik/vim-vroom'
-
-  " Plug 'autozimu/LanguageClient-neovim', {
-  "       \ 'branch': 'next',
-  "       \ 'do': 'bash install.sh',
-  "       \ }
-  " let g:LanguageClient_autoStop = 0
-  " let g:LanguageClient_serverCommands = {}
-
-  " if executable('javascript-typescript-stdio')
-  "   let g:LanguageClient_serverCommands.javascript = ['javascript-typescript-stdio']
-  " endif
-
-  " if executable('css-language-server')
-  "   let g:LanguageClient_serverCommands.css = ['css-languageserver', '--stdio']
-  "   let g:LanguageClient_serverCommands.sass = ['css-languageserver', '--stdio']
-  "   let g:LanguageClient_serverCommands.scss = ['css-languageserver', '--stdio']
-  " endif
-
-  " if executable('solargraph')
-  "   let g:LanguageClient_serverCommands.ruby = ['tcp://localhost:7658']
-  " endif
-
-  " nnoremap <silent> <localleader>K :call LanguageClient_textDocument_hover()<CR>
-  " silent! nunmap gd
-  " nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-  " nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-  " nnoremap <silent> <localleader>ca :call LanguageClient_textDocument_codeAction()<CR>
-
-  " set formatexpr=LanguageClient_textDocument_rangeFormatting()
-
-  " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  " let g:deoplete#enable_at_startup = 1
-  " let g:deoplete#enable_smart_case = 1
-  " " call deoplete#custom#source('_',
-  " "           \ 'disabled_syntaxes', ['Comment', 'String'])
-
-  " let g:deoplete#sources = {}
-  " let g:deoplete#sources._ = ['buffer', 'around']
-  " let g:deoplete#sources.javascript = ['around', 'buffer', 'LanguageClient']
-  " let g:deoplete#sources.ruby = ['around', 'buffer', 'LanguageClient']
+  Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+  " Plug 'neoclide/coc-solargraph', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-prettier', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-lists', {'do': 'yarn install --frozen-lockfile'} " mru and stuff
+  " Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'} " color highlighting
 call plug#end()
 
 syntax enable
@@ -185,12 +149,6 @@ autocmd bufwritepost .vimrc source $MYVIMRC
 " Switch between files with leader-leader
 nnoremap <leader><leader> <c-^>
 
-" Switch panes without <c-w> prefix
-" map <C-J> <C-W>j<C-W>_
-" map <C-K> <C-W>k<C-W>_
-" map <C-L> <C-W>l<C-W>_
-" map <C-H> <C-W>h<C-W>_
-
 nnoremap <leader>t :Files<Cr>
 nnoremap <leader>m :BTags<Cr>
 nnoremap <leader>b :Buffers<Cr>
@@ -232,6 +190,8 @@ fu! CloseQuickFixOrBuffer()
 endfunction
 nmap <leader>c :call CloseQuickFixOrBuffer()<cr>
 
+autocmd BufLeave *#FZF :bd!
+
 runtime plugin/grepper.vim
 let g:grepper.highlight = 1
 let g:grepper.dir = 'repo,cwd'
@@ -263,22 +223,11 @@ nmap <leader>K :w<CR>:cP<CR>
   nmap <leader>gp :Git push<CR>
 " }
 
-
-" let g:vroom_map_keys = 0
-" let g:vroom_detect_spec_helper = 1
-" let g:vroom_use_vimux = 1
-
-" this should only run for ruby
-" nmap <leader>e :VroomRunNearestTest<CR>
-" nmap <leader>s :VroomRunTestFile<CR>
 nmap <leader>e :TestNearest<CR>
 nmap <leader>s :TestFile<CR>
 nmap <leader>l :TestLast<CR>
 nmap <leader>L :TestVisit<CR>
-let test#strategy = "neoterm"
-let g:neoterm_default_mod = "rightbelow"
-let g:neoterm_autoinsert = 1
-let g:neoterm_autoscroll = 1
+let test#strategy = "kitty"
 tnoremap <Esc> <C-\><C-n>
 tnoremap <C-k> <C-\><C-n><C-w>k
 tnoremap <C-j> <C-\><C-n><C-w>j

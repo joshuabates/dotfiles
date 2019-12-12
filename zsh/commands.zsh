@@ -90,3 +90,8 @@ z() {
         _z "$@"
     fi
 }
+
+pkill() {
+	pid=$(psql -d opencounter_dev -c "SELECT pid,application_name FROM pg_stat_activity WHERE datname = 'opencounter_dev' AND application_name != 'psql';" -tq | fzf -m | awk '{print $1}')
+	[ -n "$pid" ] && kill "${1:--15}" "$pid"
+}

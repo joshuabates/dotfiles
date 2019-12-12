@@ -65,6 +65,7 @@ brew "heroku/brew/heroku"
 brew "thoughtbot/formulae/rcm"
 brew "unixodbc" # asdf dependency
 brew "kitty"
+brew "direnv"
 
 cask_args appdir: "/Applications"
 cask "1password"

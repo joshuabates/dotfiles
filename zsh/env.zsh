@@ -5,6 +5,7 @@ export NODE_PATH="/usr/local/lib/node"
 export EC2_AMITOOL_HOME="/usr/local/Library/LinkedKegs/ec2-ami-tools/jars"
 export EC2_HOME="$HOME/.ec2"
 export AWS_REGION=us-east-1
+export KITTY_LISTEN_ON=/tmp/mykitty
 
 if [[ -s "$HOME/.ec2" ]]; then
   export AWS_ACCESS_KEY=`cat ~/.ec2/AWS_ACCESS_KEY`

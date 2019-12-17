@@ -16,7 +16,7 @@ call plug#begin()
 
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
-  Plug 'knubie/vim-kitty-navigator'
+  Plug 'knubie/vim-kitty-navigator', { 'commit': '08a792' }
   Plug 'itchyny/vim-cursorword'
   Plug 'mhinz/vim-grepper'
   Plug 'MattesGroeger/vim-bookmarks'
@@ -149,7 +149,9 @@ autocmd bufwritepost .vimrc source $MYVIMRC
 " Switch between files with leader-leader
 nnoremap <leader><leader> <c-^>
 
-nnoremap <leader>t :Files<Cr>
+
+nnoremap <leader>t :call fzf#vim#files('', fzf#vim#with_preview({'options': '--prompt ""'}, 'right:50%'))<CR>
+" nnoremap <leader>t :Files<Cr>
 nnoremap <leader>m :BTags<Cr>
 nnoremap <leader>b :Buffers<Cr>
 nnoremap <C-p>m :Files app/models<Cr>
@@ -190,7 +192,32 @@ fu! CloseQuickFixOrBuffer()
 endfunction
 nmap <leader>c :call CloseQuickFixOrBuffer()<cr>
 
+let $FZF_DEFAULT_OPTS=' --color=dark --layout=reverse --margin=1,4'
+" let $FZF_DEFAULT_OPTS=' --color=dark --color=fg:15,bg:-1,hl:1,fg+:#ffffff,bg+:0,hl+:1 --color=info:0,prompt:0,pointer:12,marker:4,spinner:11,header:-1 --layout=reverse --margin=1,4'
+"
 autocmd BufLeave *#FZF :bd!
+let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+
+function! FloatingFZF()
+  let buf = nvim_create_buf(v:false, v:true)
+  call setbufvar(buf, '&signcolumn', 'no')
+
+  let height = float2nr(40)
+  let width = float2nr(120)
+  let horizontal = float2nr((&columns - width) / 2)
+  let vertical = 1
+
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': vertical,
+        \ 'col': horizontal,
+        \ 'width': width,
+        \ 'height': height,
+        \ 'style': 'minimal'
+        \ }
+
+  call nvim_open_win(buf, v:true, opts)
+endfunction
 
 runtime plugin/grepper.vim
 let g:grepper.highlight = 1
@@ -234,6 +261,7 @@ tnoremap <C-j> <C-\><C-n><C-w>j
 tnoremap <C-h> <C-\><C-n><C-w>h
 tnoremap <C-l> <C-\><C-n><C-w>l
 
+let g:coc_node_path = '/usr/local/opt/node@10/bin/node'
 " fu! VimuxRunLastCommandOrLastInHistory()
 "   if exists("g:VimuxRunnerIndex")
 "     call VimuxRunLastCommand()

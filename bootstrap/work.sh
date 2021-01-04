@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
 mkdir -p ~/Projects/oc
 cd ~/Projects/oc
 vared -p 'Enter github token: ' -c GITHUB_TOKEN

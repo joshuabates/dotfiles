@@ -29,7 +29,7 @@
   rs = reset
 	ci = commit -v
 	co = checkout
-	b = branch
+	b = branch --sort=-committerdate
 	br = branch
 	mt = mergetool
 	d = diff
@@ -64,3 +64,9 @@
 	oldHighlight = red bold 52
 	newNormal = green bold
 	newHighlight = green bold 22
+[credential]
+	helper = cache
+[credential "https://github.com"]
+	username = joshuabates
+[url "https://"]
+	insteadOf = git://

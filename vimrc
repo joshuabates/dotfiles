@@ -261,7 +261,8 @@ tnoremap <C-j> <C-\><C-n><C-w>j
 tnoremap <C-h> <C-\><C-n><C-w>h
 tnoremap <C-l> <C-\><C-n><C-w>l
 
-let g:coc_node_path = '/usr/local/opt/node@10/bin/node'
+let current_node_path = trim(system('asdf where nodejs 14.4.0'))
+let g:coc_node_path = current_node_path . '/bin/node'
 " fu! VimuxRunLastCommandOrLastInHistory()
 "   if exists("g:VimuxRunnerIndex")
 "     call VimuxRunLastCommand()

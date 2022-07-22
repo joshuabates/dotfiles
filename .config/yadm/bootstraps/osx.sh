@@ -1,0 +1,296 @@
+#!/bin/sh
+trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
+set -e
+
+# Adpated from thoughtbot's laptop script.
+# https://github.com/thoughtbot/laptop
+
+laptop_echo() {
+  local fmt="$1"; shift
+
+  # shellcheck disable=SC2059
+  printf "\\n[LAPTOP] $fmt\\n" "$@"
+}
+
+# Ask for the administrator password upfront
+sudo -v
+
+# Keep-alive: update existing `sudo` time stamp until finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+# Don't sleep
+sudo pmset -a sleep 0
+
+laptop_echo "Installing Homebrew ..."
+
+if hash brew 2>/dev/null; then
+  brew update && brew cleanup
+else
+ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+
+laptop_echo "Updating Homebrew formulae ..."
+brew bundle --file="$(dirname "$0")"/Brewfile
+
+laptop_echo "Linking dotfiles"
+env RCRC=$HOME/.dotfiles/rcrc rcup
+
+if [ -f "$(brew --prefix)/bin/fish" ]; then
+  echo "$(brew --prefix)/bin/fish" | sudo tee -a /etc/shells
+  chsh -s "$(brew --prefix)/bin/fish" $USER
+else
+  puts "fish is not installed; Exiting"
+  exit 1
+fi
+
+curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+fisher update
+
+laptop_echo "Configuring asdf version manager..."
+
+install_asdf_plugin() {
+  local name="$1"
+  local url="$2"
+
+  if ! asdf plugin-list | grep -Fq "$name"; then
+    asdf plugin-add "$name" "$url"
+  fi
+}
+
+source "$HOME/.asdf/asdf.sh"
+install_asdf_plugin "ruby" "https://github.com/asdf-vm/asdf-ruby.git"
+install_asdf_plugin "nodejs" "https://github.com/asdf-vm/asdf-nodejs.git"
+install_asdf_plugin "java" "https://github.com/skotchpine/asdf-java"
+install_asdf_plugin "python" "https://github.com/tuvistavie/asdf-python.git"
+
+install_asdf_language() {
+  local language="$1"
+  local version="$2"
+	if [ -z "$version" ]; then
+    version="$(asdf list-all "$language" | tail -1)"
+  fi
+
+  if ! asdf list "$language" | grep -Fq "$version"; then
+    asdf install "$language" "$version"
+    asdf global "$language" "$version"
+  fi
+}
+
+
+laptop_echo "Installing Ruby..."
+cat << EOF > "$HOME"/.default-gems
+gem-ctags
+gem-browse
+bundler
+hookup
+pry
+pry-doc
+pry-rails
+pry-rescue
+pry-remote
+pry-nav
+pry-inline
+pry-doc
+pry-byebug
+awesome_print
+commands
+coolline
+pry-coolline
+solargraph
+EOF
+
+number_of_cores=$(sysctl -n hw.ncpu)
+
+export RUBY_CFLAGS="-ggdb3 -O0"
+
+install_asdf_language "ruby" 2.7.2
+gem update --system
+bundle config --global jobs $((number_of_cores - 1))
+
+install_asdf_language "ruby"
+gem update --system
+bundle config --global jobs $((number_of_cores - 1))
+
+laptop_echo "Installing latest Node..."
+bash "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
+install_asdf_language "nodejs" 16.13.2
+install_asdf_language "nodejs"
+
+install_asdf_language "java"
+install_asdf_language "python"
+
+laptop_echo "Installing NPM modules ..."
+# TODO: make safe for linux (needs maybe_sudo command)
+npm install --global pure-prompt yarn
+yarn global add jshint jsxhint jsonlint stylelint sass-lint flow webpack webpack-cli electron clone-org-repos javascript-typescript-langserver
+
+asdf reshim nodejs
+
+laptop_echo "Configuring puma-dev..."
+sudo puma-dev -setup
+puma-dev -install -d test
+
+laptop_echo "General OSX Settings ..."
+###############################################################################
+# General UI/UX                                                               #
+###############################################################################
+
+# Expand save panel by default
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+
+# Expand print panel by default
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+
+# Automatically quit printer app once the print jobs complete
+defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
+
+# Disable the “Are you sure you want to open this application?” dialog
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+
+# Disable the crash reporter
+defaults write com.apple.CrashReporter DialogType -string "none"
+
+# Disable smart quotes as they’re annoying when typing code
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+
+# Disable smart dashes as they’re annoying when typing code
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+
+laptop_echo "Input OSX Settings ..."
+###############################################################################
+# Trackpad, mouse, keyboard, Bluetooth accessories, and input                 #
+###############################################################################
+
+# Trackpad: enable tap to click for this user and for the login screen
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
+# Enable full keyboard access for all controls
+# (e.g. enable Tab in modal dialogs)
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+
+# Disable auto-correct
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+laptop_echo "Screen OSX Settings ..."
+###############################################################################
+# Screen                                                                      #
+###############################################################################
+
+# Require password immediately after sleep or screen saver begins
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
+
+laptop_echo "Finder OSX Settings ..."
+###############################################################################
+# Finder                                                                      #
+###############################################################################
+
+# Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons
+defaults write com.apple.finder QuitMenuItem -bool true
+
+# Set the user directory as the default location for new Finder windows
+# More options here: https://github.com/mathiasbynens/dotfiles/blob/96edd4b57047f34ffbcbb708e1e4de3a2e469925/.macos#L233
+defaults write com.apple.finder NewWindowTarget -string "PfLo"
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
+
+# Show icons for hard drives, servers, and removable media on the desktop
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+
+# Finder: show status bar
+defaults write com.apple.finder ShowStatusBar -bool true
+
+# Finder: show path bar
+defaults write com.apple.finder ShowPathbar -bool true
+
+# Keep folders on top when sorting by name
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+# When performing a search, search the current folder by default
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+# Disable the warning when changing a file extension
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+# Use column view in all Finder windows by default
+# Four-letter codes for all view modes: `icnv`, `clmv`, `Flwv`, `Nlsv`
+# Possible values:
+#  0: no-op
+#  2: Mission Control
+#  3: Show application windows
+#  4: Desktop
+#  5: Start screen saver
+#  6: Disable screen saver
+#  7: Dashboard
+# 10: Put display to sleep
+# 11: Launchpad
+# 12: Notification Center
+# Top left screen corner → Mission Control
+# defaults write com.apple.dock wvous-tl-corner -int 2
+# defaults write com.apple.dock wvous-tl-modifier -int 0
+# Top right screen corner → Desktop
+# defaults write com.apple.dock wvous-tr-corner -int 4
+# defaults write com.apple.dock wvous-tr-modifier -int 0
+# Bottom right screen corner → Display sleep
+defaults write com.apple.dock wvous-br-corner -int 10
+defaults write com.apple.dock wvous-br-modifier -int 0
+
+defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+
+# Disable the warning before emptying the Trash
+defaults write com.apple.finder WarnOnEmptyTrash -bool false
+
+# Expand the following File Info panes:
+# “General”, “Open with”, and “Sharing & Permissions”
+defaults write com.apple.finder FXInfoPanesExpanded -dict \
+      General -bool true \
+      OpenWith -bool true \
+      Privileges -bool true
+
+laptop_echo "Time machine OSX Settings ..."
+###############################################################################
+# Time Machine                                                                #
+###############################################################################
+
+# Prevent Time Machine from prompting to use new hard drives as backup volume
+defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+
+
+laptop_echo "Activity Monitor OSX Settings ..."
+###############################################################################
+# Activity Monitor                                                            #
+###############################################################################
+
+# Show the main window when launching Activity Monitor
+defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
+
+# Show all processes in Activity Monitor
+defaults write com.apple.ActivityMonitor ShowCategory -int 0
+
+# Sort Activity Monitor results by CPU usage
+defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
+defaults write com.apple.ActivityMonitor SortDirection -int 0
+
+###############################################################################
+# Address Book, Dashboard, iCal, TextEdit, and Disk Utility                   #
+###############################################################################
+
+# Use plain text mode for new TextEdit documents
+defaults write com.apple.TextEdit RichText -int 0
+# Open and save files as UTF-8 in TextEdit
+defaults write com.apple.TextEdit PlainTextEncoding -int 4
+defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+
+# Enable the debug menu in Disk Utility
+defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
+defaults write com.apple.DiskUtility advanced-image-options -bool true
+
+laptop_echo "Finished OSX Settings ..."
+
+laptop_echo `brew cask info little-snitch`

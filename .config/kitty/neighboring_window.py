@@ -1,0 +1,1 @@
+/Users/joshua/.dotfiles/config/kitty/neighboring_window.py

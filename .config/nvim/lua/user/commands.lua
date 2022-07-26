@@ -36,12 +36,12 @@ function CloseQuickFixOrBuffer()
     if type == 'quickfix' then
       vim.cmd("cclose")
       return
-    elseif type == 'terminal' then
-      vim.cmd("Tclose")
-      return
     elseif type == 'help' then
       vim.cmd("helpc")
       return
+    -- elseif type == 'terminal' then
+    --   vim.cmd("close")
+    --   return
     end
   end
 

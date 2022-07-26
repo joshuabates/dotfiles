@@ -85,11 +85,12 @@ return packer.startup(function(use)
   -- use { "RRethy/vim-illuminate" }
   use { 'ray-x/lsp_signature.nvim' }
   use { 'jose-elias-alvarez/typescript.nvim' }
+
   -- Telescope
   use { "nvim-telescope/telescope.nvim" }
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
   use { "nvim-telescope/telescope-file-browser.nvim" }
-  use {'tknightz/telescope-termfinder.nvim'}
+  use {'tknightz/telescope-termfinder.nvim' }
   use {'nvim-telescope/telescope-ui-select.nvim' }
 
   -- Treesitter

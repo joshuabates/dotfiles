@@ -21,7 +21,13 @@ end
 local shell = file_exists("/usr/local/bin/fish") and  "/usr/local/bin/fish" or "/opt/homebrew/bin/fish" 
 
 toggleterm.setup({
-	size = 80,
+  size = function(term)
+    if term.direction == "horizontal" then
+      return 15
+    elseif term.direction == "vertical" then
+      return vim.o.columns * 0.33
+    end
+  end,
 	open_mapping = [[<c-\>]],
 	hide_numbers = true,
 	shade_terminals = true,
@@ -39,7 +45,7 @@ toggleterm.setup({
 
 function _G.set_terminal_keymaps()
   local opts = {noremap = true}
-  -- vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
   vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
   vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
   vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
@@ -56,7 +62,7 @@ vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 local Terminal = terms.Terminal
 local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
 local rails_console = Terminal:new({ cmd = "rails console", direction = "vertical" })
-local start = Terminal:new({ cmd = "yarn start", hidden = true, direction = "tab" } )
+local start = Terminal:new({ cmd = "yarn start", hidden = true, direction = "float" } )
 
 function _LAZYGIT_TOGGLE()
 	lazygit:toggle()
@@ -86,19 +92,6 @@ end
 
 function _START_APP_TOGGLE()
 	start:toggle()
-end
-
--- Dupes?
-function _G.set_terminal_keymaps()
-  local opts = {noremap = true}
-  vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-t>', [[<C-\><C-n><leader>ct]], opts)
-
-  -- vim.api.nvim_buf_set_keymap(0, 't', 'jk', [[<C-\><C-n>]], opts)
-  -- vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
-  -- vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
-  -- vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
-  -- vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
 end
 
 function _TERMINAL_EOD()

@@ -24,6 +24,18 @@ keymap("n", "<C-j>", "<C-w>j", opts)
 keymap("n", "<C-k>", "<C-w>k", opts)
 keymap("n", "<C-l>", "<C-w>l", opts)
 
+-- Fix window navigation in netrw buffers
+function set_netrw_keymaps()
+  local opts = { silent = true, buffer = true }
+  keymap("n", "<C-h>", ":wincmd h<cr>", opts)
+  keymap("n", "<C-j>", ":wincmd j<cr>", opts)
+  keymap("n", "<C-k>", ":wincmd k<cr>", opts)
+  keymap("n", "<C-l>", ":wincmd l<cr>", opts)
+end
+
+vim.cmd('autocmd! filetype netrw lua set_netrw_keymaps()')
+
+
 -- Resize with arrows
 keymap("n", "<C-Up>", ":resize -2<CR>", opts)
 keymap("n", "<C-Down>", ":resize +2<CR>", opts)
@@ -157,7 +169,7 @@ wk.register({
     w = { "<cmd>lua require('telescope.builtin').grep_string({search = vim.fn.expand('<cword>')})<cr>", "Word"},
     s = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Search" },
     l = { "<cmd>Telescope resume<cr>", "Last Search" },
-    -- "\\" = "Terminal", -- TODO
+    -- ['\\'] = { "<cmd>Telescope termfinder find<cr>", "Terminal" }, -- TODO: this doesn't list any of my custom terms (which are the only ones I care about here)
     g = {
       name = "Git",
       b = { "<cmd>lua require('telescope.builtin').git_branches()<cr>", "Branches" },

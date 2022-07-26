@@ -20,7 +20,6 @@ require "user.treesitter"
 
 require "user.ruby"
 -- TODO:
--- toggle diagnostics
 -- better toggleterm config?
 -- tests -> quickfix
 -- diagnostics -> quickfix
@@ -28,19 +27,13 @@ require "user.ruby"
 -- move down a line after comment
 -- quickfix navigation
 --
--- diagnostics (inline or hover?)
--- navigating out of netrw w/ normal keys
 -- leap, leap-ast
 -- hydra
--- luacheck (null-ls for lua)
 --
 -- define filtered and labeled g prefix in whichkey
 --
 -- JS
 -- Run yarn in a terminal, watch for errors and show notification when it breaks (and maybe even restart?) w/ option of going to error line in file
---
--- Ruby
--- find method (telescope/lsp)
 --
 -- copy file w/ line#
 -- function M.yank_file_path()

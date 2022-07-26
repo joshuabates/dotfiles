@@ -63,22 +63,27 @@ M.setup = function()
   })
   -- M.setup_lsp_diags()
 end
-vim.g.diagnostics_active = true
+vim.g.diagnostics_active = false
+local disabled_diagnostics = {
+  virtual_text = false,
+  signs = false,
+  underline = true,
+  update_in_insert = false,
+}
+local enabled_diagnostics = {
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+}
+
 function _G.toggle_diagnostics()
   if vim.g.diagnostics_active then
     vim.g.diagnostics_active = false
-    vim.lsp.diagnostic.clear(0)
-    vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
+    vim.diagnostic.config(disabled_diagnostics)
   else
     vim.g.diagnostics_active = true
-    vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-      vim.lsp.diagnostic.on_publish_diagnostics, {
-        virtual_text = true,
-        signs = true,
-        underline = true,
-        update_in_insert = false,
-      }
-    )
+    vim.diagnostic.config(enabled_diagnostics)
   end
 end
 
@@ -91,7 +96,7 @@ local function lsp_keymaps(bufnr)
   keymap(bufnr, "n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
   keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
   keymap(bufnr, "n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
-  keymap(bufnr, "n", "<leader>ld", "<cmd>lua v:lua.toggle_diagnostics()<CR>", opts)
+  keymap(bufnr, "n", "<leader>ld", "<cmd>lua _G.toggle_diagnostics()<CR>", opts)
   keymap(bufnr, "n", "<leader>lf", "<cmd>lua vim.lsp.buf.formatting()<cr>", opts)
   keymap(bufnr, "n", "<leader>li", "<cmd>LspInfo<cr>", opts)
   keymap(bufnr, "n", "<leader>lI", "<cmd>LspInstallInfo<cr>", opts)
@@ -107,8 +112,8 @@ local function lsp_keymaps(bufnr)
 end
 
 M.on_attach = function(client, bufnr)
-  if client.name == "tsserver" then
-    client.server_capabilities.documentFormattingProvider = false 
+  if (client.name == "tsserver" or client.name == "solargraph") then
+    client.resolved_capabilities.document_formatting = false -- 0.7 and earlier
   end
 
   lsp_keymaps(bufnr)

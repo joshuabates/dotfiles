@@ -12,6 +12,14 @@ end
 -- add binding to toggle vertical size between default and 50%
 -- fix ctrl- nav commands
 -- add normal mode   to kill/continue term
+
+function file_exists(name)
+   local f=io.open(name,"r")
+   if f~=nil then io.close(f) return true else return false end
+end
+
+local shell = file_exists("/usr/local/bin/fish") and  "/usr/local/bin/fish" or "/opt/homebrew/bin/fish" 
+
 toggleterm.setup({
 	size = 80,
 	open_mapping = [[<c-\>]],
@@ -23,7 +31,7 @@ toggleterm.setup({
 	persist_size = true,
 	direction = "float",
 	close_on_exit = true,
-	shell = "/usr/local/bin/fish",
+	shell = shell,
 	float_opts = {
 		border = "curved",
 	},

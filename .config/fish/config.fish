@@ -51,9 +51,11 @@ if status is-interactive
   export FD_SETSIZE=10000
 end
 
+set -g fish_greeting
 fish_add_path "./node_modules"
 fish_add_path "/usr/local/sbin"
 fish_add_path "/usr/local/share/npm/bin/"
+fish_add_path "/opt/homebrew/bin"
 # export PATH=./node_modules/:/usr/local/bin:/usr/local/sbin:~/bin:/usr/local/share/npm/bin/:$PATH
 # export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 

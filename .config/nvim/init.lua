@@ -19,6 +19,7 @@ require "user.toggleterm"
 require "user.treesitter"
 
 require "user.ruby"
+
 -- TODO:
 -- better toggleterm config?
 -- tests -> quickfix

@@ -4,6 +4,7 @@ local ttt = require "toggleterm.terminal"
 vim.g["test#custom_strategies"] = {
   tterm = function(cmd)
     -- TODO: if termina; is already open then make sure it's scrolling
+    -- fix go_back https://github.com/akinsho/toggleterm.nvim/blob/main/lua/toggleterm/terminal.lua#L288
     tt.exec_command("cmd='" .. cmd .. "' direction=vertical go_back=1")
   end,
 

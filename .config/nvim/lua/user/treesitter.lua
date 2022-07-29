@@ -17,12 +17,14 @@ configs.setup({
   endwise = {
     enable = true,
   },
-	indent = { enable = true, disable = { "python", "css" } },
+	indent = { enable = false },
   textsubjects = {
     enable = true,
+    prev_selection = ',',
     keymaps = {
       ['.'] = 'textsubjects-smart',
       [';'] = 'textsubjects-container-outer',
+      ['i;'] = 'textsubjects-container-inner',
     }
   },
 })

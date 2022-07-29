@@ -8,6 +8,8 @@ end
 -- consider using vim for all primary project terminal stuff (e.g starting webpack)
 -- https://github.com/sheodox/projectlaunch.nvim
 --
+-- pressing up arrow when not in insert should run last command?
+-- telescope picker to search and execute from terminal history
 -- how to handle copy/paste in terminal buffer? (c-w N)
 -- add binding to toggle vertical size between default and 50%
 -- fix ctrl- nav commands
@@ -50,6 +52,8 @@ function _G.set_terminal_keymaps()
   vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
   vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
   vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+
+  -- vim.api.nvim_buf_set_keymap(0, 't', '<Up>', [[<C-\><C-n><C-W>l]], opts)
 
   vim.api.nvim_buf_set_keymap(0, 'i', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
   vim.api.nvim_buf_set_keymap(0, 'i', '<C-j>', [[<C-\><C-n><C-W>j]], opts)

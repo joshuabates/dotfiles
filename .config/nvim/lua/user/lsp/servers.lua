@@ -12,7 +12,7 @@ end
 --   "yamlls",
 -- }
 
-lsp_installer.setup()
+-- lsp_installer.setup()
 
 local _, lspconfig = pcall(require, "lspconfig")
 -- if not lspconfig_status_ok then
@@ -24,8 +24,14 @@ local opts = {
   capabilities = require("user.lsp.handlers").capabilities,
 }
 
+local solargraph_opts = {
+  on_attach = require("user.lsp.handlers").on_attach,
+  capabilities = require("user.lsp.handlers").capabilities,
+  cmd = { 'bundle', 'exec', 'solargraph', 'stdio' },
+}
+
 lspconfig['cssls'].setup(opts)
 lspconfig['html'].setup(opts)
-lspconfig['solargraph'].setup(opts)
+lspconfig['solargraph'].setup(solargraph_opts)
 
 require("typescript").setup({ server = opts })

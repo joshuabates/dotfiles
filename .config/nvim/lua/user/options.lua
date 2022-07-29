@@ -46,4 +46,5 @@ vim.opt.showmatch = true
 vim.opt.incsearch = true
 vim.opt.gdefault = true
 
--- vim.opt.netrw_banner = false
+-- vim.opt.netrw_banner = 0
+-- vim.opt.netrw_liststyle = 3

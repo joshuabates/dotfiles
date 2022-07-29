@@ -3,6 +3,9 @@
 local keymap = vim.keymap.set
 local opts = { silent = true }
 
+keymap("i", "<F1>", "<Esc>", opts)
+keymap("n", "<F1>", "<Esc>", opts)
+
 --Remap space as leader key
 keymap("", "<Space>", "<Nop>", opts)
 vim.g.mapleader = " "
@@ -157,6 +160,20 @@ wk.register({
 
 keymap("n", "<leader>f<space>", "<cmd>Telescope find_files<cr>", opts)
 wk.register({
+  -- TODO: customize list for text objects
+  -- v = {
+  --   name = "Visual"
+  -- },
+  -- y = {
+  --   name = "Yank"
+  -- },
+  -- c = {
+  --   name = "Change"
+  -- },
+  -- d = {
+  --   name = "Delete"
+  -- },
+
   f = {
     name = "Find",
 

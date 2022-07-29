@@ -57,10 +57,6 @@ return packer.startup(function(use)
     end
   })
   use {'kevinhwang91/nvim-bqf'}
-  -- use {
-  --   "folke/trouble.nvim",
-  --   requires = "kyazdani42/nvim-web-devicons",
-  -- }
   use { "goolord/alpha-nvim" }
   -- Colorschemes
   use { "sainnhe/gruvbox-material" }
@@ -116,10 +112,15 @@ return packer.startup(function(use)
 
   -- Navigation
 
-  use { 'knubie/vim-kitty-navigator' }--, { 'commit': '08a792' }
+  use { 'knubie/vim-kitty-navigator' }
   -- DAP
   -- use { "mfussenegger/nvim-dap" }
   -- use { "rcarriga/nvim-dap-ui" }
+  --
+  -- neotest doesn't yet have an adapter to run specs in toggleterm with streaming output but recently added APIs to allow both
+  -- https://github.com/nvim-neotest/neotest/pull/70 (streaming output)
+  -- https://github.com/nvim-neotest/neotest/discussions/46 (custom consumers)
+  -- https://github.com/nvim-neotest/neotest/issues/50
   --
   -- use({
   --   'nvim-neotest/neotest',
@@ -130,17 +131,13 @@ return packer.startup(function(use)
   --     'olimorris/neotest-rspec',
   --   },
   -- })
-  -- use { "klen/nvim-test" }
+  
   use { "janko/vim-test" }
   -- use { "ravenxrz/DAPInstall.nvim" }
   use {
     "folke/which-key.nvim",
     config = function()
-      require("which-key").setup {
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      }
+      require("which-key").setup {}
     end
   }
   -- Automatically set up your configuration after cloning packer.nvim

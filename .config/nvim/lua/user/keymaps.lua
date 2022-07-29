@@ -134,6 +134,40 @@ local wk = require("which-key")
 -- end)
 
 wk.register({
+  g = {
+    name = "Go",
+
+    -- % - cycle results
+    -- b,c comment toggl
+    -- x open w/ system app
+    -- ' marks
+    e = "End of prev word"
+    f = "File",
+    g = "First line",
+    i = "Last insert",
+    p = "Last paste",
+    v = "Last selection",
+    u = "Lowercase",
+    U = "Uppercase",
+
+    s = { "<cmd>lua require('telescope.builtin').grep_string({search = vim.fn.expand('<cword>')})<cr>", "Search word"},
+    r = "References",
+    d = "Definition",
+    D = "Decleration",
+    I = "Implementation",
+    h = "Help doc",
+
+    x = "Diagnostics"
+
+    -- todo
+
+    -- make a g1, g2, g3, etcc for window navigation?
+
+
+
+  }
+});
+wk.register({
   ["<leader>\\"] = {
     name = "Terminals",
 
@@ -158,6 +192,14 @@ wk.register({
   }
 })
 
+-- TODO: Settle on prefix(es) and groupings for search/find/lookup
+-- leader f - first there are file find operations by name
+-- leader s? or just part of f? - then file find ops by content (search)
+--
+-- g then there are operations based on a word, file or context
+-- find references for this symbol
+-- grep for this word
+-- doc for this word
 keymap("n", "<leader>f<space>", "<cmd>Telescope find_files<cr>", opts)
 wk.register({
   -- TODO: customize list for text objects
@@ -187,6 +229,7 @@ wk.register({
     s = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Search" },
     l = { "<cmd>Telescope resume<cr>", "Last Search" },
     -- ['\\'] = { "<cmd>Telescope termfinder find<cr>", "Terminal" }, -- TODO: this doesn't list any of my custom terms (which are the only ones I care about here)
+    e = { "<cmd>lua vim.lsp.buf.references()<CR>", "Reference"}
     g = {
       name = "Git",
       b = { "<cmd>lua require('telescope.builtin').git_branches()<cr>", "Branches" },

@@ -21,10 +21,10 @@ require "user.treesitter"
 require "user.ruby"
 
 -- TODO:
+-- git blame
 -- better toggleterm config?
 -- tests -> quickfix
 -- diagnostics -> quickfix
--- git blame
 -- move down a line after comment
 -- quickfix navigation
 --

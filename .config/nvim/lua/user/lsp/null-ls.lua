@@ -7,13 +7,15 @@ local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics
 local code_actions = null_ls.builtins.code_actions
 --
-local on_attach = function(client)
+local on_attach = function(client, buffnr)
   if (client.resolved_capabilities.document_formatting) then
     vim.cmd [[augroup Format]]
     vim.cmd [[autocmd! * <buffer>]]
     vim.cmd [[autocmd BufWritePost <buffer> lua vim.lsp.buf.formatting()]]
     vim.cmd [[augroup END]]
   end
+
+  require("user.lsp.handlers").on_attach(client, buffnr);
 end
 
 

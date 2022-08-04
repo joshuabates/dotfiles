@@ -79,7 +79,6 @@ install_asdf_language() {
 
 laptop_echo "Installing Ruby..."
 cat << EOF > "$HOME"/.default-gems
-gem-ctags
 gem-browse
 bundler
 hookup
@@ -92,10 +91,6 @@ pry-nav
 pry-inline
 pry-doc
 pry-byebug
-awesome_print
-commands
-coolline
-pry-coolline
 solargraph
 EOF
 
@@ -118,6 +113,7 @@ install_asdf_language "nodejs"
 
 install_asdf_language "java"
 install_asdf_language "python"
+pip3 install neovim-remote
 
 laptop_echo "Installing NPM modules ..."
 # TODO: make safe for linux (needs maybe_sudo command)

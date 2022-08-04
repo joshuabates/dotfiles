@@ -141,7 +141,7 @@ wk.register({
     -- b,c comment toggl
     -- x open w/ system app
     -- ' marks
-    e = "End of prev word"
+    e = "End of prev word",
     f = "File",
     g = "First line",
     i = "Last insert",
@@ -229,7 +229,7 @@ wk.register({
     s = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Search" },
     l = { "<cmd>Telescope resume<cr>", "Last Search" },
     -- ['\\'] = { "<cmd>Telescope termfinder find<cr>", "Terminal" }, -- TODO: this doesn't list any of my custom terms (which are the only ones I care about here)
-    e = { "<cmd>lua vim.lsp.buf.references()<CR>", "Reference"}
+    e = { "<cmd>lua vim.lsp.buf.references()<CR>", "Reference"},
     g = {
       name = "Git",
       b = { "<cmd>lua require('telescope.builtin').git_branches()<cr>", "Branches" },
@@ -248,6 +248,10 @@ wk.register({
   g = {
     name = "Git",
 
+    -- TODO: figure out how to add a hover to show full commit message and enter to view commit diff
+    b = { "<cmd>lua require('agitator').git_blame({sidebar_width=40})<CR>", "Blame"},
+    v = { ":lua ShowCommitAtLine()<cr>", "View commit"},
+    t = { "<cmd>lua require('agitator').git_time_machine()<CR>", "Time Machine"},
     g = "Lazygit",
     y = "Copy github link",
 
@@ -327,5 +331,14 @@ wk.register({
 
     -- w = "Current Word",
     -- g = "Grep"
+  },
+  v = {
+    name = "Vim",
+
+    c = { '<cmd>e $MYVIMRC<CR>', 'Open Config' },
+    i = { '<cmd>PackerInstall<CR>', 'Install Plugins' },
+    u = { '<cmd>PackerSync<CR>', 'Update Plugins' },
+    r = { '<cmd>Reload<CR>', 'Reload' },
+    R = { '<cmd>Restart<CR>', 'Restart' },
   }
 }, { prefix = "<leader>" })

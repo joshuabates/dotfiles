@@ -20,3 +20,8 @@ neogit.setup {}
 local actions = require("diffview.actions")
 
 require("diffview").setup({ })
+
+function _G.ShowCommitAtLine()
+  local commit_sha = require"agitator".git_blame_commit_for_line()
+  vim.cmd("DiffviewOpen " .. commit_sha .. "^.." .. commit_sha)
+end

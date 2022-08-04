@@ -70,3 +70,8 @@
   username = joshuabates
 [url "https://"]
   insteadOf = git://
+[push]
+  autoSetupRemote = true
+[core]
+  editor = nvr --servername socket --remote-wait-silent
+

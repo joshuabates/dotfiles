@@ -107,7 +107,7 @@ return packer.startup(function(use)
   use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
   use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
   use { 'emmanueltouzery/agitator.nvim' }
-
+  use { 'famiu/nvim-reload' }
   use { "vim-ruby/vim-ruby" }
 
   -- Navigation
@@ -131,7 +131,9 @@ return packer.startup(function(use)
   --     'olimorris/neotest-rspec',
   --   },
   -- })
-  
+  --
+ -- https://github.com/vuki656/package-info.nvim 
+ --
   use { "janko/vim-test" }
   -- use { "ravenxrz/DAPInstall.nvim" }
   use {

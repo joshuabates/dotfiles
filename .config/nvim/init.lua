@@ -21,6 +21,10 @@ require "user.treesitter"
 require "user.ruby"
 
 -- TODO:
+-- caddexpr (add location to quickfix)
+-- cfilter (filter qf list)
+--  https://gosukiwi.github.io/vim/2022/04/19/vim-advanced-search-and-replace.html
+--
 -- git blame
 -- better toggleterm config?
 -- tests -> quickfix

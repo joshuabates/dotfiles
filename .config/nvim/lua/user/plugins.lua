@@ -56,7 +56,9 @@ return packer.startup(function(use)
       require("nvim-surround").setup({})
     end
   })
-  use {'kevinhwang91/nvim-bqf'}
+  use {'kevinhwang91/nvim-bqf' }
+  -- use { "gabrielpoca/replacer.nvim" }
+  -- use { "stefandtw/quickfix-reflector.vim" }
   use { "goolord/alpha-nvim" }
   -- Colorschemes
   use { "sainnhe/gruvbox-material" }

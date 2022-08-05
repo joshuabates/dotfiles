@@ -200,7 +200,16 @@ wk.register({
 -- find references for this symbol
 -- grep for this word
 -- doc for this word
+--
+-- should there just be a single prefix key for all context related operations
+-- surround
+-- move
+-- transformations (uppercase, etc..)
+-- .... the g key already does some of this, but it's never become part of my muscle memory...
+-- using leader-g wou
 keymap("n", "<leader>f<space>", "<cmd>Telescope find_files<cr>", opts)
+
+-- keymap("qf", "dd", "<Tab>zN", opts)
 wk.register({
   -- TODO: customize list for text objects
   -- v = {
@@ -280,8 +289,11 @@ wk.register({
   q = {
     name = "Quickfix",
 
-    o = { "<cmd>copen<CR>", "Open" }
+    o = { "<cmd>copen<CR>", "Open" },
+    r = { "<cmd>zN<CR>", "Remove tagged" },
+    s = { "<cmd>zn<CR>", "Select tagged" },
 
+    y = { "<cmd>lua _G.add_current_line_to_qf()<CR>", "Add" }
   },
   r = {
     --- Testing

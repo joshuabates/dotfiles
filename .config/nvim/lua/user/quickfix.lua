@@ -25,6 +25,18 @@ vim.cmd('autocmd! FileType qf if (getwininfo(win_getid())[0].loclist != 1) | win
 --
 local fn = vim.fn
 
+_G.add_current_line_to_qf = function()
+  vim.cmd 'caddexpr expand("%") . ":" . line(".") . ":" . getline(".")'
+
+  local win = vim.fn.getqflist({ winid = 0 }).winid
+  if win > 0 then
+    return
+  end
+
+  vim.cmd 'cwindow'
+  vim.cmd 'wincmd p'
+end
+
 function _G.qftf(info)
     local items
     local ret = {}

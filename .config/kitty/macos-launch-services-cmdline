@@ -1,1 +1,1 @@
-/Users/joshua/.dotfiles/config/kitty/macos-launch-services-cmdline
+--single-instance -o allow_remote_control=yes --listen-on unix:/tmp/mykitty

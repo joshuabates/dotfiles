@@ -98,6 +98,7 @@ return packer.startup(function(use)
   use { "RRethy/nvim-treesitter-endwise" }
 
   -- Git
+  -- use { "tpope/vim-fugitive" }
   use { "lewis6991/gitsigns.nvim" }
   use {
     'ruifm/gitlinker.nvim',

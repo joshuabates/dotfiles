@@ -259,6 +259,7 @@ wk.register({
 
     -- TODO: figure out how to add a hover to show full commit message and enter to view commit diff
     b = { "<cmd>lua require('agitator').git_blame({sidebar_width=40})<CR>", "Blame"},
+    -- b = { "<cmd>Git blame<CR>", "Blame"},
     v = { ":lua ShowCommitAtLine()<cr>", "View commit"},
     t = { "<cmd>lua require('agitator').git_time_machine()<CR>", "Time Machine"},
     g = "Lazygit",

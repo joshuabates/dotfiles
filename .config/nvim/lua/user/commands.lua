@@ -8,36 +8,22 @@
 --   exec 'vsp '.l:cssFile
 -- endfunction
 --
--- " If a quickfix, or help window is open close it, independent of what pane
--- " has focus, otherwise close the current pane
--- fu! CloseQuickFixOrBuffer()
---     for i in range(1, winnr('$'))
---         let bnum = winbufnr(i)
---         let type = getbufvar(bnum, '&buftype')
---         if type == 'quickfix'
---             cclose
---             return
---         endif
---         if type == 'terminal'
---             execute "Tclose"
---             return
---         endif
---     endfor
---     :q
--- endfunction
--- nmap <leader>c :call CloseQuickFixOrBuffer()<cr>
 
 function CloseQuickFixOrBuffer()
   local window_count = vim.fn.winnr("$")
   for win_num = 1,window_count do
     local bnum = vim.fn.winbufnr(win_num)
     local type = vim.fn.getbufvar(bnum, '&buftype')
+    local ftype = vim.fn.getbufvar(bnum, '&fileype')
 
     if type == 'quickfix' then
       vim.cmd("cclose")
       return
     elseif type == 'help' then
       vim.cmd("helpc")
+      return
+    elseif ftype == 'agitator' then
+      vim.api.nvim_win_close(0, 0)
       return
     -- elseif type == 'terminal' then
     --   vim.cmd("close")

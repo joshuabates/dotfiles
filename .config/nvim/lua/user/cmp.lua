@@ -15,6 +15,8 @@ local check_backspace = function()
 	return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
 end
 
+local cmp_buffer = require('cmp_buffer')
+
 local kind_icons = {
 	Text = "",
 	Method = "",
@@ -114,14 +116,19 @@ cmp.setup({
 	-- 	end,
 	-- },
 	sources = {
-    { name = 'nvim_lsp' },
     { name = 'buffer' },
+    { name = 'nvim_lsp' },
     -- { name = 'vsnip' },
     { name = 'path' },
     { name = "nvim_lua" },
 
 		{ name = "luasnip" },
 	},
+  sorting = {
+    comparators = {
+      function(...) return cmp_buffer:compare_locality(...) end,
+    }
+  },
 	confirm_opts = {
 		behavior = cmp.ConfirmBehavior.Replace,
 		select = false,

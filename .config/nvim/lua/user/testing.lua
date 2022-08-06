@@ -1,18 +1,15 @@
 local tt = require "toggleterm"
+local with_cursor_restore = require("user.utils").with_cursor_restore
 
 vim.g["test#custom_strategies"] = {
-  tterm = function(cmd)
-    -- TODO: if termina; is already open then make sure it's scrolling
-    -- fix go_back https://github.com/akinsho/toggleterm.nvim/blob/main/lua/toggleterm/terminal.lua#L288
-    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    local winnr = vim.api.nvim_get_current_win()
-
-    tt.exec_command("cmd='" .. cmd .. "' direction=vertical")
-    vim.cmd("stopinsert!")
-    vim.api.nvim_win_set_cursor(winnr, { line, col })
-    -- vim.api.nvim_set_current_win(winnr)
-    -- vim.api.nvim_set_current_line(linenr)
-  end,
+  tterm = with_cursor_restore(
+    function(cmd)
+      -- TODO: if termina; is already open then make sure it's scrolling
+      -- fix go_back https://github.com/akinsho/toggleterm.nvim/blob/main/lua/toggleterm/terminal.lua#L288
+      tt.exec_command("cmd='" .. cmd .. "' direction=vertical")
+      vim.cmd("stopinsert!")
+    end
+  ),
 
   tterm_close = function(cmd)
     local term_id = 0

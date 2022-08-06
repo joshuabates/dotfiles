@@ -21,16 +21,14 @@ require "user.treesitter"
 require "user.ruby"
 
 -- TODO:
--- caddexpr (add location to quickfix)
--- cfilter (filter qf list)
---  https://gosukiwi.github.io/vim/2022/04/19/vim-advanced-search-and-replace.html
---
--- git blame
+-- better surround keys
+-- better git blame
 -- better toggleterm config?
 -- tests -> quickfix
 -- diagnostics -> quickfix
 -- move down a line after comment
 -- quickfix navigation
+-- improve autocomplete dor ruby especially
 --
 -- leap, leap-ast
 -- hydra
@@ -39,11 +37,3 @@ require "user.ruby"
 --
 -- JS
 -- Run yarn in a terminal, watch for errors and show notification when it breaks (and maybe even restart?) w/ option of going to error line in file
---
--- copy file w/ line#
--- function M.yank_file_path()
---   local current_file = vim.fn.expand("%:r")
---   local extension = vim.fn.expand("%:e")
---   local current_line = vim.fn.line(".")
---   return current_file .. "." .. extension .. ":" .. current_line
--- end

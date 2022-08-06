@@ -6,8 +6,32 @@ end
 -- How do you take a list of results and feed them back into telescope
 -- it would be usefull when there are too many results, that you then want to
 -- filter based on something else (like file name/path)
+
 local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
+local M = {}
+
+M.find_in_dir_prompt = "Find file/grep (<c-s>) in directory"
+
+-- it's annoying to have the bqf preview open as soon as sending to the quckfix so refocus to last window instead
+function send_to_qf(prompt_bufnr)
+  actions.send_to_qflist(prompt_bufnr)
+  vim.cmd [[ copen ]]
+  vim.cmd [[ wincmd p ]]
+end
+
+function is_find_in_dir(picker)
+  if picker.previewer then
+    return false
+  else
+    return true
+  end
+  -- if picker.prompt_title == M.find_in_dir_prompt then
+  --   return true
+  -- else
+  --   return false
+  -- end
+end
 
 telescope.setup {
   defaults = {
@@ -15,11 +39,12 @@ telescope.setup {
     -- selection_caret = " ",
     mappings = {
       i = {
-        ["<Down>"] = actions.move_selection_next,
-        ["<Up>"] = actions.move_selection_previous,
-        ["<esc>"] = actions.close
-        -- ["<Down>"] = actions.cycle_history_next,
-        -- ["<Up>"] = actions.cycle_history_prev,
+        ["<C-j>"] = actions.move_selection_next,
+        ["<C-k>"] = actions.move_selection_previous,
+        ["<C-q>"] = send_to_qf,
+        ["<esc>"] = actions.close,
+        [">"] = actions.cycle_history_next,
+        ["<"] = actions.cycle_history_prev
       },
       -- n = { ["<c-q>"] = trouble.open_with_trouble }
     },
@@ -37,9 +62,10 @@ telescope.setup {
     find_files = {
       mappings = {
         i = {
+          -- <CR> on an entry in the find in directory picker will refocus you in a new file search of that directory
           ["<CR>"] = function(prompt_bufnr)
             local picker = action_state.get_current_picker(prompt_bufnr)
-            if picker.prompt_title == "Find in directory" then
+            if is_find_in_dir(picker) then
               local selection = require("telescope.actions.state").get_selected_entry()
               local dir = vim.fn.fnamemodify(selection.path, ":p:h")
               actions.close(prompt_bufnr)
@@ -50,9 +76,10 @@ telescope.setup {
             end
           end,
 
+          -- <c-s> on an entry in the find in directory picker will refocus you in a live_grep of that directory
           ["<c-s>"] = function(prompt_bufnr)
             local picker = action_state.get_current_picker(prompt_bufnr)
-            if picker.prompt_title == "Find in directory" then
+            if is_find_in_dir(picker) then
               local selection = require("telescope.actions.state").get_selected_entry()
               local dir = vim.fn.fnamemodify(selection.path, ":p:h")
               actions.close(prompt_bufnr)
@@ -70,3 +97,5 @@ telescope.load_extension('fzf')
 telescope.load_extension("termfinder")
 telescope.load_extension("ui-select")
 telescope.load_extension("file_browser")
+
+return M

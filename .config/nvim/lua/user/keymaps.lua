@@ -2,6 +2,7 @@
 -- that would be built in docs. Only issue is if I want to move away from it
 local keymap = vim.keymap.set
 local opts = { silent = true }
+local find_in_dir_prompt = require("user.telescope").find_in_dir_prompt
 
 keymap("i", "<F1>", "<Esc>", opts)
 keymap("n", "<F1>", "<Esc>", opts)
@@ -185,10 +186,10 @@ wk.register({
     -- TODO: Test
   },
   ["<leader>."] = {
-    name = "Edir or something...",
+    name = "Edittor something...",
   },
   ["<leader>,"] = {
-    name = "Edir or something...",
+    name = "Edit or something...",
   }
 })
 
@@ -231,11 +232,14 @@ wk.register({
 -- keymap("n", "<leader>fc", "<cmd>Telescope termfinder find<cr>", opts)
 
     f = { "<cmd>Telescope find_files<cr>", "File" },
-    d = { "<cmd>lua require('telescope.builtin').find_files({ previewer = false, find_command = { 'fd', '--type', 'd' }, prompt_title = 'Find in directory'})<cr>", "In Dir"},
+    d = { "<cmd>lua require('telescope.builtin').find_files({ previewer = false, find_command = { 'fd', '--type', 'd' }, prompt_title = '" .. find_in_dir_prompt .. "'})<cr>", "In Dir (<CR> find_file in DIR, <C-s> grep)"},
     m = { "<cmd>Telescope lsp_document_symbols<cr>", "Method"},
     b = { "<cmd>lua require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true })<cr>", "Buffer"},
     w = { "<cmd>lua require('telescope.builtin').grep_string({search = vim.fn.expand('<cword>')})<cr>", "Word"},
     s = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Search" },
+    h = { "<cmd>lua require('telescope.builtin').search_history()<cr>", "Search History" },
+    q = { "<cmd>lua require('telescope.builtin').quickfixhistory()<cr>", "Quickfix History" },
+    Q = { "<cmd>lua require('telescope.builtin').quickfix()<cr>", "Quickfix" },
     l = { "<cmd>Telescope resume<cr>", "Last Search" },
     -- ['\\'] = { "<cmd>Telescope termfinder find<cr>", "Terminal" }, -- TODO: this doesn't list any of my custom terms (which are the only ones I care about here)
     e = { "<cmd>lua vim.lsp.buf.references()<CR>", "Reference"},
@@ -293,8 +297,10 @@ wk.register({
     o = { "<cmd>copen<CR>", "Open" },
     r = { "<cmd>zN<CR>", "Remove tagged" },
     s = { "<cmd>zn<CR>", "Select tagged" },
+    y = { "<cmd>lua _G.add_current_line_to_qf()<CR>", "Add" },
 
-    y = { "<cmd>lua _G.add_current_line_to_qf()<CR>", "Add" }
+    ["<"] = { "<cmd><<CR>", "Last QF" },
+    [">"] = { "<cmd>><CR>", "Next QF" },
   },
   r = {
     --- Testing

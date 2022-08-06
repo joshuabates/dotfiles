@@ -25,6 +25,7 @@ vim.cmd('autocmd! FileType qf if (getwininfo(win_getid())[0].loclist != 1) | win
 --
 local fn = vim.fn
 
+-- TODO: navigate back to quickfix line no
 _G.add_current_line_to_qf = function()
   vim.cmd 'caddexpr expand("%") . ":" . line(".") . ":" . getline(".")'
 

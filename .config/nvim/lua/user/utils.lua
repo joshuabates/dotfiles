@@ -5,7 +5,7 @@ M.with_cursor_restore = function(fn)
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
     local winnr = vim.api.nvim_get_current_win()
 
-    fn(unpack(arg))
+    fn(...)
 
     vim.api.nvim_win_set_cursor(winnr, { line, col })
   end

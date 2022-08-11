@@ -54,14 +54,20 @@ return packer.startup(function(use)
   use { "nvim-lualine/lualine.nvim" }
   use { "akinsho/toggleterm.nvim" }
   use { "lukas-reineke/indent-blankline.nvim" }
-  use({
+  use {
     "kylechui/nvim-surround",
     -- TODO: Can this handle ruby symbol to string?
     config = function()
       require("nvim-surround").setup({})
     end
-  })
+  }
   use {'kevinhwang91/nvim-bqf' }
+  use { 
+    'ggandor/lightspeed.nvim',
+    config = function()
+      require("lightspeed").setup({})
+    end
+  }
   -- use { "gabrielpoca/replacer.nvim" }
   -- use { "stefandtw/quickfix-reflector.vim" }
   use { "goolord/alpha-nvim" }
@@ -121,7 +127,36 @@ return packer.startup(function(use)
   -- Navigation
 
   use { 'knubie/vim-kitty-navigator' }
-  use { "Pocco81/true-zen.nvim" }
+  use {
+    "folke/twilight.nvim",
+    config = function()
+      require("twilight").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
+  use {
+    "folke/zen-mode.nvim",
+    config = function()
+      require("zen-mode").setup {
+        window = {
+          width = .5,
+        },
+        plugin = {
+          twilight = { enabled = false },
+          kitty = {
+            enabled = true,
+            font = "+10",
+          }
+        }
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
   -- DAP
   -- use { "mfussenegger/nvim-dap" }
   -- use { "rcarriga/nvim-dap-ui" }

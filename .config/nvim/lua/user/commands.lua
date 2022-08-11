@@ -17,7 +17,9 @@ function CloseQuickFixOrBuffer()
     local type = vim.fn.getbufvar(bnum, '&buftype')
     local ftype = vim.fn.getbufvar(bnum, '&filetype')
 
-    if type == 'quickfix' then
+    if not vim.api.nvim_win_get_config(win).relative == "" then
+      vim.api.nvim_win_close(win, 0)
+    elseif type == 'quickfix' then
       vim.cmd("cclose")
       return
     elseif type == 'help' then
@@ -38,30 +40,3 @@ function CloseQuickFixOrBuffer()
     vim.api.nvim_win_close(0, 0)
   end)
 end
--- function ToggleTroubleAuto()
---   print("AUTO MAG")
---   local buftype = "quickfix"
---   if vim.fn.getloclist(0, { filewinid = 1 }).filewinid ~= 0 then
---     print("LOCL")
---     buftype = "loclist"
---   end
---
---   local ok, trouble = pcall(require, "trouble")
---   if ok then
---     s, v = pcall(function()
---       return vim.api.nvim_win_close(0, true)
---     end)
---
---     print("OK TRY TO CLOSE")
---     print("DID CLOSE")
---     trouble.open(buftype)
---     print("DID TOGGLE")
---   else
---     print("NO OK")
---     local set = vim.opt_local
---     set.colorcolumn = ""
---     set.number = false
---     set.relativenumber = false
---     set.signcolumn = "no"
---   end
--- end

@@ -1,5 +1,13 @@
 -- TODO: Just use whichkey for all my keymaps?
 -- that would be built in docs. Only issue is if I want to move away from it
+--
+--
+-- What are the single mod-key actions I need to take?
+-- (w?) saving # w would be a better window group
+-- (x) closing window
+-- zoom/focus
+-- quick terminal
+-- find file?
 local keymap = vim.keymap.set
 local opts = { silent = true }
 local find_in_dir_prompt = require("user.telescope").find_in_dir_prompt
@@ -89,6 +97,7 @@ keymap("n", "<leader>gg", "<cmd>lua _LAZYGIT_TOGGLE()<CR>", opts)
 
 keymap("n", "<leader>x", "<cmd>lua CloseQuickFixOrBuffer()<CR>", opts)
 
+keymap("n", "<leader>z", "<cmd>ZenMode<cr>", opts)
 
 -- keymap("n", "gR", "<cmd>Trouble lsp_references<cr>", opts)
 

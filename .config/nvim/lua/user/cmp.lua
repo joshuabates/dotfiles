@@ -17,34 +17,6 @@ end
 
 local cmp_buffer = require('cmp_buffer')
 
-local kind_icons = {
-	Text = "",
-	Method = "",
-	Function = "",
-	Constructor = "",
-	Field = "",
-	Variable = "",
-	Class = "",
-	Interface = "",
-	Module = "",
-	Property = "",
-	Unit = "",
-	Value = "",
-	Enum = "",
-	Keyword = "",
-	Snippet = "",
-	Color = "",
-	File = "",
-	Reference = "",
-	Folder = "",
-	EnumMember = "",
-	Constant = "",
-	Struct = "",
-	Event = "",
-	Operator = "",
-	TypeParameter = "",
-}
-
 local select_opts = {behavior = cmp.SelectBehavior.Select}
 cmp.setup({
 	snippet = {
@@ -100,6 +72,24 @@ cmp.setup({
 			"s",
 		}),
 	}),
+  formatting = {
+   format = function(entry, vim_item)
+     vim_item.menu = ({
+       nvim_lsp = '[L]',
+       emoji    = '[E]',
+       path     = '[F]',
+       calc     = '[C]',
+       vsnip    = '[S]',
+       buffer   = '[B]',
+     })[entry.source.name]
+     vim_item.dup = ({
+       buffer = 0,
+       path = 0,
+       nvim_lsp = 0,
+     })[entry.source.name] or 0
+     return vim_item
+   end
+   },
 	-- formatting = {
 	-- 	fields = { "kind", "abbr", "menu" },
 	-- 	format = function(entry, vim_item)
@@ -116,8 +106,8 @@ cmp.setup({
 	-- 	end,
 	-- },
 	sources = {
-    { name = 'buffer' },
     { name = 'nvim_lsp' },
+    { name = 'buffer' },
     -- { name = 'vsnip' },
     { name = 'path' },
     { name = "nvim_lua" },

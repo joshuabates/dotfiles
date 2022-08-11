@@ -21,19 +21,26 @@ require "user.treesitter"
 require "user.ruby"
 
 -- TODO:
--- better surround keys
+-- get remote-neovim working for git?
+-- use a seperate background for a embedded terminal vs a kitty one
+-- improve autocomplete
+  -- filter out duplicates (from buffer) favor lsp
+-- improve ruby lsp. should atleast work with local file docs and non-rails gems
+-- better "go to implementation" (flexible based on server)
+-- copy filepath:line
+-- lua autoformatting
+--
 -- git history for current file
 -- better toggleterm config?
 -- tests -> quickfix
 -- diagnostics -> quickfix
--- move down a line after comment
 -- quickfix navigation
--- improve autocomplete for ruby especially
 --
--- leap, leap-ast
 -- hydra
 --
 -- define filtered and labeled g prefix in whichkey
 --
 -- JS
 -- Run yarn in a terminal, watch for errors and show notification when it breaks (and maybe even restart?) w/ option of going to error line in file
+--
+-- memorize surround keys: ys, cs, ds t(ag), f(n)

@@ -262,7 +262,11 @@ wk.register({
     name = "Git",
 
     -- TODO: figure out how to add a hover to show full commit message and enter to view commit diff
-    b = { "<cmd>lua require('agitator').git_blame({sidebar_width=40})<CR>", "Blame"},
+    -- b = { "<cmd>lua require('agitator').git_blame({sidebar_width=40})<CR>", "Blame"},
+    b = { '<cmd>lua require("user.blame").open()<CR>', 'Blame' },
+    -- vim.keymap.set('n', '<leader>c', ":lua require('plugins.telescope').my_git_commits()<CR>", {noremap = true, silent = true})
+    -- vim.keymap.set('n', '<leader>g', ":lua require('plugins.telescope').my_git_status()<CR>", {noremap = true, silent = true})
+    -- vim.keymap.set('n', '<leader>b', ":lua require('plugins.telescope').my_git_bcommits()<CR>", {noremap = true, silent = true})
     -- b = { "<cmd>Git blame<CR>", "Blame"},
     v = { ":lua ShowCommitAtLine()<cr>", "View commit"},
     t = { "<cmd>lua require('agitator').git_time_machine()<CR>", "Time Machine"},

@@ -102,5 +102,10 @@ function _TERMINAL_EOD()
   toggleterm.exec_command("cmd='' go_back=1")
 end
 
+function _GIT_SHOW(sha)
+  local term = Terminal:new({ cmd = "git show " .. sha, hidden = true, close_on_exit = false, direction = "float", go_back = 0, start_in_insert = true } )
+  term:open()
+end
+
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
 vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')

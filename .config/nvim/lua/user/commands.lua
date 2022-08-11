@@ -12,9 +12,10 @@
 function CloseQuickFixOrBuffer()
   local window_count = vim.fn.winnr("$")
   for win_num = 1,window_count do
+    local win = vim.fn.win_getid(win_num)
     local bnum = vim.fn.winbufnr(win_num)
     local type = vim.fn.getbufvar(bnum, '&buftype')
-    local ftype = vim.fn.getbufvar(bnum, '&fileype')
+    local ftype = vim.fn.getbufvar(bnum, '&filetype')
 
     if type == 'quickfix' then
       vim.cmd("cclose")
@@ -22,8 +23,10 @@ function CloseQuickFixOrBuffer()
     elseif type == 'help' then
       vim.cmd("helpc")
       return
-    elseif ftype == 'agitator' then
-      vim.api.nvim_win_close(0, 0)
+    elseif ftype == 'GitBlame' then
+      pcall(function()
+        vim.api.nvim_win_close(win, 0)
+      end)
       return
     -- elseif type == 'terminal' then
     --   vim.cmd("close")
@@ -31,7 +34,9 @@ function CloseQuickFixOrBuffer()
     end
   end
 
-  vim.api.nvim_win_close(0, 0)
+  pcall(function()
+    vim.api.nvim_win_close(0, 0)
+  end)
 end
 -- function ToggleTroubleAuto()
 --   print("AUTO MAG")

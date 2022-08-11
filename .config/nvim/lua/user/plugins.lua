@@ -68,6 +68,7 @@ return packer.startup(function(use)
   -- Colorschemes
   use { "sainnhe/gruvbox-material" }
   use { "lunarvim/darkplus.nvim" }
+  use { "rcarriga/nvim-notify" }
 
   -- cmp plugins
   use { "hrsh7th/nvim-cmp" } -- The completion plugin
@@ -103,7 +104,6 @@ return packer.startup(function(use)
   use { "RRethy/nvim-treesitter-endwise" }
 
   -- Git
-  -- use { "tpope/vim-fugitive" }
   use { "lewis6991/gitsigns.nvim" }
   use {
     'ruifm/gitlinker.nvim',
@@ -112,15 +112,16 @@ return packer.startup(function(use)
       require("gitlinker").setup()
     end
   }
+  use { 'rhysd/git-messenger.vim' }
   use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
   use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
-  use { 'emmanueltouzery/agitator.nvim' }
   use { 'famiu/nvim-reload' }
   use { "vim-ruby/vim-ruby" }
 
   -- Navigation
 
   use { 'knubie/vim-kitty-navigator' }
+  use { "Pocco81/true-zen.nvim" }
   -- DAP
   -- use { "mfussenegger/nvim-dap" }
   -- use { "rcarriga/nvim-dap-ui" }

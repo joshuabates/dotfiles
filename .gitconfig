@@ -1,28 +1,7 @@
-[merge]
-  tool = opendiff
-  defaultToUpstream = true
-  conflictStyle=diff3
-[user]
-  name = Joshua Bates
-  email = joshuabates@gmail.com
-[color]
-  branch = auto
-  diff = auto
-  status = auto
-  ui = auto
-[color "branch"]
-  current = yellow reverse
-  local = yellow
-  remote = green
-[color "diff"]
-  meta = yellow bold
-  frag = magenta bold
-  old = red bold
-  new = green bold
-[color "status"]
-  added = yellow
-  changed = green
-  untracked = cyan
+[core]
+  excludesfile = ~/.gitignore_global
+  editor = nvim
+  pager = "delta --syntax-theme='gruvbox-dark'"
 [alias]
   st = status
   s = status
@@ -44,26 +23,19 @@
   ps = push
   fe = fetch
   sh = stash
-  # fast forward
   ff = merge --ff-only
-  # merge commit
-  mc = merge --no-ff
-  ctags = !.git/hooks/ctags
+[merge]
+  defaultToUpstream = true
+  conflictstyle = diff3
+[user]
+  name = Joshua Bates
+  email = joshuabates@gmail.com
 [push]
   default = simple
 [format]
   pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
-[core]
-  excludesfile = ~/.gitignore_global
-  editor = nvim
-  pager = diff-so-fancy | less --tabs=4 -RFX
 [help]
   autocorrect = 1
-[color "diff-highlight"]
-  oldNormal = red bold
-  oldHighlight = red bold 52
-  newNormal = green bold
-  newHighlight = green bold 22
 [credential]
   helper = cache
 [credential "https://github.com"]
@@ -72,6 +44,34 @@
   insteadOf = git://
 [push]
   autoSetupRemote = true
-[core]
-  editor = nvr --servername socket --remote-wait-silent
-
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  navigate = true    # use n and N to move between diff sections
+  light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+  line-numbers = true
+[diff]
+  colorMoved = default
+[color]
+  branch = auto
+  diff = auto
+  status = auto
+  ui = auto
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+[color "diff-highlight"]
+  oldNormal = red bold
+  oldHighlight = red bold 52
+  newNormal = green bold
+  newHighlight = green bold 22
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan

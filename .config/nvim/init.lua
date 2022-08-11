@@ -22,13 +22,13 @@ require "user.ruby"
 
 -- TODO:
 -- better surround keys
--- better git blame
+-- git history for current file
 -- better toggleterm config?
 -- tests -> quickfix
 -- diagnostics -> quickfix
 -- move down a line after comment
 -- quickfix navigation
--- improve autocomplete dor ruby especially
+-- improve autocomplete for ruby especially
 --
 -- leap, leap-ast
 -- hydra

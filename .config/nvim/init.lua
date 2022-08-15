@@ -21,12 +21,15 @@ require "user.treesitter"
 require "user.ruby"
 
 -- TODO:
+-- telescope start search and then select directory to narow it down with
 -- get remote-neovim working for git?
 -- use a seperate background for a embedded terminal vs a kitty one
--- improve autocomplete
+-- improve autocomplete. how?
+-- snippets?
+-- react stuff
 --
 -- improve ruby lsp. should atleast work with local file docs and non-rails gems
--- better "go to implementation" (flexible based on server)
+-- better "go to implementation" (flexible based on server?)
 -- copy filepath:line
 -- lua autoformatting
 --

@@ -33,7 +33,6 @@ function is_find_in_dir(picker)
 end
 
 -- Implement delta as previewer for diffs
-
 local previewers = require('telescope.previewers')
 local builtin = require('telescope.builtin')
 local conf = require('telescope.config')

@@ -44,7 +44,10 @@ toggleterm.setup({
 	close_on_exit = true,
 	shell = shell,
 	float_opts = {
-		border = "curved",
+		border = "double",
+    width = 200,
+    height = 200,
+    winblend = 10,
 	},
 })
 
@@ -75,7 +78,46 @@ function watch_yarn(t, _, data, _)
 end
 
 local Terminal = terms.Terminal
-local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, on_open = no_normal })
+local lazygit = Terminal:new({
+  cmd = "lazygit",
+  dir = "git_dir",
+  direction = "float",
+  float_opts = {
+    border = "double",
+  },
+  -- function to run on opening the terminal
+  on_open = function(term)
+    no_normal()
+    vim.cmd("startinsert!")
+    vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true})
+
+    pcall(vim.api.nvim_buf_del_keymap, term.bufnr, "i", "<c-h>")
+    pcall(vim.api.nvim_buf_del_keymap, term.bufnr, "i", "<c-j>")
+    pcall(vim.api.nvim_buf_del_keymap, term.bufnr, "i", "<c-k>")
+    pcall(vim.api.nvim_buf_del_keymap, term.bufnr, "i", "<c-l>")
+
+    pcall(vim.api.nvim_buf_del_keymap, term.bufnr, "t", "<c-h>")
+    pcall(vim.api.nvim_buf_del_keymap, term.bufnr, "t", "<c-j>")
+    pcall(vim.api.nvim_buf_del_keymap, term.bufnr, "t", "<c-k>")
+    pcall(vim.api.nvim_buf_del_keymap, term.bufnr, "t", "<c-l>")
+
+    vim.api.nvim_buf_set_keymap(term.bufnr, "i", "<c-j>", "<Right>", { noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<c-j>", "<Right>", { noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(term.bufnr, "i", "<c-k>", "<Left>", { noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<c-j>", "<Right>", { noremap = true, silent = true})
+
+    vim.api.nvim_buf_set_keymap(term.bufnr, "i", "<c-h>", "[", { noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<c-h>", "[", { noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(term.bufnr, "i", "<c-h>", "[", { noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<c-h>", "[", { noremap = true, silent = true})
+
+  end,
+  -- function to run on closing the terminal
+  on_close = function(term)
+    vim.cmd("startinsert!")
+  end,
+})
+
 local rails_console = Terminal:new({ cmd = "rails console", direction = "vertical" })
 local start = Terminal:new({ cmd = "yarn start", hidden = true, direction = "float", on_stdout = watch_yarn } )
 
@@ -120,4 +162,4 @@ function _GIT_SHOW(sha)
 end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
-vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+vim.cmd('autocmd! TermOpen term://*toggleterm#* lua set_terminal_keymaps()')

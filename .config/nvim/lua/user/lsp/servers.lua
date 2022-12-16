@@ -55,7 +55,10 @@ null_ls.setup {
   sources = {
     code_actions.eslint_d,
     diagnostics.eslint_d,
-    formatting.eslint_d,
+    -- formatting.eslint_d,
+    formatting.eslint_d.with({
+      prefer_local = "node_modules/.bin",
+    }),
     formatting.fixjson,
 
     diagnostics.jsonlint,

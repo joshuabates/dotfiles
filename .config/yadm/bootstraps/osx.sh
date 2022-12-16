@@ -33,7 +33,7 @@ laptop_echo "Updating Homebrew formulae ..."
 brew bundle --file="$(dirname "$0")"/Brewfile
 
 laptop_echo "Linking dotfiles"
-env RCRC=$HOME/.dotfiles/rcrc rcup
+# env RCRC=$HOME/.dotfiles/rcrc rcup
 
 if [ -f "$(brew --prefix)/bin/fish" ]; then
   echo "$(brew --prefix)/bin/fish" | sudo tee -a /etc/shells
@@ -43,8 +43,8 @@ else
   exit 1
 fi
 
-curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
-fisher update
+# curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+# fisher update
 
 laptop_echo "Configuring asdf version manager..."
 
@@ -57,10 +57,10 @@ install_asdf_plugin() {
   fi
 }
 
-source "$HOME/.asdf/asdf.sh"
+# source "$HOME/.asdf/asdf.sh"
 install_asdf_plugin "ruby" "https://github.com/asdf-vm/asdf-ruby.git"
 install_asdf_plugin "nodejs" "https://github.com/asdf-vm/asdf-nodejs.git"
-install_asdf_plugin "java" "https://github.com/skotchpine/asdf-java"
+# install_asdf_plugin "java" "https://github.com/skotchpine/asdf-java"
 install_asdf_plugin "python" "https://github.com/tuvistavie/asdf-python.git"
 
 install_asdf_language() {

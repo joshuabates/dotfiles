@@ -7,8 +7,8 @@ end
 
 M.capabilities = vim.lsp.protocol.make_client_capabilities()
 -- M.capabilities.textDocument.completion.completionItem.snippetSupport = true
-M.capabilities = cmp_nvim_lsp.update_capabilities(M.capabilities)
-
+M.capabilities = cmp_nvim_lsp.default_capabilities(M.capabilities)
+                                                                                                                                                                                                                   
 -- M.setup_lsp_diags = function ()
 --   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 --     vim.lsp.diagnostic.on_publish_diagnostics,
@@ -116,6 +116,7 @@ local function lsp_keymaps(bufnr)
 end
 
 local lsp_formatting = function(bufnr)
+  vim.lsp.buf.format({ bufnr = bufnr })
   vim.lsp.buf.format({
     filter = function(client)
       return client.name == "null-ls"
@@ -128,7 +129,6 @@ local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
 M.on_attach = function(client, bufnr)
   lsp_keymaps(bufnr)
-
   if client.supports_method("textDocument/formatting") then
     vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
     vim.api.nvim_create_autocmd("BufWritePre", {

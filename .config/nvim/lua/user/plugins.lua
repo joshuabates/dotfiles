@@ -62,17 +62,20 @@ return packer.startup(function(use)
     end
   }
   use {'kevinhwang91/nvim-bqf' }
-  use { 
-    'ggandor/lightspeed.nvim',
-    config = function()
-      require("lightspeed").setup({})
-    end
-  }
+  -- use { 
+  --   'ggandor/lightspeed.nvim',
+  --   config = function()
+  --     require("lightspeed").setup({})
+  --   end
+  -- }
   -- use { "gabrielpoca/replacer.nvim" }
   -- use { "stefandtw/quickfix-reflector.vim" }
   use { "goolord/alpha-nvim" }
   -- Colorschemes
-  use { "sainnhe/gruvbox-material" }
+  use {
+    "sainnhe/gruvbox-material",
+    tag = "v1.2.4"
+  }
   use { "lunarvim/darkplus.nvim" }
   use { "rcarriga/nvim-notify" }
 
@@ -91,7 +94,7 @@ return packer.startup(function(use)
   -- LSP
   use { "neovim/nvim-lspconfig" } -- enable LSP
   use { "williamboman/nvim-lsp-installer" } -- simple to use language server installer
-  use { "jose-elias-alvarez/null-ls.nvim" } -- for formatters and linters
+  use { "jose-elias-alvarez/null-ls.nvim", commit = "8914051" } -- for formatters and linters
   -- use { "RRethy/vim-illuminate" }
   use { 'ray-x/lsp_signature.nvim' }
   use { 'jose-elias-alvarez/typescript.nvim' }
@@ -106,7 +109,7 @@ return packer.startup(function(use)
   -- Treesitter
   use { "nvim-treesitter/nvim-treesitter" }
   use { "RRethy/nvim-treesitter-textsubjects" }
-  use { "JoosepAlviste/nvim-ts-context-commentstring", commit = "88343753dbe81c227a1c1fd2c8d764afb8d36269" }
+  use { "JoosepAlviste/nvim-ts-context-commentstring" }
   use { "RRethy/nvim-treesitter-endwise" }
 
   -- Git

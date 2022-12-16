@@ -21,16 +21,20 @@ local _, lspconfig = pcall(require, "lspconfig")
 --   return
 -- end
 
+local on_attach = require("user.lsp.handlers").on_attach
+
 local opts = {
-  on_attach = require("user.lsp.handlers").on_attach,
+  on_attach = on_attach,
   capabilities = require("user.lsp.handlers").capabilities,
 }
 
 local solargraph_opts = {
-  on_attach = require("user.lsp.handlers").on_attach,
+  on_attach = on_attach,
   capabilities = require("user.lsp.handlers").capabilities,
   cmd = { 'bundle', 'exec', 'solargraph', 'stdio' },
 }
+
+
 
 lspconfig['cssls'].setup(opts)
 lspconfig['html'].setup(opts)

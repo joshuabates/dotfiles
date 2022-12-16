@@ -11,6 +11,7 @@
 local keymap = vim.keymap.set
 local opts = { silent = true }
 local find_in_dir_prompt = require("user.telescope").find_in_dir_prompt
+local utils = require('user.utils')
 
 keymap("i", "<F1>", "<Esc>", opts)
 keymap("n", "<F1>", "<Esc>", opts)
@@ -47,6 +48,24 @@ end
 
 vim.cmd('autocmd! filetype netrw lua set_netrw_keymaps()')
 
+
+function set_terminal_keymaps()
+  local opts = {noremap = true}
+
+  vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+
+  -- vim.api.nvim_buf_set_keymap(0, 't', '<Up>', [[<C-\><C-n><C-W>l]], opts)
+
+  vim.api.nvim_buf_set_keymap(0, 'i', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
+  vim.api.nvim_buf_set_keymap(0, 'i', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
+  vim.api.nvim_buf_set_keymap(0, 'i', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
+  vim.api.nvim_buf_set_keymap(0, 'i', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+end
+vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 
 -- Resize with arrows
 keymap("n", "<C-Up>", ":resize -2<CR>", opts)

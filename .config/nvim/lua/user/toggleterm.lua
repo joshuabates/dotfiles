@@ -1,9 +1,11 @@
 local status_ok, toggleterm = pcall(require, "toggleterm")
 local ok, terms = pcall(require, 'toggleterm.terminal')
+local utils = require('user.utils')
 
 if not status_ok then
 	return
 end
+
 -- TODO: seperate consoles for rails console, specs, etc...
 -- consider using vim for all primary project terminal stuff (e.g starting webpack)
 -- https://github.com/sheodox/projectlaunch.nvim
@@ -31,6 +33,7 @@ toggleterm.setup({
     end
   end,
 	open_mapping = [[<c-\>]],
+  auto_scroll = true,
 	hide_numbers = true,
 	shade_terminals = true,
 	shading_factor = 2,
@@ -45,31 +48,40 @@ toggleterm.setup({
 	},
 })
 
-function _G.set_terminal_keymaps()
-  local opts = {noremap = true}
-  vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+function no_normal(term)
+  pcall(function()
+    vim.api.nvim_buf_del_keymap(0, 't', '<esc>')
+  end)
 
-  -- vim.api.nvim_buf_set_keymap(0, 't', '<Up>', [[<C-\><C-n><C-W>l]], opts)
-
-  vim.api.nvim_buf_set_keymap(0, 'i', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
-  vim.api.nvim_buf_set_keymap(0, 'i', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
-  vim.api.nvim_buf_set_keymap(0, 'i', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
-  vim.api.nvim_buf_set_keymap(0, 'i', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+  pcall(function()
+    vim.api.nvim_buf_set_keymap(0, 't', '<esc><esc>', [[<C-\><C-n>]], { silent = true, noremap = true })
+  end)
 end
 
-vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+function watch_yarn(t, _, data, _)
+  for k,line in pairs(data) do 
+    if line:match("ERROR") then 
+      str = line:gsub("%[%dm", "")
+      -- [1m[31mERROR[39m[22m in [1m./ui/index.js[39m[22m
+
+      utils.errorlog(str, "Webpack ERROR")
+    else
+      -- utils.log(line)
+    end
+  end
+-- ERROR in ./ui/components/changesets/Changeset.js
+-- on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
+  -- on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
+end
 
 local Terminal = terms.Terminal
-local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
+local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, on_open = no_normal })
 local rails_console = Terminal:new({ cmd = "rails console", direction = "vertical" })
-local start = Terminal:new({ cmd = "yarn start", hidden = true, direction = "float" } )
+local start = Terminal:new({ cmd = "yarn start", hidden = true, direction = "float", on_stdout = watch_yarn } )
 
 function _LAZYGIT_TOGGLE()
 	lazygit:toggle()
+  lazygit.display_name = "Git"
 end
 
 function _RAILS_CONSOLE_TOGGLE()

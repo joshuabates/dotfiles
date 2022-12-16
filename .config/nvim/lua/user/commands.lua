@@ -1,3 +1,4 @@
+local utils = require('user.utils')
 
 -- command! CreateStyles call CreateStyles()
 -- function! CreateStyles()
@@ -17,15 +18,19 @@ function CloseQuickFixOrBuffer()
     local type = vim.fn.getbufvar(bnum, '&buftype')
     local ftype = vim.fn.getbufvar(bnum, '&filetype')
 
-    if not vim.api.nvim_win_get_config(win).relative == "" then
+    -- this should close floating windows, but isn't....
+    if vim.api.nvim_win_get_config(win).relative == "" then
       vim.api.nvim_win_close(win, 0)
     elseif type == 'quickfix' then
+      utils.warn("closing quickfix")
       vim.cmd("cclose")
       return
     elseif type == 'help' then
+      utils.warn("closing help")
       vim.cmd("helpc")
       return
     elseif ftype == 'GitBlame' then
+      utils.warn("closing blame")
       pcall(function()
         vim.api.nvim_win_close(win, 0)
       end)
@@ -36,6 +41,7 @@ function CloseQuickFixOrBuffer()
     end
   end
 
+  utils.warn("closing current")
   pcall(function()
     vim.api.nvim_win_close(0, 0)
   end)

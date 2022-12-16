@@ -60,3 +60,9 @@ fish_add_path "/opt/homebrew/bin"
 # export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 
 direnv hook fish | source
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+eval /Users/joshua/Projects/ai/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+# <<< conda initialize <<<
+

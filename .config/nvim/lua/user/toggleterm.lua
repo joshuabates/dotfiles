@@ -57,7 +57,7 @@ function no_normal(term)
   end)
 
   pcall(function()
-    vim.api.nvim_buf_set_keymap(0, 't', '<esc><esc>', [[<C-\><C-n>]], { silent = true, noremap = true })
+    vim.api.nvim_buf_set_keymap(0, 't', '<esc><esc>', "<cmd>close<CR>", { silent = true, noremap = true })
   end)
 end
 
@@ -90,6 +90,7 @@ local lazygit = Terminal:new({
     no_normal()
     vim.cmd("startinsert!")
     vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(term.bufnr, "t", "q", "<cmd>close<CR>", { noremap = true, silent = true})
 
     pcall(vim.api.nvim_buf_del_keymap, term.bufnr, "i", "<c-h>")
     pcall(vim.api.nvim_buf_del_keymap, term.bufnr, "i", "<c-j>")
@@ -119,7 +120,18 @@ local lazygit = Terminal:new({
 })
 
 local rails_console = Terminal:new({ cmd = "rails console", direction = "vertical" })
-local start = Terminal:new({ cmd = "yarn start", hidden = true, direction = "float", on_stdout = watch_yarn } )
+local start = Terminal:new({
+  cmd = "yarn start",
+  hidden = true,
+  direction = "float",
+  on_stdout = watch_yarn,
+  on_open = function(term)
+    vim.api.nvim_buf_set_keymap(term.bufnr, "n", "<esc><esc>", "<cmd>close<CR>", { noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<esc><esc>", "<cmd>close<CR>", { noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(term.bufnr, "t", "q", "<cmd>close<CR>", { noremap = true, silent = true})
+  end
+} )
 
 function _LAZYGIT_TOGGLE()
 	lazygit:toggle()

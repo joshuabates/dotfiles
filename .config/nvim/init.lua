@@ -21,6 +21,15 @@ require "user.treesitter"
 require "user.ruby"
 
 -- TODO:
+-- FIX BUGS
+--
+-- lsp doesn't alays work... (needs to be automatic)
+-- keep getting enter outputting qq
+-- keep getting dual imports on save
+-- gotofile should work with js imports
+--
+-- - sometimes get stuck with an out of focus float window
+--
 -- telescope start search and then select directory to narow it down with
 -- get remote-neovim working for git?
 -- use a seperate background for a embedded terminal vs a kitty one

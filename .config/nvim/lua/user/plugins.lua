@@ -42,7 +42,12 @@ return packer.startup(function(use)
   use { "wbthomason/packer.nvim" } -- Have packer manage itself
   use { "nvim-lua/plenary.nvim" } -- Useful lua functions used by lots of plugins
   use { "windwp/nvim-autopairs" } -- Autopairs, integrates with both cmp and treesitter
-  use { "numToStr/Comment.nvim" }
+  use {
+    "numToStr/Comment.nvim",
+    config = function()
+      require('Comment').setup()
+    end
+  }
   use {
     "kyazdani42/nvim-web-devicons",
     config = function()
@@ -69,7 +74,7 @@ return packer.startup(function(use)
   --   end
   -- }
   -- use { "gabrielpoca/replacer.nvim" }
-  -- use { "stefandtw/quickfix-reflector.vim" }
+  -- uje { "stefandtw/quickfix-reflector.vim" }
   use { "goolord/alpha-nvim" }
   -- Colorschemes
   use {
@@ -94,24 +99,26 @@ return packer.startup(function(use)
   -- LSP
   use { "neovim/nvim-lspconfig" } -- enable LSP
   use { "williamboman/nvim-lsp-installer" } -- simple to use language server installer
-  use { "jose-elias-alvarez/null-ls.nvim", commit = "8914051" } -- for formatters and linters
+  use { "jose-elias-alvarez/null-ls.nvim" } -- for formatters and linters
   -- use { "RRethy/vim-illuminate" }
   use { 'ray-x/lsp_signature.nvim' }
   use { 'jose-elias-alvarez/typescript.nvim' }
 
   -- Telescope
   use { "nvim-telescope/telescope.nvim" }
-  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+  -- use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+  use "natecraddock/telescope-zf-native.nvim"
   use { "nvim-telescope/telescope-file-browser.nvim" }
   use {'tknightz/telescope-termfinder.nvim' }
   use {'nvim-telescope/telescope-ui-select.nvim' }
 
   -- Treesitter
   use { "nvim-treesitter/nvim-treesitter" }
+  use { 'nvim-treesitter/playground' }
   use { "RRethy/nvim-treesitter-textsubjects" }
   use { "JoosepAlviste/nvim-ts-context-commentstring" }
   use { "RRethy/nvim-treesitter-endwise" }
-
+  use { "github/copilot.vim" }
   -- Git
   use { "lewis6991/gitsigns.nvim" }
   use {
@@ -121,9 +128,13 @@ return packer.startup(function(use)
       require("gitlinker").setup()
     end
   }
-  use { 'rhysd/git-messenger.vim' }
-  use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
+
+  -- use { 'rhysd/git-messenger.vim' }
+  -- use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
   use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
+
+  use { 'tpope/vim-fugitive' }
+
   use { 'famiu/nvim-reload' }
   use { "vim-ruby/vim-ruby" }
 
@@ -134,6 +145,16 @@ return packer.startup(function(use)
     "folke/twilight.nvim",
     config = function()
       require("twilight").setup {
+        dimming = {
+          alpha = 0.5, -- amount of dimming
+        },
+        expand = { -- for treesitter, we we always try to expand to the top-most ancestor with these types
+          "function",
+          "method",
+          "table",
+          "if_statement",
+          "method_definition",
+      },
         -- your configuration comes here
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
@@ -146,17 +167,25 @@ return packer.startup(function(use)
       require("zen-mode").setup {
         window = {
           width = .5,
+          backdrop = 0.5,
         },
-        plugin = {
+        plugins = {
           twilight = { enabled = false },
           kitty = {
             enabled = true,
-            font = "+10",
+            font = "+4",
           }
-        }
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
+        },
+        on_open = function(win)
+          local cmd = "kitty @ --to %s goto_layout stack"
+          local socket = vim.fn.expand("$KITTY_LISTEN_ON")
+          vim.fn.system(cmd:format(socket))
+        end,
+        on_close = function()
+          local cmd = "kitty @ --to %s kitten zoom_toggle.py"
+          local socket = vim.fn.expand("$KITTY_LISTEN_ON")
+          vim.fn.system(cmd:format(socket, opts.font))
+        end
       }
     end
   }

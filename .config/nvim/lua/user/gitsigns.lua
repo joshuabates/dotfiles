@@ -13,9 +13,8 @@ gitsigns.setup {
   },
 }
 
-local neogit = require('neogit')
-
-neogit.setup {}
+-- local neogit = require('neogit')
+-- neogit.setup {}
 
 local actions = require("diffview.actions")
 
@@ -32,3 +31,9 @@ require("diffview").setup({ })
 --     enabled = false,
 --   },
 -- })
+
+
+-- autocmd CursorMoved *.fugitiveblame call <SID>show_log_message()
+-- autocmd User FugitiveBlob,FugitiveStageBlob call s:BlobOverrides()
+-- vim.api.nvim_command("autocmd User FugitivePager nnoremap <buffer> <CR> :qq")
+-- open in diffview?>

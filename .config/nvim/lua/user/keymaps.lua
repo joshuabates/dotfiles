@@ -1,6 +1,6 @@
 -- TODO: Just use whichkey for all my keymaps?
 -- that would be built in docs. Only issue is if I want to move away from it
---
+
 --
 -- What are the single mod-key actions I need to take?
 -- (w?) saving # w would be a better window group
@@ -107,9 +107,15 @@ keymap("n", "<leader>K", ":w<CR>:cP<CR>", opts)
 keymap("n", "<leader>t", "<cmd>Telescope find_files<cr>", opts)
 keymap("n", "<leader>b", "<cmd>lua require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true })<cr>", opts)
 
+local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
+
 -- Comment
-keymap("n", "<leader>/", "<cmd>lua require('Comment.api').comment_toggle_linewise()<CR>j", opts)
-keymap("x", "<leader>/", '<ESC><CMD>lua require("Comment.api").toggle_linewise_op(vim.fn.visualmode())<CR>')
+keymap("n", "<leader>/", "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>j", opts)
+keymap("x", "<leader>/", function()
+  vim.api.nvim_feedkeys(esc, 'nx', false)
+  require('Comment.api').toggle.linewise(vim.fn.visualmode())
+  vim.cmd('norm! j')
+end)
 
 -- Git
 keymap("n", "<leader>gg", "<cmd>lua _LAZYGIT_TOGGLE()<CR>", opts)
@@ -291,7 +297,8 @@ wk.register({
 
     -- TODO: figure out how to add a hover to show full commit message and enter to view commit diff
     -- b = { "<cmd>lua require('agitator').git_blame({sidebar_width=40})<CR>", "Blame"},
-    b = { '<cmd>lua require("user.blame").open()<CR>', 'Blame' },
+    -- b = { '<cmd>lua require("user.blame").open()<CR>', 'Blame' },
+    b = { '<cmd>Git blame<CR>', 'Blame' },
     -- vim.keymap.set('n', '<leader>c', ":lua require('plugins.telescope').my_git_commits()<CR>", {noremap = true, silent = true})
     -- vim.keymap.set('n', '<leader>g', ":lua require('plugins.telescope').my_git_status()<CR>", {noremap = true, silent = true})
     -- vim.keymap.set('n', '<leader>b', ":lua require('plugins.telescope').my_git_bcommits()<CR>", {noremap = true, silent = true})

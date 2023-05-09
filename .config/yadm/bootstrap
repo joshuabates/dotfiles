@@ -2,12 +2,135 @@
 set -e
 
 if [[ "$(uname)" == "Darwin" ]]; then
-  ./bootstraps/osx.sh
+  OS="osx"
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
-  ./bootstraps/linux.sh
+  OS="linux"
 fi
 
-mkdir -p ~/.vim/autoload
+echo "$OS"
 
+trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
+set -e
+
+# Adpated from thoughtbot's laptop script.
+# https://github.com/thoughtbot/laptop
+
+laptop_echo() {
+  local fmt="$1"; shift
+
+  # shellcheck disable=SC2059
+  printf "\\n[LAPTOP] $fmt\\n" "$@"
+}
+
+install_asdf_plugin() {
+  local name="$1"
+  local url="$2"
+
+  if ! asdf plugin-list | grep -Fq "$name"; then
+    asdf plugin-add "$name" "$url"
+  fi
+}
+
+install_asdf_language() {
+  local language="$1"
+  local version="$2"
+
+  if ! asdf list "$language" | grep -Fq "$version"; then
+    asdf install "$language" "$version"
+    asdf global "$language" "$version"
+  fi
+}
+
+# Ask for the administrator password upfront
+sudo -v
+
+# Keep-alive: update existing `sudo` time stamp until finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+rm -rf $HOME/tmp
+mkdir -p $HOME/tmp
+
+if [ "$OS" == "osx" ]; then
+  # Don't sleep
+  sudo pmset -a sleep 0
+  laptop_echo "Installing Homebrew ..."
+  if hash brew 2>/dev/null; then
+    brew update && brew cleanup
+  else
+   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  fi
+  brew bundle --file="$(dirname "$0")"/Brewfile
+  fish_path="$(brew --prefix)/bin/fish"
+  curl https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -o ~/tmp/miniconda.sh
+else
+  sudo apt-add-repository ppa:fish-shell/release-3 -y
+  sudo apt-get update
+  sudo apt-get install fish direnv wget silversearcher-ag curl net-tools htop git-core zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev software-properties-common libffi-dev -y
+  fish_path="/usr/bin/fish"
+
+  if [ ! -d "$HOME/miniconda" ]; then
+    wget -nc https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/tmp/miniconda.sh
+  fi
+fi
+
+if [ ! -d "$HOME/miniconda" ]; then
+  bash ~/tmp/miniconda.sh -b -p $HOME/miniconda
+fi
+
+if [ -f "$fish_path" ]; then
+  echo "$fish_path" | sudo tee -a /etc/shells
+  sudo chsh -s "$fish_path" $USER
+else
+  echo "fish is not installed; Exiting"
+  exit 1
+fi
+
+if [ ! -d "$HOME/.asdf" ]; then
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.11.3
+fi
+
+. "$HOME/.asdf/asdf.sh"
+install_asdf_plugin "ruby"
+install_asdf_plugin "nodejs"
+install_asdf_plugin "neovim"
+
+laptop_echo "Installing Ruby..."
+cat << EOF > "$HOME"/.default-gems
+bundler
+pry
+pry-rails
+pry-nav
+pry-byebug
+solargraph
+EOF
+# pry-rescue
+# pry-inline
+# pry-remote
+# pry-doc
+# gem-browse
+# hookup
+
+export RUBY_CFLAGS="-ggdb3 -O0"
+
+install_asdf_language "ruby"
+gem update --system
+bundle config --global jobs 4
+
+laptop_echo "Installing latest Node..."
+# bash "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
+install_asdf_language "nodejs"
+
+npm install --global pure-prompt yarn
+yarn global add jshint jsxhint jsonlint stylelint sass-lint flow webpack webpack-cli electron clone-org-repos javascript-typescript-langserver
+asdf reshim nodejs
 # restart shell
-su -l `whoami`
+# su -l `whoami`
+#
+#
+install_asdf_language "neovim", "stable"
+
+if [ "$OS" == "osx" ]; then
+  laptop_echo "Configuring puma-dev..."
+  sudo puma-dev -setup
+  puma-dev -install -d test
+fi

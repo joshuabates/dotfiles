@@ -1,6 +1,13 @@
 require "user.options"
-require "user.keymaps"
 require "user.plugins"
+
+local fn = vim.fn
+local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
+if fn.empty(fn.glob(install_path)) > 0 then
+  return
+end
+
+require "user.keymaps"
 require "user.colorscheme"
 
 require "user.autopairs"

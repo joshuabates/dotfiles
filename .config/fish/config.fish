@@ -1,4 +1,5 @@
 if status is-interactive
+  alias ssh="kitty +kitten ssh"
   # Machine
   alias psg='ps aux | grep'
 
@@ -63,6 +64,6 @@ direnv hook fish | source
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-eval /Users/joshua/Projects/ai/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+# eval /Users/joshua/Projects/ai/miniconda3/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
 

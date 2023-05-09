@@ -1,5 +1,6 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
+SETUVAR --export PYENV_ROOT:/Users/joshua/\x2epyenv
 SETUVAR __fish_initialized:3400
 SETUVAR _fisher_halostatue_2F_fish_2D_rake_files:\x7e/\x2econfig/fish/functions/clean_rake_cache\x2efish\x1e\x7e/\x2econfig/fish/completions/rake\x2efish
 SETUVAR _fisher_jorgebucaran_2F_fisher_files:\x7e/\x2econfig/fish/functions/fisher\x2efish\x1e\x7e/\x2econfig/fish/completions/fisher\x2efish
@@ -36,4 +37,4 @@ SETUVAR fish_pager_color_description:B3A06D\x1eyellow\x1e\x2di
 SETUVAR fish_pager_color_prefix:cyan\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
 SETUVAR fish_pager_color_selected_background:\x2dr
-SETUVAR fish_user_paths:/opt/homebrew/sbin\x1e/Users/joshua/Projects/playground/puppet\x2dpush/node_modules\x1e/Users/joshua/Projects/playground/puppet\x2dpush/packages/push\x2dpuppets/node_modules\x1e/Users/joshua/Work/opencounter/node_modules\x1e/opt/homebrew/bin\x1e/Users/joshua/Projects/oc/opencounter/node_modules\x1e/usr/local/sbin
+SETUVAR fish_user_paths:/Users/joshua/\x2epyenv/bin\x1e/Users/joshua/\x2easdf/shims\x1e/Users/joshua/\x2easdf/bin\x1e/Users/joshua/Projects/click/packages/ableton\x2djs/node_modules\x1e/opt/homebrew/sbin\x1e/Users/joshua/Projects/playground/puppet\x2dpush/node_modules\x1e/Users/joshua/Projects/playground/puppet\x2dpush/packages/push\x2dpuppets/node_modules\x1e/Users/joshua/Work/opencounter/node_modules\x1e/opt/homebrew/bin\x1e/Users/joshua/Projects/oc/opencounter/node_modules\x1e/usr/local/sbin

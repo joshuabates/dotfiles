@@ -65,7 +65,7 @@ if [ "$OS" == "osx" ]; then
 else
   sudo apt-add-repository ppa:fish-shell/release-3 -y
   sudo apt-get update
-  sudo apt-get install fish direnv wget silversearcher-ag curl net-tools htop git-core zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev software-properties-common libffi-dev -y
+  sudo apt-get install fish direnv wget silversearcher-ag curl net-tools htop git-core git-lfs zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev software-properties-common libffi-dev -y
   fish_path="/usr/bin/fish"
 
   if [ ! -d "$HOME/miniconda" ]; then
@@ -133,4 +133,15 @@ if [ "$OS" == "osx" ]; then
   laptop_echo "Configuring puma-dev..."
   sudo puma-dev -setup
   puma-dev -install -d test
+fi
+
+git lfs install
+curl -sSL https://install.python-poetry.org | python3 -
+
+if [ "$OS" == "linux" ]; then
+  curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+  && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+  && sudo apt update \
+  && sudo apt install gh -y
 fi

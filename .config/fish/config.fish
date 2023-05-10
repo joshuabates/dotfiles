@@ -67,7 +67,7 @@ fish_add_path "/opt/homebrew/bin"
 
 source ~/.asdf/asdf.fish
 
-pyenv init - | source
+# pyenv init - | source
 
 fish_add_path "./bin"
 direnv hook fish | source

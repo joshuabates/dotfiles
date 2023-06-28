@@ -66,6 +66,13 @@ return packer.startup(function(use)
       require("nvim-surround").setup({})
     end
   }
+  use({
+    'Wansmer/treesj',
+    requires = { 'nvim-treesitter' },
+    config = function()
+      require('treesj').setup({--[[ your config ]]})
+    end,
+  })
   use {'kevinhwang91/nvim-bqf' }
   -- use { 
   --   'ggandor/lightspeed.nvim',

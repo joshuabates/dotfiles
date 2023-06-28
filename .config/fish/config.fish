@@ -64,6 +64,7 @@ fish_add_path "/opt/homebrew/bin"
 # export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 # set --export FZF_DEFAULT_OPTS '--cycle --layout=reverse --border --height=90% --preview-window=wrap --marker="*"'
 # export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+source ~/.asdf/asdf.fish
 
 source ~/.asdf/asdf.fish
 

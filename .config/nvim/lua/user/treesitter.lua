@@ -5,7 +5,7 @@ end
 
 configs.setup({
 	ensure_installed = "all", -- one of "all" or a list of languages
-  ensure_installed = { "c", "css", "dockerfile", "fish", "javascript", "jsdoc", "json", "lua", "ruby", "rust", "scss", "typescript", "yaml" },
+  ensure_installed = { "c", "css", "dockerfile", "fish", "javascript", "jsdoc", "json", "lua", "python", "ruby", "rust", "scss", "typescript", "yaml" },
 	ignore_install = { "php" }, -- List of parsers to ignore installing
 	highlight = {
 		enable = true, -- false will disable the whole extension

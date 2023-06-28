@@ -39,6 +39,7 @@ local solargraph_opts = {
 lspconfig['cssls'].setup(opts)
 lspconfig['html'].setup(opts)
 lspconfig['solargraph'].setup(opts)
+lspconfig['pyright'].setup(opts)
 
 require("typescript").setup({
   debug = true,

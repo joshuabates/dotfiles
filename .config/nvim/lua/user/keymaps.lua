@@ -18,7 +18,6 @@ keymap("n", "<F1>", "<Esc>", opts)
 
 --Remap space as leader key
 keymap("", "<Space>", "<Nop>", opts)
-vim.g.mapleader = " "
 
 -- Modes
 --   normal_mode = "n",
@@ -345,7 +344,7 @@ wk.register({
     --- Testing
     name = "Run",
     n = { "<cmd>TestNearest<cr>", "Nearest"},
-    N = { "<cmd>TestNearest<cr>", "Nearest (background)"},
+    N = { "<cmd>TestNearest<cr>", "Nearest (background)" },
     s = { "<cmd>TestFile<cr>", "File"},
     S = { "<cmd>TestFile<cr>", "File (background)"},
     l = { "<cmd>TestLast<cr>", "Last"},
@@ -394,8 +393,7 @@ wk.register({
     name = "Vim",
 
     c = { '<cmd>e $MYVIMRC<CR>', 'Open Config' },
-    i = { '<cmd>PackerInstall<CR>', 'Install Plugins' },
-    u = { '<cmd>PackerSync<CR>', 'Update Plugins' },
+    l = { '<cmd>lazy<CR>', 'Lazy' },
     r = { '<cmd>Reload<CR>', 'Reload' },
     R = { '<cmd>Restart<CR>', 'Restart' },
   }

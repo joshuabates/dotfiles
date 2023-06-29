@@ -1,11 +1,21 @@
 require "user.options"
-require "user.plugins"
 
-local fn = vim.fn
-local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
-if fn.empty(fn.glob(install_path)) > 0 then
-  return
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup("plugins")
+
+require "plugins"
 
 require "user.keymaps"
 require "user.colorscheme"
@@ -16,7 +26,7 @@ require "user.comment"
 require "user.commands"
 require "user.gitsigns"
 require "user.indentline"
-require "user.lsp"
+-- require "user.lsp"
 require "user.lualine"
 require "user.nvim-tree"
 require "user.quickfix"
@@ -28,11 +38,16 @@ require "user.treesitter"
 require "user.ruby"
 
 -- TODO:
+-- X switch from packer to lazy
+-- beter org of plugins
+-- mason
+-- dap
+-- flash
+--
 -- FIX BUGS
 --
 -- lsp doesn't alays work... (needs to be automatic)
--- keep getting enter outputting qq
--- keep getting dual imports on save
+-- dual js imports on save
 -- gotofile should work with js imports
 --
 -- - sometimes get stuck with an out of focus float window
@@ -60,6 +75,6 @@ require "user.ruby"
 -- define filtered and labeled g prefix in whichkey
 --
 -- JS
--- Run yarn in a terminal, watch for errors and show notification when it breaks (and maybe even restart?) w/ option of going to error line in file
+-- limit error messages when running yarn
 --
 -- memorize surround keys: ys, cs, ds t(ag), f(n)

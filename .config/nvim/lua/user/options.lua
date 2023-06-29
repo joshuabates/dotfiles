@@ -45,6 +45,7 @@ vim.opt.maxmempattern = 2000000  --- default: 1000, max: 2000000
 vim.opt.showmatch = true
 vim.opt.incsearch = true
 vim.opt.gdefault = true
+vim.g.mapleader = " "
 
 -- vim.opt.netrw_banner = 0
 -- vim.opt.netrw_liststyle = 3

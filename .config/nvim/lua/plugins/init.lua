@@ -1,170 +1,129 @@
 return {
-  "nvim-lua/plenary.nvim", -- Useful lua functions used by lots of plugins
-    "folke/neodev.nvim",
-  "windwp/nvim-autopairs", -- Autopairs, integrates with both cmp and treesitter
-  "numToStr/Comment.nvim",
-  {
-    "kyazdani42/nvim-web-devicons",
-    config = function()
-      require("nvim-web-devicons").setup({})
-    end
-  },
-  -- "kyazdani42/nvim-tree.lua",
+	"nvim-lua/plenary.nvim", -- Useful lua functions used by lots of plugins
+	"folke/neodev.nvim",
+	{
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		opts = { check_ts = true },
+		config = function(_, opts)
+			local ap = require("nvim-autopairs")
+			ap.setup(opts)
+			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+			local cmp = require("cmp")
+			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+		end,
+	},
+	"numToStr/Comment.nvim",
+	-- "kyazdani42/nvim-tree.lua",
 
-  "nvim-lualine/lualine.nvim",
-  "akinsho/toggleterm.nvim",
-  "lukas-reineke/indent-blankline.nvim",
-  "kylechui/nvim-surround",
+	"lukas-reineke/indent-blankline.nvim",
+	{
+		"kylechui/nvim-surround",
+		version = "*", -- Use for stability; omit to use `main` branch for the latest features
+		event = "VeryLazy",
+		config = function()
+			require("nvim-surround").setup({
+				-- Configuration here, or leave empty to use defaults
+			})
+		end,
+	},
+	-- "gabrielpoca/replacer.nvim",
+	-- uje { "stefandtw/quickfix-reflector.vim" }
 
-  -- split/join via treesitter <leader-m>toggle
-  {
-    'Wansmer/treesj',
-    requires = { 'nvim-treesitter' },
-    config = function()
-      require('treesj').setup({--[[ your config ]]})
-    end,
-  },
-  'kevinhwang91/nvim-bqf',
-  -- "gabrielpoca/replacer.nvim",
-  -- uje { "stefandtw/quickfix-reflector.vim" }
-  "goolord/alpha-nvim",
-  -- Colorschemes
-  {
-    "sainnhe/gruvbox-material",
-    tag = "v1.2.4"
-  },
-  "lunarvim/darkplus.nvim",
-  "rcarriga/nvim-notify",
-
-  -- cmp plugins
-  "hrsh7th/nvim-cmp", -- The completion plugin
-  "hrsh7th/cmp-buffer", -- buffer completions
-  "hrsh7th/cmp-path", -- path completions
-  "saadparwaiz1/cmp_luasnip", -- snippet completions
-  "hrsh7th/cmp-nvim-lsp",
-  "hrsh7th/cmp-nvim-lua",
-
-  -- snippets
-  "L3MON4D3/LuaSnip", --snippet engine
-  -- "rafamadriz/friendly-snippets", -- a bunch of snippets to use
-
-  -- LSP
-  "neovim/nvim-lspconfig", -- enable LSP
-  "williamboman/nvim-lsp-installer", -- simple to use language server installer
-  "jose-elias-alvarez/null-ls.nvim", -- for formatters and linters
-  -- "RRethy/vim-illuminate",
-  'ray-x/lsp_signature.nvim',
-  'jose-elias-alvarez/typescript.nvim',
-
-  -- Telescope
-  "nvim-telescope/telescope.nvim",
-  -- use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-  "natecraddock/telescope-zf-native.nvim",
-  "nvim-telescope/telescope-file-browser.nvim",
-  'tknightz/telescope-termfinder.nvim',
-  'nvim-telescope/telescope-ui-select.nvim',
-
-  -- Treesitter
-  "nvim-treesitter/nvim-treesitter",
-  'nvim-treesitter/playground', 
-  "RRethy/nvim-treesitter-textsubjects",
-  "JoosepAlviste/nvim-ts-context-commentstring",
-  "RRethy/nvim-treesitter-endwise",
-  "github/copilot.vim",
-  -- Git
-  "lewis6991/gitsigns.nvim",
-  {
-    'ruifm/gitlinker.nvim',
-    requires = 'nvim-lua/plenary.nvim',
-    config = function()
-      require("gitlinker").setup()
-    end
-  },
-
-  -- use { 'rhysd/git-messenger.vim' }
-  -- use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
-  { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' },
-
-  'tpope/vim-fugitive',
-
-  'famiu/nvim-reload',
-  "vim-ruby/vim-ruby",
-
-  -- Navigation
-
-  'knubie/vim-kitty-navigator',
-  {
-    "folke/twilight.nvim",
-    config = function()
-      require("twilight").setup {
-        dimming = {
-          alpha = 0.5, -- amount of dimming
-        },
-        expand = { -- for treesitter, we we always try to expand to the top-most ancestor with these types
-          "function",
-          "method",
-          "table",
-          "if_statement",
-          "method_definition",
-      },
-      }
-    end
-  },
-  {
-    "folke/zen-mode.nvim",
-    config = function()
-      require("zen-mode").setup {
-        window = {
-          width = .5,
-          backdrop = 0.5,
-        },
-        plugins = {
-          twilight = { enabled = false },
-          kitty = {
-            enabled = true,
-            font = "+4",
-          }
-        },
-        on_open = function(win)
-          local cmd = "kitty @ --to %s goto_layout stack"
-          local socket = vim.fn.expand("$KITTY_LISTEN_ON")
-          vim.fn.system(cmd:format(socket))
-        end,
-        on_close = function()
-          local cmd = "kitty @ --to %s kitten zoom_toggle.py"
-          local socket = vim.fn.expand("$KITTY_LISTEN_ON")
-          vim.fn.system(cmd:format(socket, opts.font))
-        end
-      }
-    end
-  },
-  -- DAP
-  -- "mfussenegger/nvim-dap",
-  -- "rcarriga/nvim-dap-ui",
-  --
-  -- neotest doesn't yet have an adapter to run specs in toggleterm with streaming output but recently added APIs to allow both
-  -- https://github.com/nvim-neotest/neotest/pull/70 (streaming output)
-  -- https://github.com/nvim-neotest/neotest/discussions/46 (custom consumers)
-  -- https://github.com/nvim-neotest/neotest/issues/50
-  --
-  -- use({
-  --   'nvim-neotest/neotest',
-  --   requires = {
-  --     "nvim-lua/plenary.nvim",
-  --     "nvim-treesitter/nvim-treesitter",
-  --     "antoinemadec/FixCursorHold.nvim",
-  --     'olimorris/neotest-rspec',
-  --   },
-  -- })
-  --
- -- https://github.com/vuki656/package-info.nvim 
- --
-  "janko/vim-test",
-  -- "ravenxrz/DAPInstall.nvim",
-  {
-    "folke/which-key.nvim",
-    config = function()
-      require("which-key").setup {}
-    end
-  },
+	"github/copilot.vim",
+	"famiu/nvim-reload",
+	"vim-ruby/vim-ruby",
+	{
+		"folke/which-key.nvim",
+		opts = {
+			plugins = { spelling = true },
+			defaults = {
+				mode = { "n", "v" },
+				["g"] = { name = "+goto" },
+				["gz"] = { name = "+surround" },
+				["]"] = { name = "+next" },
+				["["] = { name = "+prev" },
+				-- ["<leader><tab>"] = { name = "+tabs" },
+				-- ["<leader>b"] = { name = "+buffer" },
+				["<leader>c"] = { name = "+code" },
+				["<leader>f"] = { name = "+file/find" },
+				["<leader>g"] = { name = "+git" },
+				-- ["<leader>gh"] = { name = "+hunks" },
+				["<leader>q"] = { name = "+quit/session" },
+				-- ["<leader>s"] = { name = "+search" },
+				-- ["<leader>u"] = { name = "+ui" },
+				["<leader>w"] = { name = "+windows" },
+				["<leader>x"] = { name = "+diagnostics/quickfix" },
+			},
+		},
+		config = function(_, opts)
+			local wk = require("which-key")
+			wk.setup(opts)
+			wk.register(opts.defaults)
+		end,
+	},
+	{
+		"folke/flash.nvim",
+		event = "VeryLazy",
+		vscode = true,
+		---@type Flash.Config
+		opts = {},
+		keys = {
+			{
+				"s",
+				mode = { "n", "x", "o" },
+				function()
+					require("flash").jump()
+				end,
+				desc = "Flash",
+			},
+			{
+				"S",
+				mode = { "n", "o", "x" },
+				function()
+					require("flash").treesitter()
+				end,
+				desc = "Flash Treesitter",
+			},
+			{
+				"r",
+				mode = "o",
+				function()
+					require("flash").remote()
+				end,
+				desc = "Remote Flash",
+			},
+			{
+				"R",
+				mode = { "o", "x" },
+				function()
+					require("flash").treesitter_search()
+				end,
+				desc = "Treesitter Search",
+			},
+		},
+	},
+	-- DAP
+	-- "mfussenegger/nvim-dap",
+	-- "rcarriga/nvim-dap-ui",
+	--
+	-- neotest doesn't yet have an adapter to run specs in toggleterm with streaming output but recently added APIs to allow both
+	-- https://github.com/nvim-neotest/neotest/pull/70 (streaming output)
+	-- https://github.com/nvim-neotest/neotest/discussions/46 (custom consumers)
+	-- https://github.com/nvim-neotest/neotest/issues/50
+	--
+	-- use({
+	--   'nvim-neotest/neotest',
+	--   requires = {
+	--     "nvim-lua/plenary.nvim",
+	--     "nvim-treesitter/nvim-treesitter",
+	--     "antoinemadec/FixCursorHold.nvim",
+	--     'olimorris/neotest-rspec',
+	--   },
+	-- })
+	--
+	-- https://github.com/vuki656/package-info.nvim
+	--
+	"janko/vim-test",
+	-- "ravenxrz/DAPInstall.nvim",
 }

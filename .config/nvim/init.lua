@@ -1,41 +1,39 @@
-require "user.options"
+require("user.options")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
+	vim.fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable", -- latest stable release
+		lazypath,
+	})
 end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins")
 
-require "plugins"
+require("plugins")
 
-require "user.keymaps"
-require "user.colorscheme"
+require("user.keymaps")
+require("user.colorscheme")
 
-require "user.autopairs"
-require "user.cmp"
-require "user.comment"
-require "user.commands"
-require "user.gitsigns"
-require "user.indentline"
--- require "user.lsp"
-require "user.lualine"
-require "user.nvim-tree"
-require "user.quickfix"
-require "user.telescope"
-require "user.testing"
-require "user.toggleterm"
-require "user.treesitter"
+require("user.cmp")
+require("user.comment")
+require("user.commands")
+require("user.gitsigns")
+require("user.indentline")
+require("user.lualine")
+require("user.nvim-tree")
+require("user.quickfix")
+require("user.telescope")
+require("user.testing")
+require("user.toggleterm")
+require("user.treesitter")
 
-require "user.ruby"
+require("user.ruby")
 
 -- TODO:
 -- X switch from packer to lazy
@@ -45,24 +43,19 @@ require "user.ruby"
 -- flash
 --
 -- FIX BUGS
---
--- lsp doesn't alays work... (needs to be automatic)
--- dual js imports on save
 -- gotofile should work with js imports
 --
--- - sometimes get stuck with an out of focus float window
+-- sometimes get stuck with an out of focus float window
 --
 -- telescope start search and then select directory to narow it down with
 -- get remote-neovim working for git?
 -- use a seperate background for a embedded terminal vs a kitty one
--- improve autocomplete. how?
 -- snippets?
 -- react stuff
 --
 -- improve ruby lsp. should atleast work with local file docs and non-rails gems
 -- better "go to implementation" (flexible based on server?)
 -- copy filepath:line
--- lua autoformatting
 --
 -- git history for current file
 -- better toggleterm config?

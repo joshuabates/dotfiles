@@ -11,7 +11,7 @@
 local keymap = vim.keymap.set
 local opts = { silent = true }
 local find_in_dir_prompt = require("user.telescope").find_in_dir_prompt
-local utils = require('user.utils')
+local utils = require("user.utils")
 
 keymap("i", "<F1>", "<Esc>", opts)
 keymap("n", "<F1>", "<Esc>", opts)
@@ -28,7 +28,7 @@ keymap("", "<Space>", "<Nop>", opts)
 --   command_mode = "c",
 
 -- Normal --
-keymap("n", "<leader>w", ":w<CR>", opts)
+keymap("n", "<leader>ww", ":w<CR>", opts)
 
 -- Better window navigation
 keymap("n", "<C-h>", "<C-w>h", opts)
@@ -38,33 +38,32 @@ keymap("n", "<C-l>", "<C-w>l", opts)
 
 -- Fix window navigation in netrw buffers
 function set_netrw_keymaps()
-  local opts = { silent = true, buffer = true }
-  keymap("n", "<C-h>", ":wincmd h<cr>", opts)
-  keymap("n", "<C-j>", ":wincmd j<cr>", opts)
-  keymap("n", "<C-k>", ":wincmd k<cr>", opts)
-  keymap("n", "<C-l>", ":wincmd l<cr>", opts)
+	local opts = { silent = true, buffer = true }
+	keymap("n", "<C-h>", ":wincmd h<cr>", opts)
+	keymap("n", "<C-j>", ":wincmd j<cr>", opts)
+	keymap("n", "<C-k>", ":wincmd k<cr>", opts)
+	keymap("n", "<C-l>", ":wincmd l<cr>", opts)
 end
 
-vim.cmd('autocmd! filetype netrw lua set_netrw_keymaps()')
-
+vim.cmd("autocmd! filetype netrw lua set_netrw_keymaps()")
 
 function set_terminal_keymaps()
-  local opts = {noremap = true}
+	local opts = { noremap = true }
 
-  vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+	vim.api.nvim_buf_set_keymap(0, "t", "<esc>", [[<C-\><C-n>]], opts)
+	vim.api.nvim_buf_set_keymap(0, "t", "<C-h>", [[<C-\><C-n><C-W>h]], opts)
+	vim.api.nvim_buf_set_keymap(0, "t", "<C-j>", [[<C-\><C-n><C-W>j]], opts)
+	vim.api.nvim_buf_set_keymap(0, "t", "<C-k>", [[<C-\><C-n><C-W>k]], opts)
+	vim.api.nvim_buf_set_keymap(0, "t", "<C-l>", [[<C-\><C-n><C-W>l]], opts)
 
-  -- vim.api.nvim_buf_set_keymap(0, 't', '<Up>', [[<C-\><C-n><C-W>l]], opts)
+	-- vim.api.nvim_buf_set_keymap(0, 't', '<Up>', [[<C-\><C-n><C-W>l]], opts)
 
-  vim.api.nvim_buf_set_keymap(0, 'i', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
-  vim.api.nvim_buf_set_keymap(0, 'i', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
-  vim.api.nvim_buf_set_keymap(0, 'i', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
-  vim.api.nvim_buf_set_keymap(0, 'i', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+	vim.api.nvim_buf_set_keymap(0, "i", "<C-h>", [[<C-\><C-n><C-W>h]], opts)
+	vim.api.nvim_buf_set_keymap(0, "i", "<C-j>", [[<C-\><C-n><C-W>j]], opts)
+	vim.api.nvim_buf_set_keymap(0, "i", "<C-k>", [[<C-\><C-n><C-W>k]], opts)
+	vim.api.nvim_buf_set_keymap(0, "i", "<C-l>", [[<C-\><C-n><C-W>l]], opts)
 end
-vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
 
 -- Resize with arrows
 keymap("n", "<C-Up>", ":resize -2<CR>", opts)
@@ -93,7 +92,7 @@ keymap("n", "<CR>", ":noh<CR><CR>", opts)
 -- keymap("n", "<Leader>p", ":let @+ = expand('%:.') . ':' . line('.')<CR>", opts)
 
 -- keymap("n", "<leader>v", ":source $MYVIMRC<CR>", opts)
-keymap("n", "<leader>w", ":wa<cr>", opts)
+keymap("n", "<leader>ww", ":wa<cr>", opts)
 
 -- " Cycle through lines in the quickfix list
 keymap("n", "<leader>j", ":w<CR>:cn<CR>", opts)
@@ -104,16 +103,21 @@ keymap("n", "<leader>K", ":w<CR>:cP<CR>", opts)
 
 -- Telescope
 keymap("n", "<leader>t", "<cmd>Telescope find_files<cr>", opts)
-keymap("n", "<leader>b", "<cmd>lua require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true })<cr>", opts)
+keymap(
+	"n",
+	"<leader>b",
+	"<cmd>lua require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true })<cr>",
+	opts
+)
 
-local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
+local esc = vim.api.nvim_replace_termcodes("<ESC>", true, false, true)
 
 -- Comment
 keymap("n", "<leader>/", "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>j", opts)
 keymap("x", "<leader>/", function()
-  vim.api.nvim_feedkeys(esc, 'nx', false)
-  require('Comment.api').toggle.linewise(vim.fn.visualmode())
-  vim.cmd('norm! j')
+	vim.api.nvim_feedkeys(esc, "nx", false)
+	require("Comment.api").toggle.linewise(vim.fn.visualmode())
+	vim.cmd("norm! j")
 end)
 
 -- Git
@@ -133,7 +137,7 @@ local wk = require("which-key")
 --   x = {
 --     name = "Trouble",
 --
---     -- x = { "<cmd>Trouble<cr>", "Trouble" }, 
+--     -- x = { "<cmd>Trouble<cr>", "Trouble" },
 --     -- w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workplace" },
 --     -- f = { "<cmd>Trouble document_diagnostics<cr>", "File" },
 --     -- l = { "<cmd>Trouble loclist<cr>", "Locations" },
@@ -168,62 +172,58 @@ local wk = require("which-key")
 -- end)
 
 wk.register({
-  g = {
-    name = "Go",
+	g = {
+		name = "Go",
 
-    -- % - cycle results
-    -- b,c comment toggl
-    -- x open w/ system app
-    -- ' marks
-    e = "End of prev word",
-    f = "File",
-    g = "First line",
-    i = "Last insert",
-    p = "Last paste",
-    v = "Last selection",
-    u = "Lowercase",
-    U = "Uppercase",
+		-- % - cycle results
+		-- b,c comment toggl
+		-- x open w/ system app
+		-- ' marks
+		e = "End of prev word",
+		f = "File",
+		g = "First line",
+		i = "Last insert",
+		p = "Last paste",
+		v = "Last selection",
+		u = "Lowercase",
+		U = "Uppercase",
 
-    s = { "<cmd>lua require('telescope.builtin').grep_string({search = vim.fn.expand('<cword>')})<cr>", "Search word"},
-    r = "References",
-    d = "Definition",
-    D = "Decleration",
-    I = "Implementation",
-    h = "Help doc",
+		r = "References",
+		d = "Definition",
+		D = "Decleration",
+		I = "Implementation",
+		h = "Help doc",
 
-    x = "Diagnostics"
+		x = "Diagnostics",
 
-    -- todo
+		-- todo
 
-    -- make a g1, g2, g3, etcc for window navigation?
-
-
-
-  }
-});
+		-- make a g1, g2, g3, etcc for window navigation?
+	},
+})
 wk.register({
-  ["<leader>\\"] = {
-    name = "Terminals",
+	["<leader>\\"] = {
+		name = "Terminals",
 
-    r = { "<cmd>lua _RAILS_CONSOLE_TOGGLE()<CR>", "Rails Console (Float)" },
-    a = { "<cmd>lua _START_APP_TOGGLE()<CR>", "Start App" },
-    g = { "<cmd>lua _LAYGIT_TOGGLE()<CR>", "Lazygit" },
-    t = { "<cmd>lua _TOGGLE_TERMINAL_DIR()<CR>", "Toggle Float"},
+		r = { "<cmd>lua _RAILS_CONSOLE_TOGGLE()<CR>", "Rails Console (Float)" },
+		a = { "<cmd>lua _START_APP_TOGGLE()<CR>", "Start App" },
+		g = { "<cmd>lua _LAYGIT_TOGGLE()<CR>", "Lazygit" },
+		t = { "<cmd>lua _TOGGLE_TERMINAL_DIR()<CR>", "Toggle Float" },
 
-    c = { "<cmd>lua _TERMINAL_EOD()<CR>", "Continue"},
-    x = { "<cmd>lua _TERMINAL_EOD()<CR>", "Kill"},
+		c = { "<cmd>lua _TERMINAL_EOD()<CR>", "Continue" },
+		x = { "<cmd>lua _TERMINAL_EOD()<CR>", "Kill" },
 
-    p = { "<cmd>ToggleTermSendCurrentLine<CR>", "Paste Current Line"},
-    v = { "<cmd>ToggleTermSendVisualSelection<CR>", "Paste Visual Selection"}
-    -- p = "Rails REPL",
-    -- TODO: Test
-  },
-  ["<leader>."] = {
-    name = "Edittor something...",
-  },
-  ["<leader>,"] = {
-    name = "Edit or something...",
-  }
+		p = { "<cmd>ToggleTermSendCurrentLine<CR>", "Paste Current Line" },
+		v = { "<cmd>ToggleTermSendVisualSelection<CR>", "Paste Visual Selection" },
+		-- p = "Rails REPL",
+		-- TODO: Test
+	},
+	["<leader>."] = {
+		name = "Edittor something...",
+	},
+	["<leader>,"] = {
+		name = "Edit or something...",
+	},
 })
 
 -- TODO: Settle on prefix(es) and groupings for search/find/lookup
@@ -245,156 +245,164 @@ keymap("n", "<leader>f<space>", "<cmd>Telescope find_files<cr>", opts)
 
 -- keymap("qf", "dd", "<Tab>zN", opts)
 wk.register({
-  -- TODO: customize list for text objects
-  -- v = {
-  --   name = "Visual"
-  -- },
-  -- y = {
-  --   name = "Yank"
-  -- },
-  -- c = {
-  --   name = "Change"
-  -- },
-  -- d = {
-  --   name = "Delete"
-  -- },
+	-- TODO: customize list for text objects
+	-- v = {
+	--   name = "Visual"
+	-- },
+	-- y = {
+	--   name = "Yank"
+	-- },
+	-- c = {
+	--   name = "Change"
+	-- },
+	-- d = {
+	--   name = "Delete"
+	-- },
 
-  f = {
-    name = "Find",
+	f = {
+		name = "Find",
 
--- keymap("n", "<leader>fc", "<cmd>Telescope termfinder find<cr>", opts)
+		-- keymap("n", "<leader>fc", "<cmd>Telescope termfinder find<cr>", opts)
 
-    f = { "<cmd>Telescope find_files<cr>", "File" },
-    d = { "<cmd>lua require('telescope.builtin').find_files({ previewer = false, find_command = { 'fd', '--type', 'd' }, prompt_title = '" .. find_in_dir_prompt .. "'})<cr>", "In Dir (<CR> find_file in DIR, <C-s> grep)"},
-    m = { "<cmd>Telescope lsp_document_symbols<cr>", "Method"},
-    b = { "<cmd>lua require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true })<cr>", "Buffer"},
-    w = { "<cmd>lua require('telescope.builtin').grep_string({search = vim.fn.expand('<cword>')})<cr>", "Word"},
-    s = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Search" },
-    h = { "<cmd>lua require('telescope.builtin').search_history()<cr>", "Search History" },
-    q = { "<cmd>lua require('telescope.builtin').quickfixhistory()<cr>", "Quickfix History" },
-    Q = { "<cmd>lua require('telescope.builtin').quickfix()<cr>", "Quickfix" },
-    l = { "<cmd>Telescope resume<cr>", "Last Search" },
-    -- ['\\'] = { "<cmd>Telescope termfinder find<cr>", "Terminal" }, -- TODO: this doesn't list any of my custom terms (which are the only ones I care about here)
-    e = { "<cmd>lua vim.lsp.buf.references()<CR>", "Reference"},
-    g = {
-      name = "Git",
-      b = { "<cmd>lua require('telescope.builtin').git_branches()<cr>", "Branches" },
-      c = { "<cmd>lua require('telescope.builtin').git_commits()<cr>", "Commits" },
-      f = { "<cmd>lua require('telescope.builtin').git_bcommits()<cr>", "Buffer Commits" },
-      s = { "<cmd>lua require('telescope.builtin').git_stash()<cr>", "Stashes" },
-    },
-    r = {
-      name = "Rails",
-      m = { "<cmd>Telescope find_files cwd=app/models<Cr>", "Model" },
-      c = { "<cmd>Telescope find_files cwd=app/controllers<Cr>", "Controller" },
-      s = { "<cmd>Telescope find_files cwd=spec<Cr>", "Spec" }
-    }
-  },
+		f = { "<cmd>Telescope find_files<cr>", "File" },
+		d = {
+			"<cmd>lua require('telescope.builtin').find_files({ previewer = false, find_command = { 'fd', '--type', 'd' }, prompt_title = '"
+				.. find_in_dir_prompt
+				.. "'})<cr>",
+			"In Dir (<CR> find_file in DIR, <C-s> grep)",
+		},
+		m = { "<cmd>Telescope lsp_document_symbols<cr>", "Method" },
+		b = {
+			"<cmd>lua require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true })<cr>",
+			"Buffer",
+		},
+		w = { "<cmd>lua require('telescope.builtin').grep_string({search = vim.fn.expand('<cword>')})<cr>", "Word" },
+		s = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Search" },
+		h = { "<cmd>lua require('telescope.builtin').search_history()<cr>", "Search History" },
+		q = { "<cmd>lua require('telescope.builtin').quickfixhistory()<cr>", "Quickfix History" },
+		Q = { "<cmd>lua require('telescope.builtin').quickfix()<cr>", "Quickfix" },
+		l = { "<cmd>Telescope resume<cr>", "Last Search" },
+		-- ['\\'] = { "<cmd>Telescope termfinder find<cr>", "Terminal" }, -- TODO: this doesn't list any of my custom terms (which are the only ones I care about here)
+		e = { "<cmd>lua vim.lsp.buf.references()<CR>", "Reference" },
+		g = {
+			name = "Git",
+			b = { "<cmd>lua require('telescope.builtin').git_branches()<cr>", "Branches" },
+			c = { "<cmd>lua require('telescope.builtin').git_commits()<cr>", "Commits" },
+			f = { "<cmd>lua require('telescope.builtin').git_bcommits()<cr>", "Buffer Commits" },
+			s = { "<cmd>lua require('telescope.builtin').git_stash()<cr>", "Stashes" },
+		},
+		r = {
+			name = "Rails",
+			m = { "<cmd>Telescope find_files cwd=app/models<Cr>", "Model" },
+			c = { "<cmd>Telescope find_files cwd=app/controllers<Cr>", "Controller" },
+			s = { "<cmd>Telescope find_files cwd=spec<Cr>", "Spec" },
+		},
+	},
 
-  g = {
-    name = "Git",
+	g = {
+		name = "Git",
 
-    -- TODO: figure out how to add a hover to show full commit message and enter to view commit diff
-    -- b = { "<cmd>lua require('agitator').git_blame({sidebar_width=40})<CR>", "Blame"},
-    -- b = { '<cmd>lua require("user.blame").open()<CR>', 'Blame' },
-    b = { '<cmd>Git blame<CR>', 'Blame' },
-    -- vim.keymap.set('n', '<leader>c', ":lua require('plugins.telescope').my_git_commits()<CR>", {noremap = true, silent = true})
-    -- vim.keymap.set('n', '<leader>g', ":lua require('plugins.telescope').my_git_status()<CR>", {noremap = true, silent = true})
-    -- vim.keymap.set('n', '<leader>b', ":lua require('plugins.telescope').my_git_bcommits()<CR>", {noremap = true, silent = true})
-    -- b = { "<cmd>Git blame<CR>", "Blame"},
-    v = { ":lua ShowCommitAtLine()<cr>", "View commit"},
-    t = { "<cmd>lua require('agitator').git_time_machine()<CR>", "Time Machine"},
-    g = "Lazygit",
-    y = "Copy github link",
+		-- TODO: figure out how to add a hover to show full commit message and enter to view commit diff
+		-- b = { "<cmd>lua require('agitator').git_blame({sidebar_width=40})<CR>", "Blame"},
+		-- b = { '<cmd>lua require("user.blame").open()<CR>', 'Blame' },
+		b = { "<cmd>Git blame<CR>", "Blame" },
+		-- vim.keymap.set('n', '<leader>c', ":lua require('plugins.telescope').my_git_commits()<CR>", {noremap = true, silent = true})
+		-- vim.keymap.set('n', '<leader>g', ":lua require('plugins.telescope').my_git_status()<CR>", {noremap = true, silent = true})
+		-- vim.keymap.set('n', '<leader>b', ":lua require('plugins.telescope').my_git_bcommits()<CR>", {noremap = true, silent = true})
+		-- b = { "<cmd>Git blame<CR>", "Blame"},
+		v = { ":lua ShowCommitAtLine()<cr>", "View commit" },
+		t = { "<cmd>lua require('agitator').git_time_machine()<CR>", "Time Machine" },
+		g = "Lazygit",
+		y = "Copy github link",
 
-    h = { "<Cmd>DiffviewFileHistory %.<CR>", "History" },
+		h = { "<Cmd>DiffviewFileHistory %.<CR>", "History" },
 
-    -- b = { "<Cmd>VGit buffer_blame_preview<CR>", "Blame" },
-    -- d = { "<Cmd>VGit buffer_diff_preview<CR>", "Diff" },
-    -- h = { "<Cmd>VGit buffer_history_preview<CR>", "History" },
+		-- b = { "<Cmd>VGit buffer_blame_preview<CR>", "Blame" },
+		-- d = { "<Cmd>VGit buffer_diff_preview<CR>", "Diff" },
+		-- h = { "<Cmd>VGit buffer_history_preview<CR>", "History" },
 
-    -- nnoremap('<leader>gs', '<Cmd>VGit buffer_stage<CR>')
-    -- nnoremap('<leader>gr', '<Cmd>VGit buffer_reset<CR>')
-    -- nnoremap('<leader>gp','<Cmd>VGit buffer_hunk_preview<CR>')
-    -- nnoremap('<leader>gu','<Cmd>VGit buffer_reset<CR>')
-    -- nnoremap('<leader>gg','<Cmd>VGit buffer_gutter_blame_preview<CR>')
-    -- nnoremap('<leader>gl','<Cmd>VGit project_hunks_preview<CR>')
-    -- nnoremap('<leader>gd','<Cmd>VGit project_diff_preview<CR>')
-    -- nnoremap('<leader>gq','<Cmd>VGit project_hunks_qf<CR>')
-    -- nnoremap('<leader>gx','<Cmd>VGit toggle_diff_preference<CR>')
-  },
-  h = {
-    name = "Help / Docs",
+		-- nnoremap('<leader>gs', '<Cmd>VGit buffer_stage<CR>')
+		-- nnoremap('<leader>gr', '<Cmd>VGit buffer_reset<CR>')
+		-- nnoremap('<leader>gp','<Cmd>VGit buffer_hunk_preview<CR>')
+		-- nnoremap('<leader>gu','<Cmd>VGit buffer_reset<CR>')
+		-- nnoremap('<leader>gg','<Cmd>VGit buffer_gutter_blame_preview<CR>')
+		-- nnoremap('<leader>gl','<Cmd>VGit project_hunks_preview<CR>')
+		-- nnoremap('<leader>gd','<Cmd>VGit project_diff_preview<CR>')
+		-- nnoremap('<leader>gq','<Cmd>VGit project_hunks_qf<CR>')
+		-- nnoremap('<leader>gx','<Cmd>VGit toggle_diff_preference<CR>')
+	},
+	h = {
+		name = "Help / Docs",
 
-    c = { "<cmd>lua require('telescope.builtin').commands()<cr>", "Commands" },
-    h = { "<cmd>lua require('telescope.builtin').help_tags()<cr>", "Help" },
-  },
-  q = {
-    name = "Quickfix",
+		c = { "<cmd>lua require('telescope.builtin').commands()<cr>", "Commands" },
+		h = { "<cmd>lua require('telescope.builtin').help_tags()<cr>", "Help" },
+	},
+	q = {
+		name = "Quickfix",
 
-    o = { "<cmd>copen<CR>", "Open" },
-    r = { "<cmd>zN<CR>", "Remove tagged" },
-    s = { "<cmd>zn<CR>", "Select tagged" },
-    y = { "<cmd>lua _G.add_current_line_to_qf()<CR>", "Add" },
+		o = { "<cmd>copen<CR>", "Open" },
+		r = { "<cmd>zN<CR>", "Remove tagged" },
+		s = { "<cmd>zn<CR>", "Select tagged" },
+		y = { "<cmd>lua _G.add_current_line_to_qf()<CR>", "Add" },
 
-    ["<"] = { "<cmd><<CR>", "Last QF" },
-    [">"] = { "<cmd>><CR>", "Next QF" },
-  },
-  r = {
-    --- Testing
-    name = "Run",
-    n = { "<cmd>TestNearest<cr>", "Nearest"},
-    N = { "<cmd>TestNearest<cr>", "Nearest (background)" },
-    s = { "<cmd>TestFile<cr>", "File"},
-    S = { "<cmd>TestFile<cr>", "File (background)"},
-    l = { "<cmd>TestLast<cr>", "Last"},
-    L = { "<cmd>TestLast<cr>", "Last (background)"},
-    g = { "<cmd>TestVisit<cr>", "Goto Last Spec"}
-    -- a = { "<cmd>Test", "Attach"},
-    -- d = { "<cmd>Test", "Debug"},
--- TestSuite - run the whole test suite
--- TestEdit - edit tests for the current file
--- TestVisit - open the last run test in the current buffer
-    -- s = {"Stop"},
-    -- o = {"Overview"},
-    -- p = {"Print"}
-    -- keymap("n", "<leader>rf", function()
-    --   require("neotest").run.run(vim.fn.expand("%"))
-    -- end) -- run file
-    -- keymap("n", "<leader>rn", function()
-    --   require("neotest").run.run()
-    -- end) -- run nearest test
-    -- keymap("n", "<leader>ra", function()
-    --   require("neotest").run.attach()
-    -- end)
-    -- keymap("n", "<leader>rd", function()
-    --   require("neotest").run.run({ strategy = "dap" })
-    -- end) -- debug nearest test
-    -- keymap("n", "<leader>rl", function()
-    --   require("neotest").run.run_last()
-    -- end) -- run last test
-    -- keymap("n", "<leader>rs", function()
-    --   require("neotest").run.stop()
-    -- end)
-    -- keymap("n", "<leader>ro", function()
-    --   require("neotest").summary.toggle()
-    -- end)
-    -- keymap("n", "<leader>rp", function()
-    --   require("neotest").output.open({ enter = true })
-    -- end)
-  },
-  s = {
-    name = "?",
+		["<"] = { "<cmd><<CR>", "Last QF" },
+		[">"] = { "<cmd>><CR>", "Next QF" },
+	},
+	r = {
+		--- Testing
+		name = "Run",
+		n = { "<cmd>TestNearest<cr>", "Nearest" },
+		N = { "<cmd>TestNearest<cr>", "Nearest (background)" },
+		s = { "<cmd>TestFile<cr>", "File" },
+		S = { "<cmd>TestFile<cr>", "File (background)" },
+		l = { "<cmd>TestLast<cr>", "Last" },
+		L = { "<cmd>TestLast<cr>", "Last (background)" },
+		g = { "<cmd>TestVisit<cr>", "Goto Last Spec" },
+		-- a = { "<cmd>Test", "Attach"},
+		-- d = { "<cmd>Test", "Debug"},
+		-- TestSuite - run the whole test suite
+		-- TestEdit - edit tests for the current file
+		-- TestVisit - open the last run test in the current buffer
+		-- s = {"Stop"},
+		-- o = {"Overview"},
+		-- p = {"Print"}
+		-- keymap("n", "<leader>rf", function()
+		--   require("neotest").run.run(vim.fn.expand("%"))
+		-- end) -- run file
+		-- keymap("n", "<leader>rn", function()
+		--   require("neotest").run.run()
+		-- end) -- run nearest test
+		-- keymap("n", "<leader>ra", function()
+		--   require("neotest").run.attach()
+		-- end)
+		-- keymap("n", "<leader>rd", function()
+		--   require("neotest").run.run({ strategy = "dap" })
+		-- end) -- debug nearest test
+		-- keymap("n", "<leader>rl", function()
+		--   require("neotest").run.run_last()
+		-- end) -- run last test
+		-- keymap("n", "<leader>rs", function()
+		--   require("neotest").run.stop()
+		-- end)
+		-- keymap("n", "<leader>ro", function()
+		--   require("neotest").summary.toggle()
+		-- end)
+		-- keymap("n", "<leader>rp", function()
+		--   require("neotest").output.open({ enter = true })
+		-- end)
+	},
+	s = {
+		name = "?",
 
-    -- w = "Current Word",
-    -- g = "Grep"
-  },
-  v = {
-    name = "Vim",
+		-- w = "Current Word",
+		-- g = "Grep"
+	},
+	v = {
+		name = "Vim",
 
-    c = { '<cmd>e $MYVIMRC<CR>', 'Open Config' },
-    l = { '<cmd>lazy<CR>', 'Lazy' },
-    r = { '<cmd>Reload<CR>', 'Reload' },
-    R = { '<cmd>Restart<CR>', 'Restart' },
-  }
+		c = { "<cmd>e $MYVIMRC<CR>", "Open Config" },
+		l = { "<cmd>lazy<CR>", "Lazy" },
+		r = { "<cmd>Reload<CR>", "Reload" },
+		R = { "<cmd>Restart<CR>", "Restart" },
+	},
 }, { prefix = "<leader>" })

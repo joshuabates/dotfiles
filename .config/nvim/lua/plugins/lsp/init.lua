@@ -244,6 +244,8 @@ local function setup_lsp_keymaps(bufnr)
 end
 
 return {
+	"ray-x/lsp_signature.nvim",
+	"jose-elias-alvarez/typescript.nvim",
 	-- lspconfig
 	{
 		"neovim/nvim-lspconfig",
@@ -423,7 +425,12 @@ return {
 	{
 		"pmizio/typescript-tools.nvim",
 		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-		opts = {},
+		opts = {
+			on_attach = function(client)
+				client.server_capabilities.documentFormattingProvider = false
+				client.server_capabilities.documentRangeFormattingProvider = false
+			end,
+		},
 	},
 
 	-- formatters
@@ -434,12 +441,16 @@ return {
 		opts = function()
 			local nls = require("null-ls")
 			return {
+				debug = false,
 				root_dir = require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", "Makefile", ".git"),
 				sources = {
 					nls.builtins.formatting.fish_indent,
 					nls.builtins.diagnostics.fish,
 					nls.builtins.formatting.stylua,
 					nls.builtins.formatting.shfmt,
+					nls.builtins.formatting.eslint_d,
+					nls.builtins.diagnostics.eslint_d,
+					nls.builtins.code_actions.eslint_d,
 					-- nls.builtins.diagnostics.flake8,
 				},
 			}

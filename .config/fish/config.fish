@@ -76,6 +76,20 @@ if status is-interactive
         set RAILS_ENV development
         bin/rake db:migrate
     end
+
+    function dshell
+        set container (docker ps --format '{{.Names}}' | fzf)
+        if test -n "$container"
+            docker exec -it $container /bin/bash
+        end
+    end
+
+    function drun
+        set image (docker images --format '{{.Repository}}:{{.Tag}}' | fzf)
+        if test -n "$image"
+            docker run -it $image /bin/bash
+        end
+    end
 end
 
 set -g fish_greeting
@@ -89,8 +103,6 @@ fish_add_path /opt/homebrew/bin
 # export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 source ~/.asdf/asdf.fish
 
-source ~/.asdf/asdf.fish
-
 # pyenv init - | source
 
 fish_add_path "./bin"
@@ -100,3 +112,13 @@ direnv hook fish | source
 if [ -f '/Users/joshua/google-cloud-sdk/path.fish.inc' ]
     . '/Users/joshua/google-cloud-sdk/path.fish.inc'
 end
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+if test -f /Users/joshua/miniconda3/bin/conda
+    eval /Users/joshua/miniconda3/bin/conda "shell.fish" hook $argv | source
+end
+# <<< conda initialize <<<
+
+# Created by `pipx` on 2023-10-20 20:31:41
+set -U PATH $PATH /Users/joshua/.local/bin

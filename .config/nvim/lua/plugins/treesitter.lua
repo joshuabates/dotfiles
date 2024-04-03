@@ -1,11 +1,10 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
-	"nvim-treesitter/playground",
+	-- 	"nvim-treesitter/playground",
 	"RRethy/nvim-treesitter-textsubjects",
 	"JoosepAlviste/nvim-ts-context-commentstring",
 	"RRethy/nvim-treesitter-endwise",
-
-	-- split/join via treesitter <leader-m>toggle
+	-- 	-- split/join via treesitter <leader-m>toggle
 	{
 		"Wansmer/treesj",
 		dependencies = { "nvim-treesitter" },

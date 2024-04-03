@@ -69,4 +69,6 @@ function EscapePair()
 	end
 end
 
-vim.api.nvim_set_keymap("i", "<C-l>", "<cmd>lua EscapePair()<CR>", { noremap = true, silent = true })
+if not vim.g.vscode then
+	vim.api.nvim_set_keymap("i", "<C-l>", "<cmd>lua EscapePair()<CR>", { noremap = true, silent = true })
+end

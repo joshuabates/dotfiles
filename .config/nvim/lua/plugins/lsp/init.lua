@@ -1,151 +1,5 @@
-local Format = {}
-
----@type PluginLspOpts
-Format.opts = nil
-
-function Format.enabled()
-	return Format.opts.autoformat
-end
-
-function Format.toggle()
-	if vim.b.autoformat == false then
-		vim.b.autoformat = nil
-		Format.opts.autoformat = true
-	else
-		Format.opts.autoformat = not Format.opts.autoformat
-	end
-	-- if Format.opts.autoformat then
-	--   Util.info("Enabled format on save", { title = "Format" })
-	-- else
-	--   Util.warn("Disabled format on save", { title = "Format" })
-	-- end
-end
-
----@param opts? {force?:boolean}
-function Format.format(opts)
-	local buf = vim.api.nvim_get_current_buf()
-	if vim.b.autoformat == false and not (opts and opts.force) then
-		return
-	end
-
-	local formatters = Format.get_formatters(buf)
-	local client_ids = vim.tbl_map(function(client)
-		return client.id
-	end, formatters.active)
-
-	if #client_ids == 0 then
-		return
-	end
-
-	if Format.opts.format_notify then
-		Format.notify(formatters)
-	end
-
-	vim.lsp.buf.format(vim.tbl_deep_extend("force", {
-		bufnr = buf,
-		filter = function(client)
-			return vim.tbl_contains(client_ids, client.id)
-		end,
-	}, {}))
-end
-
----@param formatters LazyVimFormatters
-function Format.notify(formatters)
-	local lines = { "# Active:" }
-
-	for _, client in ipairs(formatters.active) do
-		local line = "- **" .. client.name .. "**"
-		if client.name == "null-ls" then
-			line = line
-				.. " ("
-				.. table.concat(
-					vim.tbl_map(function(f)
-						return "`" .. f.name .. "`"
-					end, formatters.null_ls),
-					", "
-				)
-				.. ")"
-		end
-		table.insert(lines, line)
-	end
-
-	if #formatters.available > 0 then
-		table.insert(lines, "")
-		table.insert(lines, "# Disabled:")
-		for _, client in ipairs(formatters.available) do
-			table.insert(lines, "- **" .. client.name .. "**")
-		end
-	end
-
-	vim.notify(table.concat(lines, "\n"), vim.log.levels.INFO, {
-		title = "Formatting",
-		on_open = function(win)
-			vim.api.nvim_win_set_option(win, "conceallevel", 3)
-			vim.api.nvim_win_set_option(win, "spell", false)
-			local buf = vim.api.nvim_win_get_buf(win)
-			vim.treesitter.start(buf, "markdown")
-		end,
-	})
-end
-
--- Gets all lsp clients that support formatting.
--- When a null-ls formatter is available for the current filetype,
--- only null-ls formatters are returned.
-function Format.get_formatters(bufnr)
-	local ft = vim.bo[bufnr].filetype
-	-- check if we have any null-ls formatters for the current filetype
-	local null_ls = package.loaded["null-ls"] and require("null-ls.sources").get_available(ft, "NULL_LS_FORMATTING")
-		or {}
-
-	---@class LazyVimFormatters
-	local ret = {
-		---@type lsp.Client[]
-		active = {},
-		---@type lsp.Client[]
-		available = {},
-		null_ls = null_ls,
-	}
-
-	---@type lsp.Client[]
-	local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
-	for _, client in ipairs(clients) do
-		if Format.supports_format(client) then
-			if (#null_ls > 0 and client.name == "null-ls") or #null_ls == 0 then
-				table.insert(ret.active, client)
-			else
-				table.insert(ret.available, client)
-			end
-		end
-	end
-
-	return ret
-end
-
--- Gets all lsp clients that support formatting
--- and have not disabled it in their client config
----@param client lsp.Client
-function Format.supports_format(client)
-	if
-		client.config
-		and client.config.capabilities
-		and client.config.capabilities.documentFormattingProvider == false
-	then
-		return false
-	end
-	return client.supports_method("textDocument/formatting") or client.supports_method("textDocument/rangeFormatting")
-end
-
----@param opts PluginLspOpts
-function Format.setup(opts)
-	Format.opts = opts
-	vim.api.nvim_create_autocmd("BufWritePre", {
-		group = vim.api.nvim_create_augroup("LazyVimFormat", {}),
-		callback = function()
-			if Format.opts.autoformat then
-				Format.format()
-			end
-		end,
-	})
+if vim.g.vscode then
+	return
 end
 
 local function on_attach(on_attach)
@@ -245,7 +99,34 @@ end
 
 return {
 	"ray-x/lsp_signature.nvim",
-	"jose-elias-alvarez/typescript.nvim",
+	-- "jose-elias-alvarez/typescript.nvim",
+	{
+		"pmizio/typescript-tools.nvim",
+		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+		opts = {},
+		config = function()
+			require("typescript-tools").setup({
+				on_attach = function(client, bufnr)
+					client.server_capabilities.documentFormattingProvider = false
+					client.server_capabilities.documentRangeFormattingProvider = false
+					if vim.fn.has("nvim-0.10") then
+						-- Enable inlay hints
+						vim.lsp.inlay_hint.enable(bufnr, true)
+					end
+				end,
+				-- handlers = handlers,
+				settings = {
+					separate_diagnostic_server = true,
+					code_lens = "off",
+					tsserver_file_preferences = {
+						includeInlayParameterNameHints = "all",
+						includeCompletionsForModuleExports = true,
+						quotePreference = "auto",
+					},
+				},
+			})
+		end,
+	},
 	-- lspconfig
 	{
 		"neovim/nvim-lspconfig",
@@ -292,54 +173,93 @@ return {
 			format = {
 				formatting_options = nil,
 				timeout_ms = nil,
+				filter = function(client)
+					return client.name ~= "solargraph"
+				end,
 			},
 			-- LSP Server Settings
 			---@type lspconfig.options
+			-- turn off formatting
+			--
+			--
 			servers = {
 				jsonls = {},
-				solargraph = {},
-				cssls = {},
-				lua_ls = {
+				ruby_ls = {
+					mason = false,
+					-- cmd = { "bundle", "exec", "ruby-lsp" },
+					-- cmd = { "bundle", "exec", "ruby-lsp" },
+					cmd = { os.getenv("HOME") .. "/.asdf/shims/ruby-lsp" },
+					init_options = {
+						formatter = false,
+					},
 					settings = {
-						Lua = {
-							workspace = {
-								checkThirdParty = false,
-							},
-							completion = {
-								callSnippet = "Replace",
-							},
+            ruby_ls = {
+							autoformat = false,
+							completion = true,
+							diagnostics = false,
+							folding = false,
+							references = false,
+							rename = true,
+							symbols = false,
+            }
+          },
+				},
+        stylelint_lsp = {},
+        cssmodules_ls = {},
+				solargraph = {
+					mason = false,
+					-- See: https://medium.com/@cristianvg/neovim-lsp-your-rbenv-gemset-and-solargraph-8896cb3df453
+					cmd = { os.getenv("HOME") .. "/.asdf/shims/solargraph", "stdio" },
+					root_dir = require("lspconfig").util.root_pattern("Gemfile", ".git", "."),
+					capabilities = { documentFormattingProvider = false },
+					settings = {
+						solargraph = {
+							autoformat = false,
+							completion = false,
+							diagnostics = false,
+							folding = false,
+							references = true,
+							rename = false,
+							symbols = false,
 						},
 					},
 				},
+				cssls = {},
+				standardrb = {},
+				-- lua_ls = {
+				-- 	settings = {
+				-- 		Lua = {
+				-- 			workspace = {
+				-- 				checkThirdParty = false,
+				-- 			},
+				-- 			completion = {
+				-- 				callSnippet = "Replace",
+				-- 			},
+				-- 		},
+				-- 	},
+				-- },
 			},
-			-- you can do any additional lsp server setup here
-			-- return true if you don't want this server to be setup with lspconfig
-			---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
 			setup = {
-				-- example to setup with typescript.nvim
 				-- tsserver = function(_, opts)
 				--   require("typescript").setup({ server = opts })
 				--   return true
 				-- end,
-				-- Specify * to use this function as a fallback for any server
-				-- ["*"] = function(server, opts) end,
 			},
 		},
+
 		---@param opts PluginLspOpts
 		config = function(_, opts)
-			-- setup autoformat
-			Format.setup(opts)
-			--
-			-- setup formatting and keymaps
 			on_attach(function(client, buffer)
 				setup_lsp_keymaps(buffer)
+				vim.api.nvim_create_autocmd({ "InsertLeave", "BufWritePost" }, {
+					callback = function()
+						local lint_status, lint = pcall(require, "lint")
+						if lint_status then
+							lint.try_lint()
+						end
+					end,
+				})
 			end)
-
-			-- diagnostics
-			-- for name, icon in pairs(require("lazyvim.config").icons.diagnostics) do
-			--   name = "DiagnosticSign" .. name
-			--   vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
-			-- end
 
 			if opts.inlay_hints.enabled and vim.lsp.buf.inlay_hint then
 				on_attach(function(client, buffer)
@@ -412,52 +332,66 @@ return {
 			if have_mason then
 				mlsp.setup({ ensure_installed = ensure_installed, handlers = { setup } })
 			end
-
-			-- if Util.lsp_get_config("denols") and Util.lsp_get_config("tsserver") then
-			--   local is_deno = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc")
-			--   Util.lsp_disable("tsserver", is_deno)
-			--   Util.lsp_disable("denols", function(root_dir)
-			--     return not is_deno(root_dir)
-			--   end)
-			-- end
 		end,
 	},
+	-- {
+	-- 	"pmizio/typescript-tools.nvim",
+	-- 	dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+	-- 	opts = {
+	-- 		on_attach = function(client)
+	-- 			client.server_capabilities.documentFormattingProvider = false
+	-- 			client.server_capabilities.documentRangeFormattingProvider = false
+	-- 		end,
+	-- 	},
+	-- },
 	{
-		"pmizio/typescript-tools.nvim",
-		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-		opts = {
-			on_attach = function(client)
-				client.server_capabilities.documentFormattingProvider = false
-				client.server_capabilities.documentRangeFormattingProvider = false
-			end,
-		},
-	},
-
-	-- formatters
-	{
-		"jose-elias-alvarez/null-ls.nvim",
-		event = { "BufReadPre", "BufNewFile" },
-		dependencies = { "mason.nvim" },
-		opts = function()
-			local nls = require("null-ls")
-			return {
-				debug = false,
-				root_dir = require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", "Makefile", ".git"),
-				sources = {
-					nls.builtins.formatting.fish_indent,
-					nls.builtins.diagnostics.fish,
-					nls.builtins.formatting.stylua,
-					nls.builtins.formatting.shfmt,
-					nls.builtins.formatting.eslint_d,
-					nls.builtins.diagnostics.eslint_d,
-					nls.builtins.code_actions.eslint_d,
-					-- nls.builtins.diagnostics.flake8,
+		"mfussenegger/nvim-lint",
+		config = function()
+			local lint = require("lint")
+			lint.linters_by_ft = {
+				javascript = {
+					"eslint_d",
+				},
+				typescript = {
+					"eslint_d",
+				},
+				javascriptreact = {
+					"eslint_d",
+				},
+				typescriptreact = {
+					"eslint_d",
 				},
 			}
 		end,
 	},
 
-	-- cmdline tools and lsp servers
+	{
+		"stevearc/conform.nvim",
+		ft = { "lua", "vue", "typescript", "typescriptreact", "javascript", "json", "jsonc" },
+		opts = {
+			formatters_by_ft = {
+				-- lua = { "stylua" },
+				vue = { "eslint_d" },
+				typescript = { "prettier" },
+				typescriptreact = { "prettier" },
+				javascript = { "eslint_d" },
+				javascriptreact = { "eslint_d" },
+				json = { "prettier" },
+				jsonc = { "prettier" },
+			},
+		},
+		config = function(_, opts)
+			require("conform").setup(opts)
+
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				pattern = "*",
+				callback = function(args)
+					require("conform").format({ bufnr = args.buf })
+				end,
+			})
+		end,
+	},
+
 	{
 
 		"williamboman/mason.nvim",
@@ -467,6 +401,7 @@ return {
 			ensure_installed = {
 				"stylua",
 				"shfmt",
+				-- "tsserver",
 				-- "flake8",
 			},
 		},

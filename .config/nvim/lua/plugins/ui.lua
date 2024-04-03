@@ -6,7 +6,7 @@ return {
 			require("nvim-web-devicons").setup({})
 		end,
 	},
-	{ "nvim-lualine/lualine.nvim" },
+	{ "nvim-lualine/lualine.nvim", cond = not vim.g.vscode },
 	{
 		"goolord/alpha-nvim",
 		event = "VimEnter",
@@ -62,7 +62,7 @@ return {
 		tag = "v1.2.4",
 	},
 	"lunarvim/darkplus.nvim",
-	"rcarriga/nvim-notify",
+	{ "rcarriga/nvim-notify", cond = not vim.g.vscode },
 	{
 		"folke/twilight.nvim",
 		config = function()
@@ -110,6 +110,7 @@ return {
 	},
 	{
 		"folke/noice.nvim",
+		cond = not vim.g.vscode,
 		event = "VeryLazy",
 		dependencies = {
 			"MunifTanjim/nui.nvim",
@@ -164,6 +165,8 @@ return {
 	{
 		"stevearc/dressing.nvim",
 		lazy = true,
+		cond = not vim.g.vscode,
+
 		init = function()
 			---@diagnostic disable-next-line: duplicate-set-field
 			vim.ui.select = function(...)

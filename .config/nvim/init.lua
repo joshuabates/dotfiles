@@ -19,30 +19,32 @@ require("plugins")
 
 require("user.keymaps")
 require("user.colorscheme")
-
 require("user.cmp")
 require("user.comment")
 require("user.commands")
-require("user.gitsigns")
 require("user.indentline")
-require("user.lualine")
-require("user.nvim-tree")
-require("user.quickfix")
-require("user.telescope")
-require("user.testing")
-require("user.toggleterm")
-require("user.treesitter")
-
+-- require("user.treesitter")
 require("user.ruby")
 
+if not vim.g.vscode then
+	require("user.cmp")
+	require("user.gitsigns")
+	require("user.lualine")
+	require("user.nvim-tree")
+	-- require("user.quickfix")
+	require("user.telescope")
+	require("user.testing")
+	require("user.toggleterm")
+end
+
 -- TODO:
--- X switch from packer to lazy
 -- beter org of plugins
 -- mason
 -- dap
 -- flash
 --
 -- FIX BUGS
+-- telescope find method in file should work for ruby
 -- gotofile should work with js imports
 --
 -- sometimes get stuck with an out of focus float window

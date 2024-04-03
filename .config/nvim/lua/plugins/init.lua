@@ -5,6 +5,7 @@ return {
 		"windwp/nvim-autopairs",
 		event = "InsertEnter",
 		opts = { check_ts = true },
+		cond = not vim.g.vscode,
 		config = function(_, opts)
 			local ap = require("nvim-autopairs")
 			ap.setup(opts)
@@ -16,7 +17,7 @@ return {
 	"numToStr/Comment.nvim",
 	-- "kyazdani42/nvim-tree.lua",
 
-	"lukas-reineke/indent-blankline.nvim",
+	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
 	{
 		"kylechui/nvim-surround",
 		version = "*", -- Use for stability; omit to use `main` branch for the latest features
@@ -30,13 +31,58 @@ return {
 	-- "gabrielpoca/replacer.nvim",
 	-- uje { "stefandtw/quickfix-reflector.vim" }
 
-	"github/copilot.vim",
+	-- { "github/copilot.vim", cond = not vim.g.vscode },
+	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		-- cond = false,
+		cond = not vim.g.vscode,
+		build = ":Copilot auth",
+		event = "InsertEnter",
+		opts = {
+			suggestion = {
+				enabled = true,
+				auto_trigger = true,
+				debounce = 75,
+				keymap = {
+					accept = "<Tab>",
+					accept_word = "<Right>",
+					accept_line = false,
+					close = "<Esc>",
+					next = "<Down>",
+					prev = "<Up>",
+					select = "<CR>",
+					dismiss = "<C-X>",
+				},
+			},
+			panel = {
+				enabled = false,
+			},
+		},
+	},
+	{
+		{
+			"CopilotC-Nvim/CopilotChat.nvim",
+			branch = "canary",
+      cond = not vim.g.vscode,
+			dependencies = {
+				{ "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
+				{ "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+			},
+			opts = {
+				debug = false, -- Enable debugging
+			},
+			-- See Commands section for default commands if you want to lazy load on them
+		},
+	},
 	"famiu/nvim-reload",
 	"vim-ruby/vim-ruby",
 	{
 		"folke/which-key.nvim",
 		opts = {
 			plugins = { spelling = true },
+			cond = not vim.g.vscode,
+
 			defaults = {
 				mode = { "n", "v" },
 				["g"] = { name = "+goto" },
@@ -65,7 +111,7 @@ return {
 	{
 		"folke/flash.nvim",
 		event = "VeryLazy",
-		vscode = true,
+		cond = not vim.g.vscode,
 		---@type Flash.Config
 		opts = {},
 		keys = {
@@ -124,6 +170,6 @@ return {
 	--
 	-- https://github.com/vuki656/package-info.nvim
 	--
-	"janko/vim-test",
+	{ "janko/vim-test", cond = not vim.g.vscode },
 	-- "ravenxrz/DAPInstall.nvim",
 }

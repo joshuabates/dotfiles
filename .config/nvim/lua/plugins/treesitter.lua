@@ -3,6 +3,15 @@ return {
 	-- 	"nvim-treesitter/playground",
 	"RRethy/nvim-treesitter-textsubjects",
 	"JoosepAlviste/nvim-ts-context-commentstring",
+  {
+    'ckolkey/ts-node-action',
+     dependencies = { 'nvim-treesitter' },
+     opts = {},
+     keys = {
+      { "gC", function() require('ts-node-action.actions').cycle_case() end, desc = "Cycle Case" },
+      { "gt", function() require('ts-node-action.actions').toggle_boolean() end, desc = "Toggle BOOL" },
+     }
+   },
 	"RRethy/nvim-treesitter-endwise",
 	-- 	-- split/join via treesitter <leader-m>toggle
 	{

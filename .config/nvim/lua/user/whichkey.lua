@@ -1,43 +1,5 @@
 local wk = require("which-key")
 
--- local mappings = {
---   x = {
---     name = "Trouble",
---
---     -- x = { "<cmd>Trouble<cr>", "Trouble" },
---     -- w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workplace" },
---     -- f = { "<cmd>Trouble document_diagnostics<cr>", "File" },
---     -- l = { "<cmd>Trouble loclist<cr>", "Locations" },
---     -- q = { "<cmd>Trouble quickfix<cr>", "Quickfix" }
---     -- `:w
---     -- `
--- -- builtin.quickfixhistory	Lists all quickfix lists in your history and open them with builtin.quickfix
---     --builtin.lsp_workspace_symbols	Lists LSP document symbols in the current workspace
--- -- builtin.lsp_dynamic_workspace_symbols	Dynamically Lists LSP for all workspace symbols
---   }
--- }
--- wk.register(mappings, { prefix = "<leader>" })
-
--- -- jump to the next item, skipping the groups
--- keymap("n", "<leader>j", function()
---   require("trouble").next({skip_groups = true, jump = true});
--- end)
---
--- -- jump to the prev item, skipping the groups
--- keymap("n", "<leader>k", function()
---   require("trouble").previous({skip_groups = true, jump = true});
--- end)
-
--- -- jump to the next group
--- keymap("n", "<leader>J", function()
---   require("trouble").next({skip_groups = false, jump = true});
--- end)
---
--- -- jump to the prev group
--- keymap("n", "<leader>K", function()
---   require("trouble").previous({skip_groups = false, jump = true});
--- end)
-
 wk.register({
 	g = {
 		name = "Go",

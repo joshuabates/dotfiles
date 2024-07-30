@@ -72,3 +72,22 @@ end
 if not vim.g.vscode then
 	vim.api.nvim_set_keymap("i", "<C-l>", "<cmd>lua EscapePair()<CR>", { noremap = true, silent = true })
 end
+
+local function copy_migration_timestamp()
+    -- Get the current file name
+    local filename = vim.fn.expand('%:t')
+
+    -- Match the timestamp in the filename
+    local timestamp = filename:match("(%d+)_.*%.rb")
+
+    if timestamp then
+        -- Copy the timestamp to the macOS pasteboard
+        vim.fn.system("echo '" .. timestamp .. "' | pbcopy")
+        print("Timestamp " .. timestamp .. " copied to clipboard")
+    else
+        print("No timestamp found in the filename")
+    end
+end
+
+-- Create a user command to run the function
+vim.api.nvim_create_user_command('CopyMigrationTimestamp', copy_migration_timestamp, {})

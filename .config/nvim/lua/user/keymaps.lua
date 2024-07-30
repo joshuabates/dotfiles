@@ -11,6 +11,9 @@
 local keymap = vim.keymap.set
 local opts = { silent = true }
 
+vim.api.nvim_del_keymap('n', 'gt')
+-- vim.api.nvim_del_keymap('n', 'gT')
+
 keymap("i", "<F1>", "<Esc>", opts)
 keymap("n", "<F1>", "<Esc>", opts)
 

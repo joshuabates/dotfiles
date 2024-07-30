@@ -23,7 +23,7 @@ require("user.cmp")
 require("user.comment")
 require("user.commands")
 require("user.indentline")
--- require("user.treesitter")
+require("user.treesitter")
 require("user.ruby")
 
 if not vim.g.vscode then
@@ -38,8 +38,15 @@ if not vim.g.vscode then
 end
 
 -- TODO:
+-- LEARN
+-- <leader>fe find_references
+-- X fix tab not working in insert mode
+-- X zen or zoom mode (it's just <leader>z and seems to work fine though something with more flexibility would be nice, eg still be able to have splits
+-- X fix luasnips error. table expected, got number
+-- X fix lua tree-sitter errors
+-- fix js lsp not always working
+-- fix copilot not always working
 -- beter org of plugins
--- mason
 -- dap
 -- flash
 --

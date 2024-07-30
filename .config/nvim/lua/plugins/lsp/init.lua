@@ -38,6 +38,7 @@ local function setup_lsp_keymaps(bufnr)
 	keymap(bufnr, "n", "<leader>li", "<cmd>LspInfo<cr>", opts)
 	keymap(bufnr, "n", "<leader>lI", "<cmd>LspInstallInfo<cr>", opts)
 	keymap(bufnr, "n", "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
+  keymap(bufnr, "v", "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
 	keymap(bufnr, "n", "<leader>lj", "<cmd>lua vim.diagnostic.goto_next({buffer=0})<cr>", opts)
 	keymap(bufnr, "n", "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev({buffer=0})<cr>", opts)
 	keymap(bufnr, "n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
@@ -367,7 +368,7 @@ return {
 
 	{
 		"stevearc/conform.nvim",
-		ft = { "lua", "vue", "typescript", "typescriptreact", "javascript", "json", "jsonc" },
+		ft = { "lua", "vue", "typescript", "typescriptreact", "javascript", "json", "jsonc", "ruby" },
 		opts = {
 			formatters_by_ft = {
 				-- lua = { "stylua" },
@@ -378,6 +379,7 @@ return {
 				javascriptreact = { "eslint_d" },
 				json = { "prettier" },
 				jsonc = { "prettier" },
+				ruby = { "standardrb" },
 			},
 		},
 		config = function(_, opts)

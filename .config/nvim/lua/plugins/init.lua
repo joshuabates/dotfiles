@@ -45,7 +45,7 @@ return {
 				auto_trigger = true,
 				debounce = 75,
 				keymap = {
-					accept = "<Tab>",
+					-- accept = "<Tab>",
 					accept_word = "<Right>",
 					accept_line = false,
 					close = "<Esc>",

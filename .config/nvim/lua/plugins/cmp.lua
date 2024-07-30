@@ -34,35 +34,36 @@ if not vim.g.vscode then
 				end
 
 				local cmp = require("cmp")
+        local luasnip = require("luasnip")
 				if not opts.mapping then
 					opts.mapping = {}
 				end
 
-				-- opts.mapping = vim.tbl_extend("force", opts.mapping, {
-				-- 	["<CR>"] = vim.NIL,
-				--
-				-- 	-- ["<Tab>"] = cmp.mapping(function(fallback)
-				-- 	-- 	if require("copilot.suggestion").is_visible() then
-				-- 	-- 		require("copilot.suggestion").accept_line()
-				-- 	-- 		-- elseif luasnip.expand_or_locally_jumpable() then
-				-- 	-- 		-- luasnip.expand_or_jump()
-				-- 	-- 		-- elseif has_words_before() then
-				-- 	-- 		-- 	cmp.complete()
-				-- 	-- 		-- else
-				-- 	-- 		-- 	fallback()
-				-- 	-- 	end
-				-- 	-- end, { "i", "s" }),
-				--
-				-- 	["<S-Tab>"] = cmp.mapping(function(fallback)
-				-- 		if cmp.visible() then
-				-- 			cmp.select_prev_item()
-				-- 			-- elseif luasnip.jumpable(-1) then
-				-- 			-- luasnip.jump(-1)
-				-- 		else
-				-- 			fallback()
-				-- 		end
-				-- 	end, { "i", "s" }),
-				-- })
+				opts.mapping = vim.tbl_extend("force", opts.mapping, {
+					["<CR>"] = vim.NIL,
+
+					["<Tab>"] = cmp.mapping(function(fallback)
+						if require("copilot.suggestion").is_visible() then
+							require("copilot.suggestion").accept_line()
+            elseif luasnip.expand_or_locally_jumpable() then
+							luasnip.expand_or_jump()
+            elseif has_words_before() then
+								cmp.complete()
+            else
+								fallback()
+						end
+					end, { "i", "s" }),
+
+					["<S-Tab>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+							luasnip.jump(-1)
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+				})
 				opts.preselect = cmp.PreselectMode.None
 			end,
 		},

@@ -93,6 +93,7 @@ if status is-interactive
 end
 
 set -g fish_greeting
+set -g fish_key_bindings fish_vi_key_bindings
 fish_add_path "./node_modules"
 fish_add_path /usr/local/sbin
 fish_add_path /usr/local/share/npm/bin/
